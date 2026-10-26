@@ -1,5 +1,14 @@
 # Hindsight Editor: write-up
 
+> **Round 3 update (retry).** A bug in linear correction (ridge bias) and a transformer code path that
+> silently used the propagated-only delta confounded rounds 1–2. With both fixed and every method trained
+> by the same Adam update plus a frozen-body control (RESULTS.md, "Round 3"): local hindsight reaches 97.4%
+> on MNIST, tying random feedback (97.7%); propagating hindsight across layers is below the control in every
+> variant, including EMA slow copies; and on CIFAR and enwik8 every local-feedback signal (hindsight and DFA)
+> is worse than training only the output layer. The distinctive claim, that an answer-aware forward pass
+> gives deep layers better credit than random feedback, is not supported. The earlier editors were mostly
+> training the output layer.
+
 **Question.** Can a small learned network (the *editor*), fed only a gradient-free *hindsight delta*
 (the difference between a normal forward pass and a second pass that is shown the answer), train a
 network as well as backprop + Adam, at matched FLOPs?
