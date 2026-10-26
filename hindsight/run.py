@@ -160,6 +160,43 @@ class RawRule:
                 P[s.b] += self.lr * mb.to(P[s.b].dtype)
 
 
+class HAdam:
+    """AdamW driven by a hindsight pseudo-gradient g_W = -D^T A / N (no backward pass).
+
+    Separates *signal quality* from *update rule*: with delta_source = "backprop" (D = -dL/dz) this is
+    exactly AdamW on the true gradient; with a hindsight delta it is the same optimizer on the
+    gradient-free signal."""
+
+    def __init__(self, lr, betas=(0.9, 0.999), wd=0.0, eps=1e-8):
+        self.lr, self.b1, self.b2, self.wd, self.eps, self.st = lr, betas[0], betas[1], wd, eps, {}
+
+    @torch.no_grad()
+    def step(self, net, P, rec, D, n_params):
+        for s in net.sites:
+            A, Dm = factors(s, rec.a[s.name], D[s.name])
+            N = Dm.shape[0] / (Dm.shape[0] // rec.z[s.name].shape[0])
+            if s.kind == "embed":
+                g = -torch.zeros_like(P[s.w], dtype=torch.float32).index_add_(0, A, Dm.float()) / N
+            else:
+                g = -(Dm.float().t() @ A.float()).reshape(P[s.w].shape) / N
+                flops.add("editor", 2 * Dm.numel() * A.shape[1])
+            self._upd(s.w, P, g, decay=True)
+            if s.b is not None:
+                self._upd(s.b, P, -Dm.float().sum(0) / N, decay=False)
+        flops.add("opt", 12 * n_params)
+
+    def _upd(self, k, P, g, decay):
+        st = self.st.setdefault(k, {"t": 0, "m": torch.zeros_like(g), "v": torch.zeros_like(g)})
+        st["t"] += 1
+        st["m"].mul_(self.b1).add_(g, alpha=1 - self.b1)
+        st["v"].mul_(self.b2).addcmul_(g, g, value=1 - self.b2)
+        mh = st["m"] / (1 - self.b1 ** st["t"])
+        vh = st["v"] / (1 - self.b2 ** st["t"])
+        if decay and self.wd:
+            P[k].mul_(1 - self.lr * self.wd)
+        P[k] -= (self.lr * mh / (vh.sqrt() + self.eps)).to(P[k].dtype)
+
+
 def adam_label(state, g, lr, b1=0.9, b2=0.999, eps=1e-8):
     """Shadow Adam step (the Phase-0 imitation target) for gradient g."""
     t = state["t"] = state.get("t", 0) + 1
@@ -223,6 +260,8 @@ def run_train(cfg, log, out):
         hopt = torch.optim.Adam(hs.parameters(), lr=cfg.get("chan_lr", 1e-3))
         if method == "raw":
             rule = RawRule(cfg["lr"], cfg.get("mom", 0.9))
+        elif method == "hadam":
+            rule = HAdam(cfg["lr"], tuple(cfg.get("betas", (0.9, 0.999))), cfg.get("wd", 0.0))
         else:
             editor = make_editor(cfg, net)
             if cfg.get("editor_ckpt"):
@@ -244,7 +283,10 @@ def run_train(cfg, log, out):
             if obj is not None and s.get(key) is not None:
                 obj.load_state_dict(s[key])
         if rule is not None:
-            rule.m = s["rule_m"]
+            if isinstance(rule, HAdam):
+                rule.st = s["rule_m"]
+            else:
+                rule.m = s["rule_m"]
         log.log(event="resume", step=t0)
     else:
         vl, va = evaluate(net, P, data, cfg)
@@ -284,6 +326,9 @@ def run_train(cfg, log, out):
                 if method == "raw":
                     rule.lr = cfg["lr"] * mult
                     rule.edits(net, P, rec, D)
+                elif method == "hadam":
+                    rule.lr = cfg["lr"] * mult
+                    rule.step(net, P, rec, D, n_params)
                 else:
                     if eopt is not None:                            # Phase 0: imitate Adam on backprop grads
                         with flops.paused():
@@ -337,7 +382,7 @@ def run_train(cfg, log, out):
                 break
         if (t + 1) % cfg.get("ckpt_every", 2000) == 0:
             save = {"P": P, "t": t + 1, "flops": flop_tot, "wall": wall, "states": states, "shadow": shadow,
-                    "rule_m": rule.m if rule else None}
+                    "rule_m": (rule.st if isinstance(rule, HAdam) else rule.m) if rule else None}
             for obj, key in ((opt, "opt"), (hs, "hs"), (hopt, "hopt"), (editor, "editor"), (eopt, "eopt")):
                 save[key] = obj.state_dict() if obj is not None else None
             torch.save(save, ck + ".tmp"); os.replace(ck + ".tmp", ck)

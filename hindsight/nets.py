@@ -135,7 +135,10 @@ class GPT:
             P[f"b{i}.fc2"] = r(d, 4 * d) / math.sqrt(2 * self.L)
         return {k: v.to(device) for k, v in P.items()}
 
-    def forward(self, P, idx, inj=None, rec=None, detach_between=False):
+    def forward(self, P, idx, inj=None, rec=None, detach_between=False, ref=None, alpha=1.0):
+        """ref/alpha (sighted pass only): before each injection, the residual stream is reset toward the
+        reference (blind) state, x <- ref_i + alpha * (x - ref_i). alpha = 0 makes every block see only
+        its own injection (the transformer analogue of the MLP's local, non-propagated delta)."""
         B, T = idx.shape
         d, H = self.d, self.H
         x = P["emb"][idx] + P["pos"][:T]
@@ -157,6 +160,10 @@ class GPT:
             x = x + site(f"b{i}.fc2", F.gelu(u), P[f"b{i}.fc2"])
             if detach_between:                                     # cut BEFORE the injection, so the
                 x = x.detach()                                     # readout at point i+1 trains C_{i+1}
+            if ref is not None and alpha != 1.0:
+                xr = ref.h[i + 1].detach() if i + 1 < len(ref.h) else None
+                if xr is not None:
+                    x = xr + alpha * (x - xr)
             x = _add_inj(inj, i + 1, x)
         if rec is not None:
             rec.h.append(x)

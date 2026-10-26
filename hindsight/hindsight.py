@@ -109,9 +109,6 @@ class Hindsight(nn.Module):
             self.C[-1].data = torch.eye(n_ans)
             self.C[-1].requires_grad_(False)
         self.train_channel = cfg.get("readout_loss", True)
-        if self.source == "dfa":
-            for i, d in enumerate(dims):
-                self.register_buffer(f"B{i}", torch.randn(n_ans, d) / math.sqrt(n_ans))
 
     # ---- codes / injection -------------------------------------------------
     def code(self, y, blind_logits=None, idx=None):
@@ -184,30 +181,54 @@ class Hindsight(nn.Module):
             if self.source == "backprop":
                 return rb, blind, {k: -v for k, v in bp.items()}, aux, info
         if self.source == "dfa":
-            # standard DFA: true error at the output, ReLU-gated random projections below it
+            # standard DFA: true error at the output, ReLU-gated random projections below it.
+            # Feedback matrices are per edit site (shape from the site's output), made lazily.
             e = F.one_hot(y, self.n_ans).float() - blind.detach().float().softmax(-1)
             D = {}
             last = net.sites[-1].name
             for i, s in enumerate(net.sites):
                 z = rb.z[s.name].detach()
                 if s.name == last:
-                    D[s.name] = e
+                    D[s.name] = e.to(z.dtype) if z.dim() == e.dim() else e
                     continue
-                v = e @ getattr(self, f"B{i}")
+                width = z.shape[1] if z.dim() == 4 else z.shape[-1]
+                Bs = self.__dict__.setdefault("_Bs", {})          # plain dict: deterministic, not checkpointed
+                if s.name not in Bs or Bs[s.name].shape[1] != width:
+                    g = torch.Generator().manual_seed(1000 + i)
+                    Bs[s.name] = (torch.randn(self.n_ans, width, generator=g) / math.sqrt(self.n_ans)).to(z.device)
+                v = e @ Bs[s.name].to(e.dtype)
                 v = v[:, :, None, None].expand_as(z) if z.dim() == 4 else v
-                D[s.name] = v * (z > 0).float()
+                D[s.name] = (v * (z > 0).float()) if self.cfg.get("dfa_gate", not self.lm) else v.to(z.dtype)
             return rb, blind, D, aux, info
         code, kl = self.code(y, blind_logits=blind, idx=x)
         Pd = {k: v.detach() for k, v in P.items()}
+        # slow copy: the sighted pass (and its blind reference) run on an EMA of the weights, so a
+        # layer is not trained toward its own *current* amplified response (the Hebbian loop)
+        tau = self.cfg.get("ema", 0.0)
+        ref, Ps = rb, Pd
+        if tau > 0:
+            if getattr(self, "P_ema", None) is None or set(self.P_ema) != set(Pd):
+                self.P_ema = {k: v.clone() for k, v in Pd.items()}
+            Ps = self.P_ema
+            ref = Rec()
+            with torch.no_grad():
+                net.forward(Ps, x, rec=ref)
+        alpha = self.cfg.get("prop", 1.0)
+        kw = {"ref": ref, "alpha": alpha} if self.lm else {}
         rs = Rec()
         with torch.enable_grad():
-            net.forward(Pd, x, inj=self.injector(code), rec=rs, detach_between=True)
-            rl = self.readout_loss(rs.h, y, head=Pd.get("head"))
+            net.forward(Ps, x, inj=self.injector(code), rec=rs, detach_between=True, **kw)
+            rl = self.readout_loss(rs.h, y, head=Ps.get("head"))
         info["readout"] = rl.detach()
         if self.train_channel:
             aux = rl.sum() + (self.kl_coef * kl if self.lm else 0.0)
         info["kl"] = kl.detach()
-        D = {s.name: rs.z[s.name].detach() - rb.z[s.name] for s in net.sites}
+        D = {s.name: rs.z[s.name].detach() - ref.z[s.name].detach() for s in net.sites} if tau > 0 else \
+            {s.name: rs.z[s.name].detach() - rb.z[s.name] for s in net.sites}
+        if tau > 0:
+            with torch.no_grad():
+                for k, v in Pd.items():
+                    self.P_ema[k].mul_(tau).add_(v, alpha=1 - tau)
         alpha = self.cfg.get("prop", 1.0)
         if alpha != 1.0 and not self.lm:
             # d = inj + alpha * (propagated part). alpha < 1 damps the Hebbian loop in which a

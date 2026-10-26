@@ -108,6 +108,12 @@ class Editor(nn.Module):
         directions (no cross-example noise), at O(N r (in + out) + r in out) cost.
         """
         N, r = Dw.shape[0], self.rank
+        if r <= 0:                                                  # full rank: the exact weighted update
+            if A_idx is not None:
+                flops.add("editor", 2 * N * Dw.shape[1])
+                return torch.zeros(W_shape[0], Dw.shape[1], device=Dw.device, dtype=Dw.dtype).index_add_(0, A_idx, Dw) / N
+            flops.add("editor", 2 * N * Dw.shape[1] * An.shape[1])
+            return Dw.t() @ An / N
         n_in = W_shape[0] if A_idx is not None else An.shape[1]
         Om = torch.randn(n_in, r, generator=gen).to(Dw.device)
         AOm = Om[A_idx] if A_idx is not None else An @ Om          # (N, r)
