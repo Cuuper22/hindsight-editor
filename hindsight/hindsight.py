@@ -199,15 +199,22 @@ class Hindsight(nn.Module):
                 v = e @ Bs[s.name].to(e.dtype)
                 v = v[:, :, None, None].expand_as(z) if z.dim() == 4 else v
                 D[s.name] = (v * (z > 0).float()) if self.cfg.get("dfa_gate", not self.lm) else v.to(z.dtype)
+                if self.cfg.get("freeze_body", False):
+                    D[s.name] = torch.zeros_like(D[s.name])
             return rb, blind, D, aux, info
         code, kl = self.code(y, blind_logits=blind, idx=x)
         Pd = {k: v.detach() for k, v in P.items()}
         # slow copy: the sighted pass (and its blind reference) run on an EMA of the weights, so a
         # layer is not trained toward its own *current* amplified response (the Hebbian loop)
         tau = self.cfg.get("ema", 0.0)
+        every = self.cfg.get("copy_every", 0)                       # alternative: periodic hard copy
+        if every:
+            tau = 1.0
         ref, Ps = rb, Pd
         if tau > 0:
-            if getattr(self, "P_ema", None) is None or set(self.P_ema) != set(Pd):
+            self._t = getattr(self, "_t", -1) + 1
+            if getattr(self, "P_ema", None) is None or set(self.P_ema) != set(Pd) or \
+                    (every and self._t % every == 0):
                 self.P_ema = {k: v.clone() for k, v in Pd.items()}
             Ps = self.P_ema
             ref = Rec()
@@ -225,7 +232,7 @@ class Hindsight(nn.Module):
         info["kl"] = kl.detach()
         D = {s.name: rs.z[s.name].detach() - ref.z[s.name].detach() for s in net.sites} if tau > 0 else \
             {s.name: rs.z[s.name].detach() - rb.z[s.name] for s in net.sites}
-        if tau > 0:
+        if 0 < tau < 1:
             with torch.no_grad():
                 for k, v in Pd.items():
                     self.P_ema[k].mul_(tau).add_(v, alpha=1 - tau)
@@ -242,6 +249,9 @@ class Hindsight(nn.Module):
             D = self.linear_correct(D, code, blind)
         if self.source == "hindsight_lc" and self.lm:
             D = self.linear_correct_lm(D, code, blind, y)
+        if self.cfg.get("freeze_body", False):                     # control: only the output layer learns
+            last = net.sites[-1].name
+            D = {k: v if k == last else torch.zeros_like(v) for k, v in D.items()}
         if self.cfg.get("gate", False) and not self.lm:            # ReLU nets: only active units move
             last = net.sites[-1].name
             D = {k: v if k == last else v * (rb.z[k].detach() > 0) for k, v in D.items()}
