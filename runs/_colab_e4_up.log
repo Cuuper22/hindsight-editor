@@ -1,0 +1,63 @@
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 42.5kB / 42.5kB, 4.17kB/s  
+New Data Upload               : 100%|██████████| 42.5kB / 42.5kB, 4.17kB/s  [A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[AProcessing Files (1 / 1)      : 100%|██████████| 42.5kB / 42.5kB, 3.71kB/s  
+New Data Upload               : 100%|██████████| 42.5kB / 42.5kB, 3.71kB/s  
+Validating                    : ██████████| 100%            
+  ...dab810\runs\_colab\e4.tgz: 100%|██████████| 42.5kB / 42.5kB            
+[e4] bundle on HF; balance before: 293.52
+hf user: cuuper22
+launch/e4.tgz: reconstructing file:   0%|          |  0.00B / 42.5kB           
+launch/e4.tgz: downloading bytes:           |  0.00B            
+SUPERVISOR_PID 13307
+
+[e4] running: session=hs-e4-85470 rate=8.9/hr pid=13307

@@ -1,0 +1,63 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "delta_source": "hindsight_lc",
+  "gate": true,
+  "beta": 1.0,
+  "prop": 0.5,
+  "editor": {
+   "rank": 16,
+   "lr_init": 0.001
+  },
+  "meta_steps": 6000,
+  "unroll": 16,
+  "inner_steps": 2000,
+  "meta_lr": 0.0001,
+  "clip": 1.0,
+  "adam_warm_max": 1500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 2,
+  "eval": {
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "overrides": {
+    "steps": 6000,
+    "eval_every": 250,
+    "log_every": 100,
+    "ckpt_every": 2000
+   }
+  },
+  "run_id": "e2c_mlp_p05_s0_eval_s2",
+  "steps": 6000,
+  "eval_every": 250,
+  "method": "editor",
+  "editor_ckpt": "/content/runs/e2c_mlp_p05_s0/editor.pt",
+  "editor_train": null
+ },
+ "test_loss": 40.35377578125,
+ "test_acc": 0.135,
+ "val_loss": 36.5243,
+ "val_acc": 0.1382,
+ "flops": 1089404928000.0,
+ "flops_by": {
+  "fwd": 825753600000.0,
+  "hint": 32071680000.0,
+  "readout": 23592960000.0,
+  "editor": 207986688000.0
+ },
+ "wall": 68.2329831123352,
+ "peak_mem_gb": 0.09247493743896484,
+ "n_params": 269322,
+ "steps": 6000
+}

@@ -1,0 +1,37 @@
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 39.9kB / 39.9kB,   ???B/s  
+New Data Upload               : 100%|██████████| 39.9kB / 39.9kB,   ???B/s  [A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[AProcessing Files (1 / 1)      : 100%|██████████| 39.9kB / 39.9kB, 3.80kB/s  
+New Data Upload               : 100%|██████████| 39.9kB / 39.9kB, 3.80kB/s  
+Validating                    : ██████████| 100%            
+  ...ab810\runs\_colab\e3b.tgz: 100%|██████████| 39.9kB / 39.9kB            
+[e3b] bundle on HF; balance before: 330.74
+hf user: cuuper22
+launch/e3b.tgz: reconstructing file:   0%|          |  0.00B / 39.9kB          
+launch/e3b.tgz: downloading bytes:           |  0.00B            
+SUPERVISOR_PID 5250
+
+[e3b] running: session=hs-e3b-72027 rate=8.9/hr pid=5250

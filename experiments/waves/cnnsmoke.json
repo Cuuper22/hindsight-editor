@@ -1,0 +1,52 @@
+{
+ "wave": "cnnsmoke",
+ "gpu": "G4",
+ "max_parallel": 4,
+ "max_hours": 0.5,
+ "prefetch": [
+  "cifar10"
+ ],
+ "jobs": [
+  {
+   "run_id": "cnnsmoke_adam_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "steps": 600,
+    "eval_every": 300,
+    "seed": 0,
+    "run_id": "cnnsmoke_adam_s0"
+   }
+  },
+  {
+   "run_id": "cnnsmoke_ed_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "editor",
+    "editor": {
+     "lr_init": 0.001
+    },
+    "steps": 600,
+    "eval_every": 300,
+    "seed": 0,
+    "run_id": "cnnsmoke_ed_s0"
+   }
+  },
+  {
+   "run_id": "cnnsmoke_ed_meta_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "mode": "meta",
+    "meta_steps": 40,
+    "unroll": 2,
+    "inner_steps": 200,
+    "meta_lr": 0.0003,
+    "editor": {
+     "lr_init": 0.001
+    },
+    "log_every": 10,
+    "seed": 0,
+    "run_id": "cnnsmoke_ed_meta_s0"
+   }
+  }
+ ]
+}

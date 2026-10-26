@@ -1,0 +1,61 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "delta_source": "dfa",
+  "gate": true,
+  "beta": 1.0,
+  "prop": 0.0,
+  "editor": {
+   "rank": 16,
+   "lr_init": 0.001
+  },
+  "meta_steps": 6000,
+  "unroll": 16,
+  "inner_steps": 2000,
+  "meta_lr": 0.0001,
+  "clip": 1.0,
+  "adam_warm_max": 1500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 0,
+  "eval": {
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "overrides": {
+    "steps": 6000,
+    "eval_every": 250,
+    "log_every": 100,
+    "ckpt_every": 2000
+   }
+  },
+  "run_id": "e2c_mlp_randfb_s0_eval_s0",
+  "steps": 6000,
+  "eval_every": 250,
+  "method": "editor",
+  "editor_ckpt": "/content/runs/e2c_mlp_randfb_s0/editor.pt",
+  "editor_train": null
+ },
+ "test_loss": 0.19972765350341798,
+ "test_acc": 0.9378,
+ "val_loss": 0.21808215026855468,
+ "val_acc": 0.9372,
+ "flops": 620863488000.0,
+ "flops_by": {
+  "fwd": 412876800000.0,
+  "editor": 207986688000.0
+ },
+ "wall": 112.4656867980957,
+ "peak_mem_gb": 0.09250068664550781,
+ "n_params": 269322,
+ "steps": 6000
+}

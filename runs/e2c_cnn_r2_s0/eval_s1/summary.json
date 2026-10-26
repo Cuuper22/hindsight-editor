@@ -1,0 +1,65 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "cifar10",
+  "net": "cnn",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "delta_source": "hindsight_lc",
+  "gate": true,
+  "beta": 1.0,
+  "prop": 0.0,
+  "editor": {
+   "rank": 16,
+   "lr_init": 0.001
+  },
+  "meta_steps": 4000,
+  "unroll": 16,
+  "inner_steps": 2000,
+  "meta_lr": 0.0001,
+  "clip": 1.0,
+  "adam_warm_max": 1500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 1,
+  "eval": {
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "overrides": {
+    "task": "cifar10",
+    "net": "cnn",
+    "steps": 8000,
+    "eval_every": 500,
+    "log_every": 100,
+    "ckpt_every": 2000
+   }
+  },
+  "run_id": "e2c_cnn_r2_s0_eval_s1",
+  "steps": 8000,
+  "eval_every": 500,
+  "method": "editor",
+  "editor_ckpt": "/content/runs/e2c_cnn_r2_s0/editor.pt",
+  "editor_train": null
+ },
+ "test_loss": 2.315217578125,
+ "test_acc": 0.2424,
+ "val_loss": 2.338841748046875,
+ "val_acc": 0.236,
+ "flops": 51391324160000.0,
+ "flops_by": {
+  "fwd": 44436553728000.0,
+  "hint": 2379776000000.0,
+  "readout": 29491200000.0,
+  "editor": 4545503232000.0
+ },
+ "wall": 86.84852981567383,
+ "peak_mem_gb": 0.6547074317932129,
+ "n_params": 620362,
+ "steps": 8000
+}

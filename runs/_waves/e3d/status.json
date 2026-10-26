@@ -1,0 +1,154 @@
+{
+ "wave": "e3d",
+ "start": 1792977933.7036905,
+ "now": 1792984185.3423233,
+ "hours": 1.736566286947992,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e3d_w4_vib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 933,
+   "started": 1792977938.9021823,
+   "rc": 0,
+   "ended": 1792982904.0819235
+  },
+  "e3d_w4_vib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 934,
+   "started": 1792977938.9025664,
+   "rc": 0,
+   "ended": 1792982904.0820026
+  },
+  "e3d_w4_vib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 935,
+   "started": 1792977938.9028714,
+   "rc": 0,
+   "ended": 1792982904.0820448
+  },
+  "e3d_w4_novib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 936,
+   "started": 1792977938.9031198,
+   "rc": 0,
+   "ended": 1792982904.0820851
+  },
+  "e3d_w4_novib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 937,
+   "started": 1792977938.9033513,
+   "rc": 0,
+   "ended": 1792982904.0821245
+  },
+  "e3d_w4_novib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 938,
+   "started": 1792977938.9035828,
+   "rc": 0,
+   "ended": 1792982904.0821624
+  },
+  "e3d_w16_vib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 939,
+   "started": 1792977938.903802,
+   "rc": 0,
+   "ended": 1792982603.7710147
+  },
+  "e3d_w16_vib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 940,
+   "started": 1792977938.904027,
+   "rc": 0,
+   "ended": 1792982603.7710948
+  },
+  "e3d_w16_vib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 941,
+   "started": 1792977938.9042344,
+   "rc": 0,
+   "ended": 1792982603.7711375
+  },
+  "e3d_w16_novib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 942,
+   "started": 1792977938.9044547,
+   "rc": 0,
+   "ended": 1792982603.7711773
+  },
+  "e3d_w16_novib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 943,
+   "started": 1792977938.9046805,
+   "rc": 0,
+   "ended": 1792982603.771216
+  },
+  "e3d_w16_novib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 944,
+   "started": 1792977938.9048867,
+   "rc": 0,
+   "ended": 1792982603.7712533
+  },
+  "e3d_w64_vib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 945,
+   "started": 1792977938.9051042,
+   "rc": 0,
+   "ended": 1792982603.771289
+  },
+  "e3d_w64_vib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 946,
+   "started": 1792977938.9053261,
+   "rc": 0,
+   "ended": 1792982603.7713234
+  },
+  "e3d_w64_vib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 21836,
+   "started": 1792982603.7718284,
+   "rc": 0,
+   "ended": 1792984185.3277094
+  },
+  "e3d_w64_novib_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 21837,
+   "started": 1792982603.7721262,
+   "rc": 0,
+   "ended": 1792984185.3277893
+  },
+  "e3d_w64_novib_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 21838,
+   "started": 1792982603.7723713,
+   "rc": 0,
+   "ended": 1792984185.3278248
+  },
+  "e3d_w64_novib_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 21839,
+   "started": 1792982603.7725968,
+   "rc": 0,
+   "ended": 1792984185.3278575
+  }
+ }
+}

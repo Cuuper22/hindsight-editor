@@ -1,0 +1,9 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU", "cfg": {"mode": "train", "task": "mnist", "net": "mlp", "hidden": [256, 256], "bs": 128, "steps": 2000, "beta": 1.0, "delta_source": "hindsight_lc", "method": "editor", "lr": 0.001, "sched": "cos", "eval_every": 1000, "log_every": 500, "ckpt_every": 2000, "seed": 0, "gate": true, "prop": 0.5, "editor": {"lr_init": 0.001}, "run_id": "e1_mnist"}, "time": 1792957499.74815}
+{"event": "eval", "step": 0, "val_loss": 2.63643, "val_acc": 0.1334, "flops": 0.0, "wall": 0.0, "n_params": 269322, "time": 1792957503.08513}
+{"event": "train", "step": 500, "loss": 0.69794, "flops": 84910080000.0, "wall": 79.2913, "readout_mean": 0.1323, "time": 1792957585.99201}
+{"event": "train", "step": 1000, "loss": 0.68876, "flops": 169820160000.0, "wall": 159.19382, "readout_mean": 0.25084, "time": 1792957669.59225}
+{"event": "eval", "step": 1000, "val_loss": 0.60673, "val_acc": 0.8278, "flops": 169820160000.0, "flops_by": {"fwd": 137625600000.0, "hint": 5345280000.0, "readout": 3932160000.0, "editor": 22917120000.0}, "wall": 159.19382, "peak_mem_gb": 0.09049, "time": 1792957669.66102}
+{"event": "train", "step": 1500, "loss": 0.63155, "flops": 254730240000.0, "wall": 239.2735, "readout_mean": 0.25015, "time": 1792957753.40425}
+{"event": "train", "step": 2000, "loss": 0.55112, "flops": 339640320000.0, "wall": 319.02862, "readout_mean": 0.27882, "time": 1792957836.76856}
+{"event": "eval", "step": 2000, "val_loss": 0.5082, "val_acc": 0.8592, "flops": 339640320000.0, "flops_by": {"fwd": 275251200000.0, "hint": 10690560000.0, "readout": 7864320000.0, "editor": 45834240000.0}, "wall": 319.02862, "peak_mem_gb": 0.09049, "time": 1792957836.80944}
+{"event": "done", "time": 1792957836.9322}

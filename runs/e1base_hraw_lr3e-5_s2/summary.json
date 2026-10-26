@@ -1,0 +1,38 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 0.1,
+  "delta_source": "hindsight",
+  "method": "raw",
+  "lr": 3e-05,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 2,
+  "run_id": "e1base_hraw_lr3e-5_s2"
+ },
+ "test_loss": 3.71413828125,
+ "test_acc": 0.1022,
+ "val_loss": 3.688709033203125,
+ "val_acc": 0.0994,
+ "flops": 1270241280000.0,
+ "flops_by": {
+  "fwd": 825753600000.0,
+  "hint": 8017920000.0,
+  "readout": 23592960000.0,
+  "editor": 412876800000.0
+ },
+ "wall": 27.626996278762817,
+ "peak_mem_gb": 0.09045648574829102,
+ "n_params": 269322,
+ "steps": 6000
+}

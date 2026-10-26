@@ -1,0 +1,49 @@
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 43.8kB / 43.8kB, 4.29kB/s  
+New Data Upload               : 100%|██████████| 43.8kB / 43.8kB, 4.29kB/s  [A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+
+Validating                    :           |   0%            [A[A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[A
+
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            [A[A
+
+
+Validating                    : ██████████| 100%            [A[A[AProcessing Files (1 / 1)      : 100%|██████████| 43.8kB / 43.8kB, 3.99kB/s  
+New Data Upload               : 100%|██████████| 43.8kB / 43.8kB, 3.99kB/s  
+Validating                    : ██████████| 100%            
+  ...dab810\runs\_colab\e5.tgz: 100%|██████████| 43.8kB / 43.8kB            
+[e5] bundle on HF; balance before: 293.52
+hf user: cuuper22
+launch/e5.tgz: reconstructing file:   0%|          |  0.00B / 43.8kB           
+launch/e5.tgz: downloading bytes:           |  0.00B            
+SUPERVISOR_PID 6842
+
+[e5] running: session=hs-e5-85571 rate=8.9/hr pid=6842

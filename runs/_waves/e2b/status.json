@@ -1,0 +1,202 @@
+{
+ "wave": "e2b",
+ "start": 1792965879.529446,
+ "now": 1792967995.4890656,
+ "hours": 0.587766561044587,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e2cnn_adam_lr3e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2575,
+   "started": 1792965893.6852062,
+   "rc": 0,
+   "ended": 1792966013.7922523
+  },
+  "e2cnn_adam_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2576,
+   "started": 1792965893.6855583,
+   "rc": 0,
+   "ended": 1792966013.7923226
+  },
+  "e2cnn_adam_lr3e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2577,
+   "started": 1792965893.6858892,
+   "rc": 0,
+   "ended": 1792966013.7923574
+  },
+  "e2cnn_dfa_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2578,
+   "started": 1792965893.6861343,
+   "rc": 0,
+   "ended": 1792965933.7218294
+  },
+  "e2cnn_edinit_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2579,
+   "started": 1792965893.6863782,
+   "rc": 0,
+   "ended": 1792966534.2539976
+  },
+  "e2cnn_adam_lr3e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2580,
+   "started": 1792965893.6865947,
+   "rc": 0,
+   "ended": 1792966013.7923915
+  },
+  "e2cnn_adam_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2581,
+   "started": 1792965893.6868095,
+   "rc": 0,
+   "ended": 1792966013.7924213
+  },
+  "e2cnn_adam_lr3e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2582,
+   "started": 1792965893.6870537,
+   "rc": 0,
+   "ended": 1792966013.792452
+  },
+  "e2cnn_dfa_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2583,
+   "started": 1792965893.6872666,
+   "rc": 0,
+   "ended": 1792965933.7219214
+  },
+  "e2cnn_edinit_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2584,
+   "started": 1792965893.6874952,
+   "rc": 0,
+   "ended": 1792966534.254072
+  },
+  "e2cnn_adam_lr3e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2585,
+   "started": 1792965893.6877208,
+   "rc": 0,
+   "ended": 1792966013.7924855
+  },
+  "e2cnn_adam_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2586,
+   "started": 1792965893.6879418,
+   "rc": 0,
+   "ended": 1792966013.7925146
+  },
+  "e2cnn_adam_lr3e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2587,
+   "started": 1792965893.688174,
+   "rc": 0,
+   "ended": 1792966013.792543
+  },
+  "e2cnn_dfa_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2588,
+   "started": 1792965893.6884017,
+   "rc": 0,
+   "ended": 1792965933.7219658
+  },
+  "e2cnn_edinit_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3775,
+   "started": 1792965933.722434,
+   "rc": 0,
+   "ended": 1792966554.2716312
+  },
+  "e2cnn_meta_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3776,
+   "started": 1792965933.7227867,
+   "rc": 0,
+   "ended": 1792967415.0099657
+  },
+  "e2mlp_bestre_m0_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3777,
+   "started": 1792965933.7231357,
+   "rc": 0,
+   "ended": 1792966294.0383883
+  },
+  "e2mlp_bestre_m0_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4334,
+   "started": 1792966013.7930207,
+   "rc": 0,
+   "ended": 1792966374.1107407
+  },
+  "e2mlp_bestre_m0_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4335,
+   "started": 1792966013.793341,
+   "rc": 0,
+   "ended": 1792966374.1108198
+  },
+  "e2mlp_bestre_m1_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4336,
+   "started": 1792966013.7936413,
+   "rc": 0,
+   "ended": 1792966374.110868
+  },
+  "e2mlp_bestre_m1_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4337,
+   "started": 1792966013.7938697,
+   "rc": 0,
+   "ended": 1792966374.1109042
+  },
+  "e2mlp_bestre_m1_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4338,
+   "started": 1792966013.7941253,
+   "rc": 0,
+   "ended": 1792966374.1109383
+  },
+  "e2mlp_r2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4339,
+   "started": 1792966013.794379,
+   "rc": 0,
+   "ended": 1792967975.4552526
+  },
+  "e2mlp_r2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4340,
+   "started": 1792966013.794595,
+   "rc": 0,
+   "ended": 1792967995.4706006
+  }
+ }
+}

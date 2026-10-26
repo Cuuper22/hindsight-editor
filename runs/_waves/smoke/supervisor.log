@@ -1,0 +1,7 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+19:05:39 restored from repo; 0 runs already done
+19:05:39 start smoke_colab_adam try 1
+19:05:39 start smoke_colab_dfa try 1
+19:05:59 exit smoke_colab_adam 0 done
+19:05:59 exit smoke_colab_dfa 0 done
+19:05:59 finished: done

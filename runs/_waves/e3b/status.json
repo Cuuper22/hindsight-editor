@@ -1,0 +1,42 @@
+{
+ "wave": "e3b",
+ "start": 1792972046.556972,
+ "now": 1792976517.4863784,
+ "hours": 1.2419248351785872,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e3b_meta_small_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5328,
+   "started": 1792972053.0979202,
+   "rc": 0,
+   "ended": 1792976517.467198
+  },
+  "e3b_meta_small_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5329,
+   "started": 1792972053.0982633,
+   "rc": 0,
+   "ended": 1792976517.4673038
+  },
+  "e3b_meta_mid_s0": {
+   "state": "failed",
+   "tries": 3,
+   "pid": 5868,
+   "started": 1792972093.1354275,
+   "rc": 1,
+   "ended": 1792972113.154982
+  },
+  "e3b_meta_big_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5331,
+   "started": 1792972053.0988345,
+   "rc": 0,
+   "ended": 1792975996.9656973
+  }
+ }
+}

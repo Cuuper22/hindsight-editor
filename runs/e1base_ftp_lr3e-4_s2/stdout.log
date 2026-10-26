@@ -1,0 +1,16 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "mnist", "net": "mlp", "hidden": [256, 256], "bs": 128, "steps": 6000, "beta": 0.1, "delta_source": "ftp_seq", "method": "raw", "lr": 0.0003, "sched": "cos", "eval_every": 500, "log_every": 100, "ckpt_every": 2000, "seed": 2, "run_id": "e1base_ftp_lr3e-4_s2"}, "time": 1792955286.9979}
+{"event": "eval", "step": 0, "val_loss": 2.78839, "val_acc": 0.101, "flops": 0.0, "wall": 0.0, "n_params": 269322, "time": 1792955289.11127}
+{"event": "train", "step": 100, "loss": 3.44164, "flops": 21170688000.0, "wall": 0.6549, "readout_mean": 1.56648, "time": 1792955290.59696}
+{"event": "train", "step": 200, "loss": 30.17698, "flops": 42341376000.0, "wall": 1.10558, "readout_mean": 10.38701, "time": 1792955291.90503}
+{"event": "train", "step": 300, "loss": 2020.53125, "flops": 63512064000.0, "wall": 1.43748, "readout_mean": 679.43408, "time": 1792955293.21105}
+{"event": "train", "step": 400, "loss": 1275084800.0, "flops": 84682752000.0, "wall": 1.78049, "readout_mean": 425885696.0, "time": 1792955294.51899}
+{"event": "train", "step": 500, "loss": 5.220437228215337e+17, "flops": 105853440000.0, "wall": 2.1177, "readout_mean": 1.7454966993269555e+17, "time": 1792955295.74151}
+{"event": "eval", "step": 500, "val_loss": 8.450228955724922e+17, "val_acc": 0.103, "flops": 105853440000.0, "flops_by": {"fwd": 68812800000.0, "hint": 668160000.0, "readout": 1966080000.0, "editor": 34406400000.0}, "wall": 2.1177, "peak_mem_gb": 0.09046, "time": 1792955295.75855}
+{"event": "train", "step": 600, "loss": NaN, "flops": 127024128000.0, "wall": 2.42036, "readout_mean": NaN, "time": 1792955296.80851}
+{"event": "train", "step": 700, "loss": NaN, "flops": 148194816000.0, "wall": 2.74519, "readout_mean": NaN, "time": 1792955297.84419}
+{"event": "train", "step": 800, "loss": NaN, "flops": 169365504000.0, "wall": 3.13625, "readout_mean": NaN, "time": 1792955298.87988}
+{"event": "train", "step": 900, "loss": NaN, "flops": 190536192000.0, "wall": 3.71128, "readout_mean": NaN, "time": 1792955299.91644}
+{"event": "train", "step": 1000, "loss": NaN, "flops": 211706880000.0, "wall": 4.26559, "readout_mean": NaN, "time": 1792955300.94598}
+{"event": "eval", "step": 1000, "val_loss": NaN, "val_acc": 0.0926, "flops": 211706880000.0, "flops_by": {"fwd": 137625600000.0, "hint": 1336320000.0, "readout": 3932160000.0, "editor": 68812800000.0}, "wall": 4.26559, "peak_mem_gb": 0.09046, "time": 1792955300.96114}
+{"event": "diverged", "step": 1000, "time": 1792955300.96118}
+{"event": "done", "time": 1792955301.00839}

@@ -1,0 +1,106 @@
+{
+ "wave": "e2mlp",
+ "start": 1792960904.0638254,
+ "now": 1792962605.752314,
+ "hours": 0.47269124693340725,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e2mlp_p05_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5252,
+   "started": 1792960904.3150258,
+   "rc": 0,
+   "ended": 1792962445.6065927
+  },
+  "e2mlp_p05_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5253,
+   "started": 1792960904.3152966,
+   "rc": 0,
+   "ended": 1792962445.6066601
+  },
+  "e2mlp_p0_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5254,
+   "started": 1792960904.3155477,
+   "rc": 0,
+   "ended": 1792962445.6066964
+  },
+  "e2mlp_p0_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5255,
+   "started": 1792960904.3157704,
+   "rc": 0,
+   "ended": 1792962445.60673
+  },
+  "e2mlp_p05_k8_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5256,
+   "started": 1792960904.3159983,
+   "rc": 0,
+   "ended": 1792962605.734085
+  },
+  "e2mlp_p05_k8_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5257,
+   "started": 1792960904.3162174,
+   "rc": 0,
+   "ended": 1792962605.7341785
+  },
+  "e2mlp_p05_r16_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5258,
+   "started": 1792960904.3164384,
+   "rc": 0,
+   "ended": 1792962445.6067674
+  },
+  "e2mlp_p05_r16_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5259,
+   "started": 1792960904.3166587,
+   "rc": 0,
+   "ended": 1792962445.6067996
+  },
+  "e2mlp_p05_warm_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5260,
+   "started": 1792960904.3168526,
+   "rc": 0,
+   "ended": 1792962445.6068306
+  },
+  "e2mlp_p05_warm_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5261,
+   "started": 1792960904.3170621,
+   "rc": 0,
+   "ended": 1792962445.6068616
+  },
+  "e2mlp_p0_warm_k8_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5262,
+   "started": 1792960904.3172839,
+   "rc": 0,
+   "ended": 1792962605.7342215
+  },
+  "e2mlp_p0_warm_k8_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 5263,
+   "started": 1792960904.317485,
+   "rc": 0,
+   "ended": 1792962605.7342608
+  }
+ }
+}

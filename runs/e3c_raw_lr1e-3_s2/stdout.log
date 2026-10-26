@@ -1,0 +1,10 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "enwik8", "net": "gpt", "vocab": 256, "ctx": 256, "d": 384, "n_layer": 6, "n_head": 6, "bs": 32, "steps": 6000, "method": "raw", "lr": 0.001, "sched": "wcos", "warmup": 200, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 100, "ckpt_every": 2000, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "editor": {"rank": 8, "lr_init": 0.001}, "seed": 2, "run_id": "e3c_raw_lr1e-3_s2"}, "time": 1792976989.59881}
+{"event": "eval", "step": 0, "val_loss": 5.63814, "val_acc": null, "flops": 0.0, "wall": 0.0, "n_params": 10911744, "time": 1792976995.97153}
+{"event": "train", "step": 100, "loss": NaN, "flops": 60357880053760.0, "wall": 12.8767, "readout_mean": NaN, "time": 1792977010.86687}
+{"event": "train", "step": 200, "loss": NaN, "flops": 120372498268160.0, "wall": 19.06902, "readout_mean": NaN, "time": 1792977019.36167}
+{"event": "train", "step": 300, "loss": NaN, "flops": 180387116482560.0, "wall": 25.35522, "readout_mean": NaN, "time": 1792977027.74478}
+{"event": "train", "step": 400, "loss": NaN, "flops": 240401734696960.0, "wall": 31.58445, "readout_mean": NaN, "time": 1792977036.083}
+{"event": "train", "step": 500, "loss": NaN, "flops": 300416352911360.0, "wall": 37.54864, "readout_mean": NaN, "time": 1792977044.42621}
+{"event": "eval", "step": 500, "val_loss": NaN, "val_acc": null, "flops": 300416352911360.0, "flops_by": {"fwd": 194884141056000.0, "hint": 842384015360.0, "readout": 16911433728000.0, "editor": 87778394112000.0}, "wall": 37.54864, "peak_mem_gb": 3.71094, "time": 1792977044.78493}
+{"event": "diverged", "step": 500, "time": 1792977044.785}
+{"event": "done", "time": 1792977045.22364}

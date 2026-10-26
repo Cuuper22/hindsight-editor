@@ -1,0 +1,290 @@
+{
+ "wave": "e3a",
+ "gpu": "G4",
+ "max_parallel": 14,
+ "max_hours": 2.5,
+ "prefetch": [
+  "enwik8"
+ ],
+ "jobs": [
+  {
+   "run_id": "e3a_adam_lr3e-4_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "e3a_adam_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr3e-4_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "e3a_adam_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr3e-4_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "e3a_adam_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr1e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "e3a_adam_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr1e-3_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "e3a_adam_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr1e-3_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "e3a_adam_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr3e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "e3a_adam_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr3e-3_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "e3a_adam_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "e3a_adam_lr3e-3_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "e3a_adam_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "seed": 0,
+    "run_id": "e3a_ed_w4_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "seed": 1,
+    "run_id": "e3a_ed_w4_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "seed": 2,
+    "run_id": "e3a_ed_w4_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "seed": 0,
+    "run_id": "e3a_ed_w16_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "seed": 1,
+    "run_id": "e3a_ed_w16_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "seed": 2,
+    "run_id": "e3a_ed_w16_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "seed": 0,
+    "run_id": "e3a_ed_w64_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "seed": 1,
+    "run_id": "e3a_ed_w64_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "seed": 2,
+    "run_id": "e3a_ed_w64_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "seed": 0,
+    "run_id": "e3a_ed_w4_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "seed": 1,
+    "run_id": "e3a_ed_w4_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w4_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "seed": 2,
+    "run_id": "e3a_ed_w4_novib_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "seed": 0,
+    "run_id": "e3a_ed_w16_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "seed": 1,
+    "run_id": "e3a_ed_w16_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w16_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "seed": 2,
+    "run_id": "e3a_ed_w16_novib_s2"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "seed": 0,
+    "run_id": "e3a_ed_w64_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "seed": 1,
+    "run_id": "e3a_ed_w64_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3a_ed_w64_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "seed": 2,
+    "run_id": "e3a_ed_w64_novib_s2"
+   }
+  }
+ ]
+}

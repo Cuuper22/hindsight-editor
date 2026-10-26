@@ -1,0 +1,22 @@
+{
+ "wave": "e4b",
+ "gpu": "G4",
+ "max_parallel": 1,
+ "max_hours": 3.5,
+ "prefetch": [],
+ "jobs": [
+  {
+   "run_id": "e4_editor_s1fix",
+   "config": "experiments/e4_fwe.json",
+   "overrides": {
+    "n_train_tokens": 200000000,
+    "eval_every": 500,
+    "ckpt_every": 1000,
+    "seed": 0,
+    "method": "editor",
+    "steps": 7700,
+    "run_id": "e4_editor_s1fix"
+   }
+  }
+ ]
+}

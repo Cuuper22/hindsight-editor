@@ -1,0 +1,21 @@
+{
+ "mode": "train",
+ "task": "mnist",
+ "net": "mlp",
+ "hidden": [
+  256,
+  256
+ ],
+ "bs": 128,
+ "steps": 6000,
+ "beta": 0.1,
+ "delta_source": "dfa",
+ "method": "raw",
+ "lr": 0.001,
+ "sched": "cos",
+ "eval_every": 500,
+ "log_every": 100,
+ "ckpt_every": 2000,
+ "seed": 2,
+ "run_id": "e1base_dfa_lr1e-3_s2"
+}

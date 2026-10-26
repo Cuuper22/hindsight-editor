@@ -1,0 +1,38 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 0.1,
+  "delta_source": "ftp_seq",
+  "method": "raw",
+  "lr": 0.0003,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 1,
+  "run_id": "e1base_ftp_lr3e-4_s1"
+ },
+ "test_loss": NaN,
+ "test_acc": 0.098,
+ "val_loss": NaN,
+ "val_acc": 0.0926,
+ "flops": 211706880000.0,
+ "flops_by": {
+  "fwd": 137625600000.0,
+  "hint": 1336320000.0,
+  "readout": 3932160000.0,
+  "editor": 68812800000.0
+ },
+ "wall": 5.3506598472595215,
+ "peak_mem_gb": 0.09045648574829102,
+ "n_params": 269322,
+ "steps": 6000
+}

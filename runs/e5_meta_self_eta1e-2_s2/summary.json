@@ -1,0 +1,49 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 1.0,
+  "delta_source": "hindsight_lc",
+  "method": "editor",
+  "lr": 0.001,
+  "sched": "cos",
+  "eval_every": 250,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 2,
+  "gate": true,
+  "prop": 0.0,
+  "editor": {
+   "rank": 16,
+   "lr_init": 0.001
+  },
+  "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+  "self_edit": {
+   "eps": 0.01,
+   "eta": 0.01
+  },
+  "run_id": "e5_meta_self_eta1e-2_s2"
+ },
+ "test_loss": 35.279921875,
+ "test_acc": 0.912,
+ "val_loss": 59.59721875,
+ "val_acc": 0.9064,
+ "flops": 1915158528000.0,
+ "flops_by": {
+  "fwd": 1651507200000.0,
+  "hint": 32071680000.0,
+  "readout": 23592960000.0,
+  "editor": 207986688000.0
+ },
+ "wall": 310.2483649253845,
+ "peak_mem_gb": 0.09247493743896484,
+ "n_params": 269322,
+ "steps": 6000
+}

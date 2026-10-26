@@ -1,0 +1,50 @@
+{
+ "cfg": {
+  "mode": "e0",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "lr": 0.001,
+  "steps": 3000,
+  "beta": 0.5,
+  "probe_at": [
+   0,
+   50,
+   200,
+   500,
+   1000,
+   2000,
+   3000
+  ],
+  "variants": [
+   {
+    "name": "hindsight",
+    "delta_source": "hindsight"
+   },
+   {
+    "name": "hindsight_beta0.1",
+    "delta_source": "hindsight",
+    "beta": 0.1
+   },
+   {
+    "name": "no_readout",
+    "delta_source": "hindsight",
+    "readout_loss": false
+   },
+   {
+    "name": "ftp_seq",
+    "delta_source": "ftp_seq"
+   },
+   {
+    "name": "dfa",
+    "delta_source": "dfa"
+   }
+  ],
+  "seed": 1,
+  "run_id": "e0_mnist_s1"
+ }
+}

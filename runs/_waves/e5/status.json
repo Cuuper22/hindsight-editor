@@ -1,0 +1,130 @@
+{
+ "wave": "e5",
+ "start": 1792985591.1181085,
+ "now": 1792985937.1995125,
+ "hours": 0.09613372339142694,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e5_meta_frozen_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6958,
+   "started": 1792985596.8952389,
+   "rc": 0,
+   "ended": 1792985917.1675882
+  },
+  "e5_meta_frozen_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6959,
+   "started": 1792985596.8955793,
+   "rc": 0,
+   "ended": 1792985917.1676583
+  },
+  "e5_meta_frozen_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6960,
+   "started": 1792985596.8958669,
+   "rc": 0,
+   "ended": 1792985917.1676955
+  },
+  "e5_meta_self_eta1e-2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6961,
+   "started": 1792985596.8961196,
+   "rc": 0,
+   "ended": 1792985937.1849475
+  },
+  "e5_meta_self_eta1e-2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6962,
+   "started": 1792985596.896386,
+   "rc": 0,
+   "ended": 1792985937.1850271
+  },
+  "e5_meta_self_eta1e-2_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6963,
+   "started": 1792985596.896618,
+   "rc": 0,
+   "ended": 1792985937.1850634
+  },
+  "e5_meta_self_eta5e-2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6964,
+   "started": 1792985596.8968656,
+   "rc": 0,
+   "ended": 1792985937.1850967
+  },
+  "e5_meta_self_eta5e-2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6965,
+   "started": 1792985596.8970966,
+   "rc": 0,
+   "ended": 1792985937.1851277
+  },
+  "e5_meta_self_eta5e-2_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6966,
+   "started": 1792985596.897319,
+   "rc": 0,
+   "ended": 1792985937.1851585
+  },
+  "e5_untrained_frozen_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6967,
+   "started": 1792985596.8975494,
+   "rc": 0,
+   "ended": 1792985917.1677403
+  },
+  "e5_untrained_frozen_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6968,
+   "started": 1792985596.8977907,
+   "rc": 0,
+   "ended": 1792985917.1677737
+  },
+  "e5_untrained_frozen_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6969,
+   "started": 1792985596.898017,
+   "rc": 0,
+   "ended": 1792985917.1678066
+  },
+  "e5_untrained_self_eta1e-2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6970,
+   "started": 1792985596.8982627,
+   "rc": 0,
+   "ended": 1792985937.1851912
+  },
+  "e5_untrained_self_eta1e-2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6971,
+   "started": 1792985596.8985157,
+   "rc": 0,
+   "ended": 1792985937.1852243
+  },
+  "e5_untrained_self_eta1e-2_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6972,
+   "started": 1792985596.898739,
+   "rc": 0,
+   "ended": 1792985937.1852546
+  }
+ }
+}

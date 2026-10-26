@@ -1,0 +1,66 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "meta", "task": "enwik8", "net": "gpt", "vocab": 256, "ctx": 128, "d": 256, "n_layer": 4, "n_head": 4, "bs": 32, "steps": 10000, "method": "adam", "lr": 0.001, "sched": "wcos", "warmup": 200, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 50, "ckpt_every": 250, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "editor": {"rank": 16, "lr_init": 0.001, "use_id": false}, "seed": 0, "unroll": 8, "inner_steps": 2000, "adam_warm_max": 1500, "warm_lr": 0.001, "meta_lr": 0.0001, "meta_steps": 2000, "eval": {"seeds": [0, 1, 2], "overrides": {"d": 384, "n_layer": 6, "n_head": 6, "ctx": 256, "bs": 32, "steps": 6000, "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 100, "ckpt_every": 2000}}, "run_id": "e3b_meta_mid_s0"}, "time": 1792972054.04116}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 468, in <lambda>
+    "meta": lambda: run_meta(cfg, log, out)}[mode]()
+                    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 390, in run_meta
+    rec, out_, D, aux, info = hs.deltas(Pk, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 249, in linear_correct_lm
+    out[name] = (Df - Q @ M).reshape(d.shape).to(d.dtype)
+                 ~~~^~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 16.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 15.88 MiB is free. Process 5331 has 48.38 GiB memory in use. Process 5329 has 6.63 GiB memory in use. Process 5328 has 6.63 GiB memory in use. Including non-PyTorch memory, this process has 33.29 GiB memory in use. Of the allocated memory 32.59 GiB is allocated by PyTorch, and 16.70 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "meta", "task": "enwik8", "net": "gpt", "vocab": 256, "ctx": 128, "d": 256, "n_layer": 4, "n_head": 4, "bs": 32, "steps": 10000, "method": "adam", "lr": 0.001, "sched": "wcos", "warmup": 200, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 50, "ckpt_every": 250, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "editor": {"rank": 16, "lr_init": 0.001, "use_id": false}, "seed": 0, "unroll": 8, "inner_steps": 2000, "adam_warm_max": 1500, "warm_lr": 0.001, "meta_lr": 0.0001, "meta_steps": 2000, "eval": {"seeds": [0, 1, 2], "overrides": {"d": 384, "n_layer": 6, "n_head": 6, "ctx": 256, "bs": 32, "steps": 6000, "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 100, "ckpt_every": 2000}}, "run_id": "e3b_meta_mid_s0"}, "time": 1792972073.82662}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 468, in <lambda>
+    "meta": lambda: run_meta(cfg, log, out)}[mode]()
+                    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 390, in run_meta
+    rec, out_, D, aux, info = hs.deltas(Pk, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 249, in linear_correct_lm
+    out[name] = (Df - Q @ M).reshape(d.shape).to(d.dtype)
+                 ~~~^~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 16.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 7.88 MiB is free. Process 5331 has 48.38 GiB memory in use. Process 5329 has 6.63 GiB memory in use. Process 5328 has 6.63 GiB memory in use. Including non-PyTorch memory, this process has 33.29 GiB memory in use. Of the allocated memory 32.59 GiB is allocated by PyTorch, and 16.70 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "meta", "task": "enwik8", "net": "gpt", "vocab": 256, "ctx": 128, "d": 256, "n_layer": 4, "n_head": 4, "bs": 32, "steps": 10000, "method": "adam", "lr": 0.001, "sched": "wcos", "warmup": 200, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 50, "ckpt_every": 250, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "editor": {"rank": 16, "lr_init": 0.001, "use_id": false}, "seed": 0, "unroll": 8, "inner_steps": 2000, "adam_warm_max": 1500, "warm_lr": 0.001, "meta_lr": 0.0001, "meta_steps": 2000, "eval": {"seeds": [0, 1, 2], "overrides": {"d": 384, "n_layer": 6, "n_head": 6, "ctx": 256, "bs": 32, "steps": 6000, "eval_every": 500, "eval_batches": 20, "eval_bs": 32, "log_every": 100, "ckpt_every": 2000}}, "run_id": "e3b_meta_mid_s0"}, "time": 1792972093.8368}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 468, in <lambda>
+    "meta": lambda: run_meta(cfg, log, out)}[mode]()
+                    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 390, in run_meta
+    rec, out_, D, aux, info = hs.deltas(Pk, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 249, in linear_correct_lm
+    out[name] = (Df - Q @ M).reshape(d.shape).to(d.dtype)
+                 ~~~^~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 16.00 MiB. GPU 0 has a total capacity of 94.97 GiB of which 7.88 MiB is free. Process 5331 has 48.38 GiB memory in use. Process 5329 has 6.63 GiB memory in use. Process 5328 has 6.63 GiB memory in use. Including non-PyTorch memory, this process has 33.29 GiB memory in use. Of the allocated memory 32.59 GiB is allocated by PyTorch, and 16.70 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

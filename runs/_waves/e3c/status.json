@@ -1,0 +1,114 @@
+{
+ "wave": "e3c",
+ "start": 1792976982.6586072,
+ "now": 1792980672.138826,
+ "hours": 1.0248556163575915,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e3c_adam_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2617,
+   "started": 1792976988.5123868,
+   "rc": 0,
+   "ended": 1792977228.7509604
+  },
+  "e3c_raw_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2618,
+   "started": 1792976988.5127223,
+   "rc": 0,
+   "ended": 1792977048.5731378
+  },
+  "e3c_ed_lr1e-2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2619,
+   "started": 1792976988.5130234,
+   "rc": 0,
+   "ended": 1792979450.9839365
+  },
+  "e3c_ed_lr3e-2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2620,
+   "started": 1792976988.5132706,
+   "rc": 0,
+   "ended": 1792979450.9840162
+  },
+  "e3c_adam_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2621,
+   "started": 1792976988.5135028,
+   "rc": 0,
+   "ended": 1792977228.7510467
+  },
+  "e3c_raw_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2622,
+   "started": 1792976988.5137358,
+   "rc": 0,
+   "ended": 1792977048.573214
+  },
+  "e3c_ed_lr1e-2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2623,
+   "started": 1792976988.5139725,
+   "rc": 0,
+   "ended": 1792979450.9840615
+  },
+  "e3c_ed_lr3e-2_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2624,
+   "started": 1792976988.5142117,
+   "rc": 0,
+   "ended": 1792979450.984103
+  },
+  "e3c_adam_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2625,
+   "started": 1792976988.5144236,
+   "rc": 0,
+   "ended": 1792977228.7510912
+  },
+  "e3c_raw_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2626,
+   "started": 1792976988.514647,
+   "rc": 0,
+   "ended": 1792977048.573254
+  },
+  "e3c_ed_lr1e-2_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2627,
+   "started": 1792976988.5148747,
+   "rc": 0,
+   "ended": 1792979450.9841433
+  },
+  "e3c_ed_lr3e-2_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2628,
+   "started": 1792976988.5151088,
+   "rc": 0,
+   "ended": 1792979450.984184
+  },
+  "e3c_meta_small_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2629,
+   "started": 1792976988.5153737,
+   "rc": 0,
+   "ended": 1792980672.1190598
+  }
+ }
+}

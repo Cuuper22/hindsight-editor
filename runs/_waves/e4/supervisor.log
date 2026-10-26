@@ -1,0 +1,13 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+03:31:30 restored from repo; 0 runs already done
+03:31:34 start e4_adamw_lr6e-4_s0 try 1
+03:31:34 start e4_adamw_lr1.8e-3_s0 try 1
+03:31:34 start e4_editor_s0 try 1
+03:32:14 exit e4_editor_s0 1 pending
+03:32:14 start e4_editor_s0 try 2
+03:32:34 exit e4_editor_s0 1 pending
+03:32:34 start e4_editor_s0 try 3
+03:32:54 exit e4_editor_s0 1 failed
+03:51:15 exit e4_adamw_lr6e-4_s0 0 done
+03:51:15 exit e4_adamw_lr1.8e-3_s0 0 done
+03:51:15 finished: done

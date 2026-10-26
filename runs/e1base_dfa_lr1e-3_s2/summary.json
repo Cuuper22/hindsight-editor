@@ -1,0 +1,36 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 0.1,
+  "delta_source": "dfa",
+  "method": "raw",
+  "lr": 0.001,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 2,
+  "run_id": "e1base_dfa_lr1e-3_s2"
+ },
+ "test_loss": 0.13725579833984375,
+ "test_acc": 0.9586,
+ "val_loss": 0.15215931396484375,
+ "val_acc": 0.9566,
+ "flops": 825753600000.0,
+ "flops_by": {
+  "fwd": 412876800000.0,
+  "editor": 412876800000.0
+ },
+ "wall": 17.2694571018219,
+ "peak_mem_gb": 0.08190250396728516,
+ "n_params": 269322,
+ "steps": 6000
+}

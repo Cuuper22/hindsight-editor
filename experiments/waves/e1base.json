@@ -1,0 +1,359 @@
+{
+ "wave": "e1base",
+ "gpu": "G4",
+ "max_parallel": 16,
+ "max_hours": 1.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "e1base_adam_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "e1base_adam_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "e1base_adam_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "e1base_adam_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "e1base_adam_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "e1base_adam_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "e1base_adam_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "e1base_adam_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "e1base_adam_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "e1base_adam_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "e1base_adam_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "e1base_dfa_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "e1base_dfa_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "e1base_dfa_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "e1base_dfa_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "e1base_dfa_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "e1base_dfa_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "e1base_dfa_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "e1base_dfa_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "e1base_dfa_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "e1base_dfa_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0001,
+    "seed": 0,
+    "run_id": "e1base_ftp_lr1e-4_s0"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0001,
+    "seed": 1,
+    "run_id": "e1base_ftp_lr1e-4_s1"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0001,
+    "seed": 2,
+    "run_id": "e1base_ftp_lr1e-4_s2"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "e1base_ftp_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "e1base_ftp_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "e1base_ftp_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "e1base_ftp_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "e1base_ftp_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "e1base_ftp_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "ftp_seq",
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "e1base_ftp_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr3e-5_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 3e-05,
+    "seed": 0,
+    "run_id": "e1base_hraw_lr3e-5_s0"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr3e-5_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 3e-05,
+    "seed": 1,
+    "run_id": "e1base_hraw_lr3e-5_s1"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr3e-5_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 3e-05,
+    "seed": 2,
+    "run_id": "e1base_hraw_lr3e-5_s2"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr1e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 0.0001,
+    "seed": 0,
+    "run_id": "e1base_hraw_lr1e-4_s0"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr1e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 0.0001,
+    "seed": 1,
+    "run_id": "e1base_hraw_lr1e-4_s1"
+   }
+  },
+  {
+   "run_id": "e1base_hraw_lr1e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "lr": 0.0001,
+    "seed": 2,
+    "run_id": "e1base_hraw_lr1e-4_s2"
+   }
+  }
+ ]
+}

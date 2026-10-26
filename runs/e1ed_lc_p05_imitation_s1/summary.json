@@ -1,0 +1,43 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 1.0,
+  "delta_source": "hindsight_lc",
+  "method": "editor",
+  "lr": 0.001,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 1,
+  "gate": true,
+  "prop": 0.5,
+  "editor_train": "imitation",
+  "label": "sgd",
+  "imit_mag": 0,
+  "run_id": "e1ed_lc_p05_imitation_s1"
+ },
+ "test_loss": 2.386796240234375,
+ "test_acc": 0.509,
+ "val_loss": 2.470079248046875,
+ "val_acc": 0.5,
+ "flops": 1018920960000.0,
+ "flops_by": {
+  "fwd": 825753600000.0,
+  "hint": 32071680000.0,
+  "readout": 23592960000.0,
+  "editor": 137502720000.0
+ },
+ "wall": 135.54357266426086,
+ "peak_mem_gb": 0.10275411605834961,
+ "n_params": 269322,
+ "steps": 6000
+}

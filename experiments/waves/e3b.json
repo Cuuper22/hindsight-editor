@@ -1,0 +1,203 @@
+{
+ "wave": "e3b",
+ "gpu": "G4",
+ "max_parallel": 4,
+ "max_hours": 3.5,
+ "prefetch": [
+  "enwik8"
+ ],
+ "jobs": [
+  {
+   "run_id": "e3b_meta_small_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "mode": "meta",
+    "unroll": 8,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "warm_lr": 0.001,
+    "meta_lr": 0.0001,
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001,
+     "use_id": false
+    },
+    "log_every": 50,
+    "ckpt_every": 250,
+    "d": 128,
+    "n_layer": 2,
+    "n_head": 4,
+    "ctx": 64,
+    "bs": 32,
+    "meta_steps": 3000,
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "d": 384,
+      "n_layer": 6,
+      "n_head": 6,
+      "ctx": 256,
+      "bs": 32,
+      "steps": 6000,
+      "eval_every": 500,
+      "eval_batches": 20,
+      "eval_bs": 32,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e3b_meta_small_s0"
+   }
+  },
+  {
+   "run_id": "e3b_meta_small_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "mode": "meta",
+    "unroll": 8,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "warm_lr": 0.001,
+    "meta_lr": 0.0001,
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001,
+     "use_id": false
+    },
+    "log_every": 50,
+    "ckpt_every": 250,
+    "d": 128,
+    "n_layer": 2,
+    "n_head": 4,
+    "ctx": 64,
+    "bs": 32,
+    "meta_steps": 3000,
+    "seed": 1,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "d": 384,
+      "n_layer": 6,
+      "n_head": 6,
+      "ctx": 256,
+      "bs": 32,
+      "steps": 6000,
+      "eval_every": 500,
+      "eval_batches": 20,
+      "eval_bs": 32,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e3b_meta_small_s1"
+   }
+  },
+  {
+   "run_id": "e3b_meta_mid_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "mode": "meta",
+    "unroll": 8,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "warm_lr": 0.001,
+    "meta_lr": 0.0001,
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001,
+     "use_id": false
+    },
+    "log_every": 50,
+    "ckpt_every": 250,
+    "d": 256,
+    "n_layer": 4,
+    "n_head": 4,
+    "ctx": 128,
+    "bs": 32,
+    "meta_steps": 2000,
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "d": 384,
+      "n_layer": 6,
+      "n_head": 6,
+      "ctx": 256,
+      "bs": 32,
+      "steps": 6000,
+      "eval_every": 500,
+      "eval_batches": 20,
+      "eval_bs": 32,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e3b_meta_mid_s0"
+   }
+  },
+  {
+   "run_id": "e3b_meta_big_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "mode": "meta",
+    "unroll": 4,
+    "inner_steps": 1000,
+    "adam_warm_max": 800,
+    "warm_lr": 0.001,
+    "meta_lr": 0.0001,
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001,
+     "use_id": false
+    },
+    "log_every": 50,
+    "ckpt_every": 250,
+    "bs": 16,
+    "meta_steps": 1200,
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "d": 384,
+      "n_layer": 6,
+      "n_head": 6,
+      "ctx": 256,
+      "bs": 32,
+      "steps": 6000,
+      "eval_every": 500,
+      "eval_batches": 20,
+      "eval_bs": 32,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e3b_meta_big_s0"
+   }
+  }
+ ]
+}

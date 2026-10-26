@@ -1,0 +1,27 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+20:41:44 restored from repo; 0 runs already done
+20:41:44 start e2mlp_p05_s0 try 1
+20:41:44 start e2mlp_p05_s1 try 1
+20:41:44 start e2mlp_p0_s0 try 1
+20:41:44 start e2mlp_p0_s1 try 1
+20:41:44 start e2mlp_p05_k8_s0 try 1
+20:41:44 start e2mlp_p05_k8_s1 try 1
+20:41:44 start e2mlp_p05_r16_s0 try 1
+20:41:44 start e2mlp_p05_r16_s1 try 1
+20:41:44 start e2mlp_p05_warm_s0 try 1
+20:41:44 start e2mlp_p05_warm_s1 try 1
+20:41:44 start e2mlp_p0_warm_k8_s0 try 1
+20:41:44 start e2mlp_p0_warm_k8_s1 try 1
+21:07:25 exit e2mlp_p05_s0 0 done
+21:07:25 exit e2mlp_p05_s1 0 done
+21:07:25 exit e2mlp_p0_s0 0 done
+21:07:25 exit e2mlp_p0_s1 0 done
+21:07:25 exit e2mlp_p05_r16_s0 0 done
+21:07:25 exit e2mlp_p05_r16_s1 0 done
+21:07:25 exit e2mlp_p05_warm_s0 0 done
+21:07:25 exit e2mlp_p05_warm_s1 0 done
+21:10:05 exit e2mlp_p05_k8_s0 0 done
+21:10:05 exit e2mlp_p05_k8_s1 0 done
+21:10:05 exit e2mlp_p0_warm_k8_s0 0 done
+21:10:05 exit e2mlp_p0_warm_k8_s1 0 done
+21:10:05 finished: done

@@ -1,0 +1,35 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+22:06:25 restored from repo; 0 runs already done
+22:06:29 prefetched enwik8 1s
+22:06:29 start e3a_adam_lr3e-4_s0 try 1
+22:06:29 start e3a_adam_lr3e-4_s1 try 1
+22:06:29 start e3a_adam_lr3e-4_s2 try 1
+22:06:29 start e3a_adam_lr1e-3_s0 try 1
+22:06:29 start e3a_adam_lr1e-3_s1 try 1
+22:06:29 start e3a_adam_lr1e-3_s2 try 1
+22:06:29 start e3a_adam_lr3e-3_s0 try 1
+22:06:29 start e3a_adam_lr3e-3_s1 try 1
+22:06:29 start e3a_adam_lr3e-3_s2 try 1
+22:06:29 start e3a_ed_w4_vib_s0 try 1
+22:06:29 start e3a_ed_w4_vib_s1 try 1
+22:06:29 start e3a_ed_w4_vib_s2 try 1
+22:06:29 start e3a_ed_w16_vib_s0 try 1
+22:06:29 start e3a_ed_w16_vib_s1 try 1
+22:17:50 exit e3a_adam_lr3e-4_s0 0 done
+22:17:50 exit e3a_adam_lr3e-4_s1 0 done
+22:17:50 exit e3a_adam_lr3e-4_s2 0 done
+22:17:50 exit e3a_adam_lr1e-3_s0 0 done
+22:17:50 exit e3a_adam_lr1e-3_s1 0 done
+22:17:50 exit e3a_adam_lr1e-3_s2 0 done
+22:17:50 exit e3a_adam_lr3e-3_s0 0 done
+22:17:50 exit e3a_adam_lr3e-3_s1 0 done
+22:17:50 exit e3a_adam_lr3e-3_s2 0 done
+22:17:50 start e3a_ed_w16_vib_s2 try 1
+22:17:50 start e3a_ed_w64_vib_s0 try 1
+22:17:50 start e3a_ed_w64_vib_s1 try 1
+22:17:50 start e3a_ed_w64_vib_s2 try 1
+22:17:50 start e3a_ed_w4_novib_s0 try 1
+22:17:50 start e3a_ed_w4_novib_s1 try 1
+22:17:50 start e3a_ed_w4_novib_s2 try 1
+22:17:50 start e3a_ed_w16_novib_s0 try 1
+22:17:50 start e3a_ed_w16_novib_s1 try 1

@@ -1,0 +1,10 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "cifar10", "net": "cnn", "bs": 128, "steps": 8000, "beta": 1.0, "delta_source": "dfa", "gate": true, "prop": 0.0, "method": "raw", "lr": 0.001, "sched": "cos", "eval_every": 500, "log_every": 100, "ckpt_every": 2000, "seed": 1, "run_id": "e2cnn_dfa_lr1e-3_s1"}, "time": 1792965894.77339}
+{"event": "eval", "step": 0, "val_loss": 4.70972, "val_acc": 0.1016, "flops": 0.0, "wall": 0.0, "n_params": 620362, "time": 1792965902.12376}
+{"event": "train", "step": 100, "loss": NaN, "flops": 555456921600.0, "wall": 1.66375, "time": 1792965904.63907}
+{"event": "train", "step": 200, "loss": NaN, "flops": 1110913843200.0, "wall": 3.22213, "time": 1792965907.10456}
+{"event": "train", "step": 300, "loss": NaN, "flops": 1666370764800.0, "wall": 4.77598, "time": 1792965909.56005}
+{"event": "train", "step": 400, "loss": NaN, "flops": 2221827686400.0, "wall": 6.33024, "time": 1792965912.02992}
+{"event": "train", "step": 500, "loss": NaN, "flops": 2777284608000.0, "wall": 7.88877, "time": 1792965914.49527}
+{"event": "eval", "step": 500, "val_loss": NaN, "val_acc": 0.095, "flops": 2777284608000.0, "flops_by": {"fwd": 1388642304000.0, "editor": 1388642304000.0}, "wall": 7.88877, "peak_mem_gb": 0.65577, "time": 1792965914.53059}
+{"event": "diverged", "step": 500, "time": 1792965914.53063}
+{"event": "done", "time": 1792965914.61703}

@@ -1,0 +1,274 @@
+{
+ "wave": "e1base",
+ "start": 1792955225.5917358,
+ "now": 1792955365.9704437,
+ "hours": 0.03899408559004466,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e1base_adam_lr3e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2267,
+   "started": 1792955225.808399,
+   "rc": 0,
+   "ended": 1792955285.8625207
+  },
+  "e1base_adam_lr3e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2268,
+   "started": 1792955225.8087103,
+   "rc": 0,
+   "ended": 1792955285.862618
+  },
+  "e1base_adam_lr3e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2269,
+   "started": 1792955225.8089757,
+   "rc": 0,
+   "ended": 1792955285.8626661
+  },
+  "e1base_adam_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2270,
+   "started": 1792955225.8092277,
+   "rc": 0,
+   "ended": 1792955285.8627124
+  },
+  "e1base_adam_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2271,
+   "started": 1792955225.8094873,
+   "rc": 0,
+   "ended": 1792955285.8627546
+  },
+  "e1base_adam_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2272,
+   "started": 1792955225.809709,
+   "rc": 0,
+   "ended": 1792955285.862798
+  },
+  "e1base_adam_lr3e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2273,
+   "started": 1792955225.8099394,
+   "rc": 0,
+   "ended": 1792955285.8628395
+  },
+  "e1base_adam_lr3e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2274,
+   "started": 1792955225.8101678,
+   "rc": 0,
+   "ended": 1792955285.8628805
+  },
+  "e1base_adam_lr3e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2275,
+   "started": 1792955225.8103886,
+   "rc": 0,
+   "ended": 1792955285.8629227
+  },
+  "e1base_dfa_lr3e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2276,
+   "started": 1792955225.8106096,
+   "rc": 0,
+   "ended": 1792955285.8629634
+  },
+  "e1base_dfa_lr3e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2277,
+   "started": 1792955225.8108377,
+   "rc": 0,
+   "ended": 1792955285.8630018
+  },
+  "e1base_dfa_lr3e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2278,
+   "started": 1792955225.8110504,
+   "rc": 0,
+   "ended": 1792955285.86304
+  },
+  "e1base_dfa_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2279,
+   "started": 1792955225.8112838,
+   "rc": 0,
+   "ended": 1792955285.8630815
+  },
+  "e1base_dfa_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2280,
+   "started": 1792955225.8115175,
+   "rc": 0,
+   "ended": 1792955285.8631208
+  },
+  "e1base_dfa_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2281,
+   "started": 1792955225.8117266,
+   "rc": 0,
+   "ended": 1792955285.8631608
+  },
+  "e1base_dfa_lr3e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 2282,
+   "started": 1792955225.811984,
+   "rc": 0,
+   "ended": 1792955285.8632197
+  },
+  "e1base_dfa_lr3e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3696,
+   "started": 1792955285.8638065,
+   "rc": 0,
+   "ended": 1792955365.9510634
+  },
+  "e1base_dfa_lr3e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3697,
+   "started": 1792955285.864177,
+   "rc": 0,
+   "ended": 1792955365.9511535
+  },
+  "e1base_ftp_lr1e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3698,
+   "started": 1792955285.8645258,
+   "rc": 0,
+   "ended": 1792955365.951219
+  },
+  "e1base_ftp_lr1e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3699,
+   "started": 1792955285.864832,
+   "rc": 0,
+   "ended": 1792955365.9512615
+  },
+  "e1base_ftp_lr1e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3700,
+   "started": 1792955285.865136,
+   "rc": 0,
+   "ended": 1792955365.951302
+  },
+  "e1base_ftp_lr3e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3701,
+   "started": 1792955285.8654354,
+   "rc": 0,
+   "ended": 1792955365.951343
+  },
+  "e1base_ftp_lr3e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3702,
+   "started": 1792955285.8657312,
+   "rc": 0,
+   "ended": 1792955305.8872423
+  },
+  "e1base_ftp_lr3e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3703,
+   "started": 1792955285.8660223,
+   "rc": 0,
+   "ended": 1792955305.887302
+  },
+  "e1base_ftp_lr1e-3_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3704,
+   "started": 1792955285.8663042,
+   "rc": 0,
+   "ended": 1792955305.887334
+  },
+  "e1base_ftp_lr1e-3_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3705,
+   "started": 1792955285.8665712,
+   "rc": 0,
+   "ended": 1792955305.8873625
+  },
+  "e1base_ftp_lr1e-3_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3706,
+   "started": 1792955285.8668587,
+   "rc": 0,
+   "ended": 1792955305.8873901
+  },
+  "e1base_hraw_lr3e-5_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3707,
+   "started": 1792955285.8671324,
+   "rc": 0,
+   "ended": 1792955365.9513838
+  },
+  "e1base_hraw_lr3e-5_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3708,
+   "started": 1792955285.8674374,
+   "rc": 0,
+   "ended": 1792955365.9514222
+  },
+  "e1base_hraw_lr3e-5_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3709,
+   "started": 1792955285.8677247,
+   "rc": 0,
+   "ended": 1792955365.9514606
+  },
+  "e1base_hraw_lr1e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3710,
+   "started": 1792955285.868017,
+   "rc": 0,
+   "ended": 1792955365.951499
+  },
+  "e1base_hraw_lr1e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 3711,
+   "started": 1792955285.8683398,
+   "rc": 0,
+   "ended": 1792955365.9515374
+  },
+  "e1base_hraw_lr1e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4960,
+   "started": 1792955305.8878748,
+   "rc": 0,
+   "ended": 1792955365.9515755
+  }
+ }
+}

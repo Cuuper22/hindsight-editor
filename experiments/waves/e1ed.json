@@ -1,0 +1,563 @@
+{
+ "wave": "e1ed",
+ "gpu": "G4",
+ "max_parallel": 16,
+ "max_hours": 1.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "e1ed_lc_p0_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "seed": 0,
+    "run_id": "e1ed_lc_p0_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p0_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "seed": 1,
+    "run_id": "e1ed_lc_p0_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p0_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "seed": 2,
+    "run_id": "e1ed_lc_p0_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p1_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 1.0,
+    "seed": 0,
+    "run_id": "e1ed_lc_p1_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p1_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 1.0,
+    "seed": 1,
+    "run_id": "e1ed_lc_p1_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p1_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 1.0,
+    "seed": 2,
+    "run_id": "e1ed_lc_p1_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r1_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 1
+    },
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_r1_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r1_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 1
+    },
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_r1_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r1_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 1
+    },
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_r1_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 4
+    },
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_r4_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 4
+    },
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_r4_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 4
+    },
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_r4_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r16_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 16
+    },
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_r16_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r16_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 16
+    },
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_r16_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_r16_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "rank": 16
+    },
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_r16_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noa_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "use_a": false
+    },
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_noa_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noa_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "use_a": false
+    },
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_noa_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noa_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "use_a": false
+    },
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_noa_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noreadout_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "readout_loss": false,
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_noreadout_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noreadout_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "readout_loss": false,
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_noreadout_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_noreadout_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "readout_loss": false,
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_noreadout_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_norowloss_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "row_loss": false
+    },
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_norowloss_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_norowloss_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "row_loss": false
+    },
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_norowloss_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_norowloss_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor": {
+     "row_loss": false
+    },
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_norowloss_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_plain_p05_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 0,
+    "run_id": "e1ed_plain_p05_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_plain_p05_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 1,
+    "run_id": "e1ed_plain_p05_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_plain_p05_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "seed": 2,
+    "run_id": "e1ed_plain_p05_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_ftpseq_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "ftp_seq",
+    "gate": true,
+    "beta": 1.0,
+    "seed": 0,
+    "run_id": "e1ed_ftpseq_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_ftpseq_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "ftp_seq",
+    "gate": true,
+    "beta": 1.0,
+    "seed": 1,
+    "run_id": "e1ed_ftpseq_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_ftpseq_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "ftp_seq",
+    "gate": true,
+    "beta": 1.0,
+    "seed": 2,
+    "run_id": "e1ed_ftpseq_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_randfb_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "dfa",
+    "seed": 0,
+    "run_id": "e1ed_randfb_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_randfb_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "dfa",
+    "seed": 1,
+    "run_id": "e1ed_randfb_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_randfb_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "dfa",
+    "seed": 2,
+    "run_id": "e1ed_randfb_s2"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_imitation_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor_train": "imitation",
+    "label": "sgd",
+    "imit_mag": 0,
+    "seed": 0,
+    "run_id": "e1ed_lc_p05_imitation_s0"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_imitation_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor_train": "imitation",
+    "label": "sgd",
+    "imit_mag": 0,
+    "seed": 1,
+    "run_id": "e1ed_lc_p05_imitation_s1"
+   }
+  },
+  {
+   "run_id": "e1ed_lc_p05_imitation_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.5,
+    "editor_train": "imitation",
+    "label": "sgd",
+    "imit_mag": 0,
+    "seed": 2,
+    "run_id": "e1ed_lc_p05_imitation_s2"
+   }
+  }
+ ]
+}

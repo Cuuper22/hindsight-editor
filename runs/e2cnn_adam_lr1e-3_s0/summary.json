@@ -1,0 +1,35 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "cifar10",
+  "net": "cnn",
+  "bs": 128,
+  "steps": 8000,
+  "beta": 1.0,
+  "delta_source": "hindsight_lc",
+  "gate": true,
+  "prop": 0.0,
+  "method": "adam",
+  "lr": 0.001,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 0,
+  "run_id": "e2cnn_adam_lr1e-3_s0"
+ },
+ "test_loss": 1.56288193359375,
+ "test_acc": 0.7433,
+ "val_loss": 1.51852099609375,
+ "val_acc": 0.7426,
+ "flops": 66714385344000.0,
+ "flops_by": {
+  "fwd": 22218276864000.0,
+  "bwd": 44436553728000.0,
+  "opt": 59554752000.0
+ },
+ "wall": 45.93995785713196,
+ "peak_mem_gb": 0.6249942779541016,
+ "n_params": 620362,
+ "steps": 8000
+}

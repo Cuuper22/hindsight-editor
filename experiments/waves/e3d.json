@@ -1,0 +1,335 @@
+{
+ "wave": "e3d",
+ "gpu": "G4",
+ "max_parallel": 14,
+ "max_hours": 3.0,
+ "prefetch": [
+  "enwik8"
+ ],
+ "jobs": [
+  {
+   "run_id": "e3d_w4_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w4_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w4_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w4_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w4_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w4_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3d_w4_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w4_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w4_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w4_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w4_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 4,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w4_novib_s2"
+   }
+  },
+  {
+   "run_id": "e3d_w16_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w16_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w16_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w16_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w16_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w16_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3d_w16_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w16_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w16_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w16_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w16_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 16,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w16_novib_s2"
+   }
+  },
+  {
+   "run_id": "e3d_w64_vib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w64_vib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w64_vib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w64_vib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w64_vib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": true,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w64_vib_s2"
+   }
+  },
+  {
+   "run_id": "e3d_w64_novib_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "e3d_w64_novib_s0"
+   }
+  },
+  {
+   "run_id": "e3d_w64_novib_s1",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 1,
+    "run_id": "e3d_w64_novib_s1"
+   }
+  },
+  {
+   "run_id": "e3d_w64_novib_s2",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "steps": 6000,
+    "method": "editor",
+    "bottleneck": 64,
+    "vib": false,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 2,
+    "run_id": "e3d_w64_novib_s2"
+   }
+  }
+ ]
+}

@@ -1,0 +1,98 @@
+{
+ "wave": "e2c",
+ "start": 1792968245.4449227,
+ "now": 1792971679.5479445,
+ "hours": 0.9539175060722563,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e2c_cnn_r2_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4935,
+   "started": 1792968256.6190512,
+   "rc": 0,
+   "ended": 1792971679.531544
+  },
+  "e2c_cnn_dfa_lr1e-4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4936,
+   "started": 1792968256.619379,
+   "rc": 0,
+   "ended": 1792968316.6732929
+  },
+  "e2c_cnn_dfa_lr1e-4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4937,
+   "started": 1792968256.6196573,
+   "rc": 0,
+   "ended": 1792968296.6551807
+  },
+  "e2c_cnn_dfa_lr1e-4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4938,
+   "started": 1792968256.6198936,
+   "rc": 0,
+   "ended": 1792968296.655257
+  },
+  "e2c_cnn_dfa_lr3e-5_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4939,
+   "started": 1792968256.6201327,
+   "rc": 0,
+   "ended": 1792968416.7613013
+  },
+  "e2c_cnn_dfa_lr3e-5_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4940,
+   "started": 1792968256.6203556,
+   "rc": 0,
+   "ended": 1792968416.7613747
+  },
+  "e2c_cnn_dfa_lr3e-5_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4941,
+   "started": 1792968256.6205807,
+   "rc": 0,
+   "ended": 1792968416.7614126
+  },
+  "e2c_mlp_noa_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4942,
+   "started": 1792968256.6208186,
+   "rc": 0,
+   "ended": 1792971459.3517883
+  },
+  "e2c_mlp_randfb_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4943,
+   "started": 1792968256.621051,
+   "rc": 0,
+   "ended": 1792971159.0951364
+  },
+  "e2c_mlp_ftpseq_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4944,
+   "started": 1792968256.6213007,
+   "rc": 0,
+   "ended": 1792971239.16377
+  },
+  "e2c_mlp_p05_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 4945,
+   "started": 1792968256.621547,
+   "rc": 0,
+   "ended": 1792971459.3518567
+  }
+ }
+}

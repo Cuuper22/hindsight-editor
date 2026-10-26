@@ -1,0 +1,240 @@
+{
+ "wave": "e2c",
+ "gpu": "G4",
+ "max_parallel": 12,
+ "max_hours": 3.0,
+ "prefetch": [
+  "mnist",
+  "cifar10"
+ ],
+ "jobs": [
+  {
+   "run_id": "e2c_cnn_r2_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "task": "cifar10",
+    "net": "cnn",
+    "meta_steps": 4000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "task": "cifar10",
+      "net": "cnn",
+      "steps": 8000,
+      "eval_every": 500,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e2c_cnn_r2_s0"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr1e-4_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0001,
+    "seed": 0,
+    "run_id": "e2c_cnn_dfa_lr1e-4_s0"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr1e-4_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0001,
+    "seed": 1,
+    "run_id": "e2c_cnn_dfa_lr1e-4_s1"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr1e-4_s2",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.0001,
+    "seed": 2,
+    "run_id": "e2c_cnn_dfa_lr1e-4_s2"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr3e-5_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 3e-05,
+    "seed": 0,
+    "run_id": "e2c_cnn_dfa_lr3e-5_s0"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr3e-5_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 3e-05,
+    "seed": 1,
+    "run_id": "e2c_cnn_dfa_lr3e-5_s1"
+   }
+  },
+  {
+   "run_id": "e2c_cnn_dfa_lr3e-5_s2",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 3e-05,
+    "seed": 2,
+    "run_id": "e2c_cnn_dfa_lr3e-5_s2"
+   }
+  },
+  {
+   "run_id": "e2c_mlp_noa_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001,
+     "use_a": false
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e2c_mlp_noa_s0"
+   }
+  },
+  {
+   "run_id": "e2c_mlp_randfb_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "delta_source": "dfa",
+    "run_id": "e2c_mlp_randfb_s0"
+   }
+  },
+  {
+   "run_id": "e2c_mlp_ftpseq_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "delta_source": "ftp_seq",
+    "run_id": "e2c_mlp_ftpseq_s0"
+   }
+  },
+  {
+   "run_id": "e2c_mlp_p05_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.5,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "e2c_mlp_p05_s0"
+   }
+  }
+ ]
+}

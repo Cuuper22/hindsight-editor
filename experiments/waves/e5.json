@@ -1,0 +1,368 @@
+{
+ "wave": "e5",
+ "gpu": "G4",
+ "max_parallel": 15,
+ "max_hours": 2.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "e5_meta_frozen_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "seed": 0,
+    "run_id": "e5_meta_frozen_s0"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_frozen_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "seed": 1,
+    "run_id": "e5_meta_frozen_s1"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_frozen_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "seed": 2,
+    "run_id": "e5_meta_frozen_s2"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta1e-2_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 0,
+    "run_id": "e5_meta_self_eta1e-2_s0"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta1e-2_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 1,
+    "run_id": "e5_meta_self_eta1e-2_s1"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta1e-2_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 2,
+    "run_id": "e5_meta_self_eta1e-2_s2"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta5e-2_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.05
+    },
+    "seed": 0,
+    "run_id": "e5_meta_self_eta5e-2_s0"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta5e-2_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.05
+    },
+    "seed": 1,
+    "run_id": "e5_meta_self_eta5e-2_s1"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_meta_self_eta5e-2_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "editor_ckpt": "/content/runs/e2mlp_r2_s0/editor.pt",
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.05
+    },
+    "seed": 2,
+    "run_id": "e5_meta_self_eta5e-2_s2"
+   },
+   "restore": [
+    "e2mlp_r2_s0"
+   ]
+  },
+  {
+   "run_id": "e5_untrained_frozen_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "seed": 0,
+    "run_id": "e5_untrained_frozen_s0"
+   }
+  },
+  {
+   "run_id": "e5_untrained_frozen_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "seed": 1,
+    "run_id": "e5_untrained_frozen_s1"
+   }
+  },
+  {
+   "run_id": "e5_untrained_frozen_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "seed": 2,
+    "run_id": "e5_untrained_frozen_s2"
+   }
+  },
+  {
+   "run_id": "e5_untrained_self_eta1e-2_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 0,
+    "run_id": "e5_untrained_self_eta1e-2_s0"
+   }
+  },
+  {
+   "run_id": "e5_untrained_self_eta1e-2_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 1,
+    "run_id": "e5_untrained_self_eta1e-2_s1"
+   }
+  },
+  {
+   "run_id": "e5_untrained_self_eta1e-2_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "steps": 6000,
+    "eval_every": 250,
+    "self_edit": {
+     "eps": 0.01,
+     "eta": 0.01
+    },
+    "seed": 2,
+    "run_id": "e5_untrained_self_eta1e-2_s2"
+   }
+  }
+ ]
+}

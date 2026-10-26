@@ -1,0 +1,322 @@
+{
+ "wave": "e1ed",
+ "start": 1792959324.0224607,
+ "now": 1792960145.007988,
+ "hours": 0.22805153535472023,
+ "gpu": "0 %, 0 MiB, 97887 MiB",
+ "final": "done",
+ "jobs": {
+  "e1ed_lc_p0_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6106,
+   "started": 1792959324.2848363,
+   "rc": 0,
+   "ended": 1792959664.5743575
+  },
+  "e1ed_lc_p0_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6107,
+   "started": 1792959324.285096,
+   "rc": 0,
+   "ended": 1792959664.5744627
+  },
+  "e1ed_lc_p0_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6108,
+   "started": 1792959324.2853296,
+   "rc": 0,
+   "ended": 1792959664.574501
+  },
+  "e1ed_lc_p05_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6109,
+   "started": 1792959324.2855527,
+   "rc": 0,
+   "ended": 1792959664.5745351
+  },
+  "e1ed_lc_p05_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6110,
+   "started": 1792959324.285779,
+   "rc": 0,
+   "ended": 1792959664.5745673
+  },
+  "e1ed_lc_p05_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6111,
+   "started": 1792959324.2859821,
+   "rc": 0,
+   "ended": 1792959664.5746014
+  },
+  "e1ed_lc_p1_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6112,
+   "started": 1792959324.2861962,
+   "rc": 0,
+   "ended": 1792959664.5746338
+  },
+  "e1ed_lc_p1_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6113,
+   "started": 1792959324.2864218,
+   "rc": 0,
+   "ended": 1792959664.5746663
+  },
+  "e1ed_lc_p1_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6114,
+   "started": 1792959324.2866278,
+   "rc": 0,
+   "ended": 1792959664.5746987
+  },
+  "e1ed_lc_p05_r1_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6115,
+   "started": 1792959324.2868557,
+   "rc": 0,
+   "ended": 1792959664.5747333
+  },
+  "e1ed_lc_p05_r1_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6116,
+   "started": 1792959324.287068,
+   "rc": 0,
+   "ended": 1792959664.5747657
+  },
+  "e1ed_lc_p05_r1_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6117,
+   "started": 1792959324.2872698,
+   "rc": 0,
+   "ended": 1792959664.5747964
+  },
+  "e1ed_lc_p05_r4_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6118,
+   "started": 1792959324.28749,
+   "rc": 0,
+   "ended": 1792959664.5748274
+  },
+  "e1ed_lc_p05_r4_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6119,
+   "started": 1792959324.2877166,
+   "rc": 0,
+   "ended": 1792959664.5748587
+  },
+  "e1ed_lc_p05_r4_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6120,
+   "started": 1792959324.2879076,
+   "rc": 0,
+   "ended": 1792959664.5748892
+  },
+  "e1ed_lc_p05_r16_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 6121,
+   "started": 1792959324.2881267,
+   "rc": 0,
+   "ended": 1792959664.5749178
+  },
+  "e1ed_lc_p05_r16_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8769,
+   "started": 1792959664.5755177,
+   "rc": 0,
+   "ended": 1792959984.8577697
+  },
+  "e1ed_lc_p05_r16_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8770,
+   "started": 1792959664.5758643,
+   "rc": 0,
+   "ended": 1792959984.857843
+  },
+  "e1ed_lc_p05_noa_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8771,
+   "started": 1792959664.5761216,
+   "rc": 0,
+   "ended": 1792959984.8578784
+  },
+  "e1ed_lc_p05_noa_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8772,
+   "started": 1792959664.5763516,
+   "rc": 0,
+   "ended": 1792959984.8579128
+  },
+  "e1ed_lc_p05_noa_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8773,
+   "started": 1792959664.5766113,
+   "rc": 0,
+   "ended": 1792959984.857946
+  },
+  "e1ed_lc_p05_noreadout_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8774,
+   "started": 1792959664.5768294,
+   "rc": 0,
+   "ended": 1792959984.857979
+  },
+  "e1ed_lc_p05_noreadout_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8775,
+   "started": 1792959664.577052,
+   "rc": 0,
+   "ended": 1792959984.8580136
+  },
+  "e1ed_lc_p05_noreadout_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8776,
+   "started": 1792959664.577284,
+   "rc": 0,
+   "ended": 1792959984.8580456
+  },
+  "e1ed_lc_p05_norowloss_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8777,
+   "started": 1792959664.5775015,
+   "rc": 0,
+   "ended": 1792959984.858076
+  },
+  "e1ed_lc_p05_norowloss_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8778,
+   "started": 1792959664.5777335,
+   "rc": 0,
+   "ended": 1792959984.8581078
+  },
+  "e1ed_lc_p05_norowloss_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8779,
+   "started": 1792959664.5779617,
+   "rc": 0,
+   "ended": 1792959984.858139
+  },
+  "e1ed_plain_p05_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8780,
+   "started": 1792959664.57817,
+   "rc": 0,
+   "ended": 1792959944.8216803
+  },
+  "e1ed_plain_p05_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8781,
+   "started": 1792959664.578394,
+   "rc": 0,
+   "ended": 1792959944.8217547
+  },
+  "e1ed_plain_p05_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8782,
+   "started": 1792959664.5786517,
+   "rc": 0,
+   "ended": 1792959944.8217902
+  },
+  "e1ed_ftpseq_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8783,
+   "started": 1792959664.5788627,
+   "rc": 0,
+   "ended": 1792959944.8218236
+  },
+  "e1ed_ftpseq_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 8784,
+   "started": 1792959664.5790937,
+   "rc": 0,
+   "ended": 1792959944.8218553
+  },
+  "e1ed_ftpseq_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11147,
+   "started": 1792959944.8223147,
+   "rc": 0,
+   "ended": 1792960104.9579692
+  },
+  "e1ed_randfb_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11148,
+   "started": 1792959944.822632,
+   "rc": 0,
+   "ended": 1792960104.9580438
+  },
+  "e1ed_randfb_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11149,
+   "started": 1792959944.822926,
+   "rc": 0,
+   "ended": 1792960104.9580772
+  },
+  "e1ed_randfb_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11150,
+   "started": 1792959944.8231394,
+   "rc": 0,
+   "ended": 1792960104.9581115
+  },
+  "e1ed_lc_p05_imitation_s0": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11151,
+   "started": 1792959944.82338,
+   "rc": 0,
+   "ended": 1792960124.9746926
+  },
+  "e1ed_lc_p05_imitation_s1": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11685,
+   "started": 1792959984.858657,
+   "rc": 0,
+   "ended": 1792960144.9905095
+  },
+  "e1ed_lc_p05_imitation_s2": {
+   "state": "done",
+   "tries": 1,
+   "pid": 11686,
+   "started": 1792959984.8589733,
+   "rc": 0,
+   "ended": 1792960144.99058
+  }
+ }
+}

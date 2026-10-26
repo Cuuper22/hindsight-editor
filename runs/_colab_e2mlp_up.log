@@ -1,0 +1,6 @@
+[e2mlp] balance before: 368.97
+hf user: cuuper22
+prefetched mnist
+SUPERVISOR_PID 5245
+
+[e2mlp] running: session=hs-e2mlp rate=8.9/hr pid=5245

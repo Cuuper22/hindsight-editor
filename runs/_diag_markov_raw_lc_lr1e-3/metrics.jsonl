@@ -1,0 +1,4 @@
+{"event": "eval", "step": 0, "val_loss": 4.204979705810547, "val_acc": null, "flops": 0.0, "wall": 0.0, "n_params": 10764288, "time": 1792984411.7159712}
+{"event": "train", "step": 500, "loss": NaN, "flops": 285676226478080.0, "wall": 58.95107913017273, "readout_mean": NaN, "time": 1792984470.797587}
+{"event": "eval", "step": 500, "val_loss": NaN, "val_acc": null, "flops": 285676226478080.0, "flops_by": {"fwd": 193676181504000.0, "hint": 597772206080.0, "readout": 4227858432000.0, "editor": 87174414336000.0}, "wall": 58.95107913017273, "peak_mem_gb": 3.5463685989379883, "time": 1792984471.036631}
+{"event": "diverged", "step": 500, "time": 1792984471.036631}

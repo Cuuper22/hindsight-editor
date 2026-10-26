@@ -1,0 +1,31 @@
+{
+ "cfg": {
+  "mode": "meta",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "delta_source": "hindsight_lc",
+  "gate": true,
+  "beta": 1.0,
+  "prop": 0.5,
+  "editor": {
+   "rank": 8,
+   "lr_init": 0.001
+  },
+  "meta_steps": 600,
+  "unroll": 4,
+  "inner_steps": 1000,
+  "meta_lr": 0.0003,
+  "clip": 1.0,
+  "adam_warm_max": 0,
+  "log_every": 50,
+  "ckpt_every": 250,
+  "seed": 0,
+  "run_id": "e2_meta_mnist"
+ },
+ "meta_steps": 600
+}

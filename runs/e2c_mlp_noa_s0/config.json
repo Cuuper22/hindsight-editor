@@ -1,0 +1,42 @@
+{
+ "mode": "meta",
+ "task": "mnist",
+ "net": "mlp",
+ "hidden": [
+  256,
+  256
+ ],
+ "bs": 128,
+ "delta_source": "hindsight_lc",
+ "gate": true,
+ "beta": 1.0,
+ "prop": 0.0,
+ "editor": {
+  "rank": 16,
+  "lr_init": 0.001,
+  "use_a": false
+ },
+ "meta_steps": 6000,
+ "unroll": 16,
+ "inner_steps": 2000,
+ "meta_lr": 0.0001,
+ "clip": 1.0,
+ "adam_warm_max": 1500,
+ "log_every": 50,
+ "ckpt_every": 250,
+ "seed": 0,
+ "eval": {
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "overrides": {
+   "steps": 6000,
+   "eval_every": 250,
+   "log_every": 100,
+   "ckpt_every": 2000
+  }
+ },
+ "run_id": "e2c_mlp_noa_s0"
+}

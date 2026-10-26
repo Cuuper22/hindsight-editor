@@ -1,0 +1,14 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU", "cfg": {"mode": "meta", "task": "mnist", "net": "mlp", "hidden": [256, 256], "bs": 128, "delta_source": "hindsight_lc", "gate": true, "beta": 1.0, "prop": 0.5, "editor": {"rank": 8, "lr_init": 0.001}, "meta_steps": 600, "unroll": 4, "inner_steps": 1000, "meta_lr": 0.0003, "clip": 1.0, "adam_warm_max": 0, "log_every": 50, "ckpt_every": 250, "seed": 0, "run_id": "e2_meta_mnist"}, "time": 1792959180.01562}
+{"event": "meta", "step": 50, "meta_loss": 0.26514, "pre": 1.58853, "post": 1.18274, "traj": 1, "t_inner": 200, "grad_norm": 0.1005, "skipped": 0, "time": 1792959189.46071}
+{"event": "meta", "step": 100, "meta_loss": -0.20358, "pre": 1.00174, "post": 0.84149, "traj": 1, "t_inner": 400, "grad_norm": 0.1782, "skipped": 0, "time": 1792959196.80326}
+{"event": "meta", "step": 150, "meta_loss": -0.02322, "pre": 0.89867, "post": 0.99628, "traj": 1, "t_inner": 600, "grad_norm": 0.22174, "skipped": 0, "time": 1792959203.96294}
+{"event": "meta", "step": 200, "meta_loss": 0.8423, "pre": 2.30053, "post": 2.26128, "traj": 2, "t_inner": 48, "grad_norm": 0.05362, "skipped": 0, "time": 1792959210.94487}
+{"event": "meta", "step": 250, "meta_loss": -0.07729, "pre": 1.05695, "post": 0.86569, "traj": 2, "t_inner": 248, "grad_norm": 0.02377, "skipped": 0, "time": 1792959217.73839}
+{"event": "meta", "step": 300, "meta_loss": -0.19646, "pre": 0.96384, "post": 0.7109, "traj": 2, "t_inner": 448, "grad_norm": 0.03265, "skipped": 0, "time": 1792959224.60079}
+{"event": "meta", "step": 350, "meta_loss": 0.59801, "pre": 1.4175, "post": 1.93263, "traj": 2, "t_inner": 648, "grad_norm": 0.14306, "skipped": 0, "time": 1792959231.63875}
+{"event": "meta", "step": 400, "meta_loss": 1.9803, "pre": 4.74524, "post": 8.48632, "traj": 2, "t_inner": 848, "grad_norm": 0.21708, "skipped": 0, "time": 1792959239.20226}
+{"event": "meta", "step": 450, "meta_loss": -0.02182, "pre": 1.09392, "post": 1.01831, "traj": 3, "t_inner": 200, "grad_norm": 0.06574, "skipped": 0, "time": 1792959247.79259}
+{"event": "meta", "step": 500, "meta_loss": -0.2874, "pre": 0.7769, "post": 0.68769, "traj": 3, "t_inner": 400, "grad_norm": 0.01937, "skipped": 0, "time": 1792959256.22313}
+{"event": "meta", "step": 550, "meta_loss": -0.41303, "pre": 0.64797, "post": 0.6322, "traj": 3, "t_inner": 600, "grad_norm": 0.0221, "skipped": 0, "time": 1792959264.4608}
+{"event": "meta", "step": 600, "meta_loss": -0.48098, "pre": 0.72748, "post": 0.77543, "traj": 3, "t_inner": 800, "grad_norm": 0.01973, "skipped": 0, "time": 1792959272.76945}
+{"event": "done", "time": 1792959272.77719}

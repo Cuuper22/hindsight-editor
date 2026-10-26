@@ -1,0 +1,34 @@
+{
+ "wave": "smoke",
+ "gpu": "CPU",
+ "max_parallel": 2,
+ "max_hours": 0.3,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "smoke_colab_adam",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "adam",
+    "steps": 300,
+    "eval_every": 150,
+    "ckpt_every": 100
+   }
+  },
+  {
+   "run_id": "smoke_colab_dfa",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "raw",
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "steps": 300,
+    "eval_every": 150,
+    "ckpt_every": 100
+   }
+  }
+ ],
+ "sync_min": 1
+}

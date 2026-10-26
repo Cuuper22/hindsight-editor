@@ -1,0 +1,30 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+01:09:43 restored from repo; 0 runs already done
+01:09:48 prefetched enwik8 2s
+01:09:48 start e3c_adam_lr1e-3_s0 try 1
+01:09:48 start e3c_raw_lr1e-3_s0 try 1
+01:09:48 start e3c_ed_lr1e-2_s0 try 1
+01:09:48 start e3c_ed_lr3e-2_s0 try 1
+01:09:48 start e3c_adam_lr1e-3_s1 try 1
+01:09:48 start e3c_raw_lr1e-3_s1 try 1
+01:09:48 start e3c_ed_lr1e-2_s1 try 1
+01:09:48 start e3c_ed_lr3e-2_s1 try 1
+01:09:48 start e3c_adam_lr1e-3_s2 try 1
+01:09:48 start e3c_raw_lr1e-3_s2 try 1
+01:09:48 start e3c_ed_lr1e-2_s2 try 1
+01:09:48 start e3c_ed_lr3e-2_s2 try 1
+01:09:48 start e3c_meta_small_s0 try 1
+01:10:48 exit e3c_raw_lr1e-3_s0 0 done
+01:10:48 exit e3c_raw_lr1e-3_s1 0 done
+01:10:48 exit e3c_raw_lr1e-3_s2 0 done
+01:13:48 exit e3c_adam_lr1e-3_s0 0 done
+01:13:48 exit e3c_adam_lr1e-3_s1 0 done
+01:13:48 exit e3c_adam_lr1e-3_s2 0 done
+01:50:50 exit e3c_ed_lr1e-2_s0 0 done
+01:50:50 exit e3c_ed_lr3e-2_s0 0 done
+01:50:50 exit e3c_ed_lr1e-2_s1 0 done
+01:50:50 exit e3c_ed_lr3e-2_s1 0 done
+01:50:50 exit e3c_ed_lr1e-2_s2 0 done
+01:50:50 exit e3c_ed_lr3e-2_s2 0 done
+02:11:12 exit e3c_meta_small_s0 0 done
+02:11:12 finished: done

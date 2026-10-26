@@ -1,0 +1,37 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 6000,
+  "beta": 0.1,
+  "delta_source": "hindsight",
+  "method": "adam",
+  "lr": 0.001,
+  "sched": "cos",
+  "eval_every": 500,
+  "log_every": 100,
+  "ckpt_every": 2000,
+  "seed": 1,
+  "run_id": "e1base_adam_lr1e-3_s1"
+ },
+ "test_loss": 0.06650162658691407,
+ "test_acc": 0.9841,
+ "val_loss": 0.07863818054199219,
+ "val_acc": 0.9808,
+ "flops": 1258021584000.0,
+ "flops_by": {
+  "fwd": 412876800000.0,
+  "bwd": 825753600000.0,
+  "opt": 19391184000.0
+ },
+ "wall": 18.89447808265686,
+ "peak_mem_gb": 0.092437744140625,
+ "n_params": 269322,
+ "steps": 6000
+}

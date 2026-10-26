@@ -1,0 +1,287 @@
+{
+ "wave": "e2mlp",
+ "gpu": "G4",
+ "max_parallel": 12,
+ "max_hours": 3.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "e2mlp_p05_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p05_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p05_s1"
+   }
+  },
+  {
+   "run_id": "e2mlp_p0_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p0_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p0_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p0_s1"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_k8_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "unroll": 8,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p05_k8_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_k8_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "unroll": 8,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p05_k8_s1"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_r16_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p05_r16_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_r16_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p05_r16_s1"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_warm_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p05_warm_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p05_warm_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p05_warm_s1"
+   }
+  },
+  {
+   "run_id": "e2mlp_p0_warm_k8_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 8,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 0,
+    "run_id": "e2mlp_p0_warm_k8_s0"
+   }
+  },
+  {
+   "run_id": "e2mlp_p0_warm_k8_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 8,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "eval": {
+     "seeds": [
+      100,
+      101,
+      102
+     ],
+     "overrides": {
+      "steps": 6000,
+      "eval_every": 250,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "seed": 1,
+    "run_id": "e2mlp_p0_warm_k8_s1"
+   }
+  }
+ ]
+}

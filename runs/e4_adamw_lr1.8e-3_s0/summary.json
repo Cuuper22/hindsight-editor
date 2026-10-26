@@ -1,0 +1,58 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "fineweb_edu",
+  "net": "gpt",
+  "vocab": 50304,
+  "ctx": 1024,
+  "d": 768,
+  "n_layer": 12,
+  "n_head": 12,
+  "n_train_tokens": 200000000,
+  "bs": 16,
+  "steps": 6000,
+  "method": "adam",
+  "lr": 0.0018,
+  "sched": "wcos",
+  "warmup": 300,
+  "wd": 0.1,
+  "betas": [
+   0.9,
+   0.95
+  ],
+  "eval_every": 500,
+  "eval_batches": 20,
+  "eval_bs": 16,
+  "log_every": 100,
+  "ckpt_every": 1000,
+  "delta_source": "hindsight_lc",
+  "beta": 0.1,
+  "bottleneck": 16,
+  "vib": false,
+  "kl_coef": 0.01,
+  "k_future": 8,
+  "readout_rows": 0.1,
+  "readout_negatives": 4096,
+  "editor": {
+   "rank": 16,
+   "lr_init": 0.01,
+   "max_rel": 0.05,
+   "use_id": false
+  },
+  "seed": 0,
+  "run_id": "e4_adamw_lr1.8e-3_s0"
+ },
+ "val_loss": 5.757775855064392,
+ "val_acc": null,
+ "unigram_nats": 7.683131289699221,
+ "flops": 8.4027737899008e+16,
+ "flops_by": {
+  "fwd": 2.8005334253568e+16,
+  "bwd": 5.6010668507136e+16,
+  "opt": 11735138304000.0
+ },
+ "wall": 1097.7143168449402,
+ "peak_mem_gb": 18.754775524139404,
+ "n_params": 162988032,
+ "steps": 6000
+}

@@ -1,0 +1,53 @@
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [00:01<00:01,  1.86s/it]Fetching 2 files: 100%|██████████| 2/2 [00:01<00:00,  1.07it/s]
+22:04:41 restored from repo; 0 runs already done
+22:04:47 prefetched mnist 3s
+22:04:53 prefetched cifar10 6s
+22:04:53 start e2cnn_adam_lr3e-4_s0 try 1
+22:04:53 start e2cnn_adam_lr1e-3_s0 try 1
+22:04:53 start e2cnn_adam_lr3e-3_s0 try 1
+22:04:53 start e2cnn_dfa_lr1e-3_s0 try 1
+22:04:53 start e2cnn_edinit_s0 try 1
+22:04:53 start e2cnn_adam_lr3e-4_s1 try 1
+22:04:53 start e2cnn_adam_lr1e-3_s1 try 1
+22:04:53 start e2cnn_adam_lr3e-3_s1 try 1
+22:04:53 start e2cnn_dfa_lr1e-3_s1 try 1
+22:04:53 start e2cnn_edinit_s1 try 1
+22:04:53 start e2cnn_adam_lr3e-4_s2 try 1
+22:04:53 start e2cnn_adam_lr1e-3_s2 try 1
+22:04:53 start e2cnn_adam_lr3e-3_s2 try 1
+22:04:53 start e2cnn_dfa_lr1e-3_s2 try 1
+22:05:33 exit e2cnn_dfa_lr1e-3_s0 0 done
+22:05:33 exit e2cnn_dfa_lr1e-3_s1 0 done
+22:05:33 exit e2cnn_dfa_lr1e-3_s2 0 done
+22:05:33 start e2cnn_edinit_s2 try 1
+22:05:33 start e2cnn_meta_s0 try 1
+22:05:33 start e2mlp_bestre_m0_s0 try 1
+22:06:53 exit e2cnn_adam_lr3e-4_s0 0 done
+22:06:53 exit e2cnn_adam_lr1e-3_s0 0 done
+22:06:53 exit e2cnn_adam_lr3e-3_s0 0 done
+22:06:53 exit e2cnn_adam_lr3e-4_s1 0 done
+22:06:53 exit e2cnn_adam_lr1e-3_s1 0 done
+22:06:53 exit e2cnn_adam_lr3e-3_s1 0 done
+22:06:53 exit e2cnn_adam_lr3e-4_s2 0 done
+22:06:53 exit e2cnn_adam_lr1e-3_s2 0 done
+22:06:53 exit e2cnn_adam_lr3e-3_s2 0 done
+22:06:53 start e2mlp_bestre_m0_s1 try 1
+22:06:53 start e2mlp_bestre_m0_s2 try 1
+22:06:53 start e2mlp_bestre_m1_s0 try 1
+22:06:53 start e2mlp_bestre_m1_s1 try 1
+22:06:53 start e2mlp_bestre_m1_s2 try 1
+22:06:53 start e2mlp_r2_s0 try 1
+22:06:53 start e2mlp_r2_s1 try 1
+22:11:34 exit e2mlp_bestre_m0_s0 0 done
+22:12:54 exit e2mlp_bestre_m0_s1 0 done
+22:12:54 exit e2mlp_bestre_m0_s2 0 done
+22:12:54 exit e2mlp_bestre_m1_s0 0 done
+22:12:54 exit e2mlp_bestre_m1_s1 0 done
+22:12:54 exit e2mlp_bestre_m1_s2 0 done
+22:15:34 exit e2cnn_edinit_s0 0 done
+22:15:34 exit e2cnn_edinit_s1 0 done
+22:15:54 exit e2cnn_edinit_s2 0 done
+22:30:15 exit e2cnn_meta_s0 0 done
+22:39:35 exit e2mlp_r2_s0 0 done
+22:39:55 exit e2mlp_r2_s1 0 done
+22:39:55 finished: done

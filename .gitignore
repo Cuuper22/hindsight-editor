@@ -1,0 +1,12 @@
+# datasets (third-party; re-downloaded by hindsight/data.py)
+data/
+# Colab session state: contains short-lived session tokens and launch bundles
+runs/_colab/
+# local scratch
+runs/_pytest_tmp/
+runs/_peek/
+**/__pycache__/
+*.pyc
+# resume checkpoints (large, reproducible); trained editors (editor.pt) ARE kept
+**/ckpt.pt
+**/ckpt.pt.tmp

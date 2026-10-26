@@ -1,0 +1,40 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+01:25:34 restored from repo; 0 runs already done
+01:25:38 prefetched enwik8 1s
+01:25:38 start e3d_w4_vib_s0 try 1
+01:25:38 start e3d_w4_vib_s1 try 1
+01:25:38 start e3d_w4_vib_s2 try 1
+01:25:38 start e3d_w4_novib_s0 try 1
+01:25:38 start e3d_w4_novib_s1 try 1
+01:25:38 start e3d_w4_novib_s2 try 1
+01:25:38 start e3d_w16_vib_s0 try 1
+01:25:38 start e3d_w16_vib_s1 try 1
+01:25:38 start e3d_w16_vib_s2 try 1
+01:25:38 start e3d_w16_novib_s0 try 1
+01:25:38 start e3d_w16_novib_s1 try 1
+01:25:38 start e3d_w16_novib_s2 try 1
+01:25:38 start e3d_w64_vib_s0 try 1
+01:25:38 start e3d_w64_vib_s1 try 1
+02:43:23 exit e3d_w16_vib_s0 0 done
+02:43:23 exit e3d_w16_vib_s1 0 done
+02:43:23 exit e3d_w16_vib_s2 0 done
+02:43:23 exit e3d_w16_novib_s0 0 done
+02:43:23 exit e3d_w16_novib_s1 0 done
+02:43:23 exit e3d_w16_novib_s2 0 done
+02:43:23 exit e3d_w64_vib_s0 0 done
+02:43:23 exit e3d_w64_vib_s1 0 done
+02:43:23 start e3d_w64_vib_s2 try 1
+02:43:23 start e3d_w64_novib_s0 try 1
+02:43:23 start e3d_w64_novib_s1 try 1
+02:43:23 start e3d_w64_novib_s2 try 1
+02:48:24 exit e3d_w4_vib_s0 0 done
+02:48:24 exit e3d_w4_vib_s1 0 done
+02:48:24 exit e3d_w4_vib_s2 0 done
+02:48:24 exit e3d_w4_novib_s0 0 done
+02:48:24 exit e3d_w4_novib_s1 0 done
+02:48:24 exit e3d_w4_novib_s2 0 done
+03:09:45 exit e3d_w64_vib_s2 0 done
+03:09:45 exit e3d_w64_novib_s0 0 done
+03:09:45 exit e3d_w64_novib_s1 0 done
+03:09:45 exit e3d_w64_novib_s2 0 done
+03:09:45 finished: done

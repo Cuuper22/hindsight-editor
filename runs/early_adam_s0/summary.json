@@ -1,0 +1,37 @@
+{
+ "cfg": {
+  "mode": "train",
+  "task": "mnist",
+  "net": "mlp",
+  "hidden": [
+   256,
+   256
+  ],
+  "bs": 128,
+  "steps": 600,
+  "beta": 0.1,
+  "delta_source": "hindsight",
+  "method": "adam",
+  "lr": 0.001,
+  "sched": "const",
+  "eval_every": 25,
+  "log_every": 100,
+  "ckpt_every": 100000,
+  "seed": 0,
+  "run_id": "e1_mnist"
+ },
+ "test_loss": 0.10407195358276367,
+ "test_acc": 0.9665,
+ "val_loss": 0.12023664245605468,
+ "val_acc": 0.9622,
+ "flops": 125802158400.0,
+ "flops_by": {
+  "fwd": 41287680000.0,
+  "bwd": 82575360000.0,
+  "opt": 1939118400.0
+ },
+ "wall": 1.3294289112091064,
+ "peak_mem_gb": 0.091461181640625,
+ "n_params": 269322,
+ "steps": 600
+}

@@ -1,0 +1,78 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "fineweb_edu", "net": "gpt", "vocab": 50304, "ctx": 1024, "d": 768, "n_layer": 12, "n_head": 12, "n_train_tokens": 200000000, "bs": 16, "steps": 7700, "method": "editor", "lr": 0.0006, "sched": "wcos", "warmup": 700, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 16, "log_every": 100, "ckpt_every": 1000, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "readout_rows": 0.1, "readout_negatives": 4096, "editor": {"rank": 16, "lr_init": 0.01, "max_rel": 0.05, "use_id": false}, "seed": 0, "run_id": "e4_editor_s0"}, "time": 1792985495.04925}
+{"event": "eval", "step": 0, "val_loss": 10.9408, "val_acc": null, "flops": 0.0, "wall": 0.0, "n_params": 162988032, "time": 1792985512.71972}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 467, in <lambda>
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+                                                            ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 278, in run_train
+    rec, out_, D, aux, info = hs.deltas(Pd, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 236, in linear_correct_lm
+    q = self.summary.predicted(y, p).float()               # (B,T,w)
+        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 68, in predicted
+    s = s + self.w[0] * (p_next.to(e.dtype) @ self.table.weight)
+                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (16384x50304 and 50257x64)
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "fineweb_edu", "net": "gpt", "vocab": 50304, "ctx": 1024, "d": 768, "n_layer": 12, "n_head": 12, "n_train_tokens": 200000000, "bs": 16, "steps": 7700, "method": "editor", "lr": 0.0006, "sched": "wcos", "warmup": 700, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 16, "log_every": 100, "ckpt_every": 1000, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "readout_rows": 0.1, "readout_negatives": 4096, "editor": {"rank": 16, "lr_init": 0.01, "max_rel": 0.05, "use_id": false}, "seed": 0, "run_id": "e4_editor_s0"}, "time": 1792985534.94681}
+{"event": "eval", "step": 0, "val_loss": 10.9408, "val_acc": null, "flops": 0.0, "wall": 0.0, "n_params": 162988032, "time": 1792985539.18634}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 467, in <lambda>
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+                                                            ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 278, in run_train
+    rec, out_, D, aux, info = hs.deltas(Pd, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 236, in linear_correct_lm
+    q = self.summary.predicted(y, p).float()               # (B,T,w)
+        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 68, in predicted
+    s = s + self.w[0] * (p_next.to(e.dtype) @ self.table.weight)
+                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (16384x50304 and 50257x64)
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "fineweb_edu", "net": "gpt", "vocab": 50304, "ctx": 1024, "d": 768, "n_layer": 12, "n_head": 12, "n_train_tokens": 200000000, "bs": 16, "steps": 7700, "method": "editor", "lr": 0.0006, "sched": "wcos", "warmup": 700, "wd": 0.1, "betas": [0.9, 0.95], "eval_every": 500, "eval_batches": 20, "eval_bs": 16, "log_every": 100, "ckpt_every": 1000, "delta_source": "hindsight_lc", "beta": 0.1, "bottleneck": 16, "vib": false, "kl_coef": 0.01, "k_future": 8, "readout_rows": 0.1, "readout_negatives": 4096, "editor": {"rank": 16, "lr_init": 0.01, "max_rel": 0.05, "use_id": false}, "seed": 0, "run_id": "e4_editor_s0"}, "time": 1792985554.94937}
+{"event": "eval", "step": 0, "val_loss": 10.9408, "val_acc": null, "flops": 0.0, "wall": 0.0, "n_params": 162988032, "time": 1792985559.17086}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/content/hs/hindsight/run.py", line 492, in <module>
+    main()
+    ~~~~^^
+  File "/content/hs/hindsight/run.py", line 467, in main
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+           "meta": lambda: run_meta(cfg, log, out)}[mode]()
+  File "/content/hs/hindsight/run.py", line 467, in <lambda>
+    res = {"e0": lambda: run_e0(cfg, log), "train": lambda: run_train(cfg, log, out),
+                                                            ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/content/hs/hindsight/run.py", line 278, in run_train
+    rec, out_, D, aux, info = hs.deltas(Pd, x, y)
+                              ~~~~~~~~~^^^^^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 223, in deltas
+    D = self.linear_correct_lm(D, code, blind, y)
+  File "/content/hs/hindsight/hindsight.py", line 236, in linear_correct_lm
+    q = self.summary.predicted(y, p).float()               # (B,T,w)
+        ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/content/hs/hindsight/hindsight.py", line 68, in predicted
+    s = s + self.w[0] * (p_next.to(e.dtype) @ self.table.weight)
+                         ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (16384x50304 and 50257x64)

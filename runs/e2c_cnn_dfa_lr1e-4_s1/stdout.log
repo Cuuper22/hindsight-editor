@@ -1,0 +1,16 @@
+{"event": "start", "device": "cuda", "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "cfg": {"mode": "train", "task": "cifar10", "net": "cnn", "bs": 128, "steps": 8000, "beta": 1.0, "delta_source": "dfa", "gate": true, "prop": 0.0, "method": "raw", "lr": 0.0001, "sched": "cos", "eval_every": 500, "log_every": 100, "ckpt_every": 2000, "seed": 1, "run_id": "e2c_cnn_dfa_lr1e-4_s1"}, "time": 1792968257.68644}
+{"event": "eval", "step": 0, "val_loss": 4.70972, "val_acc": 0.1016, "flops": 0.0, "wall": 0.0, "n_params": 620362, "time": 1792968265.08362}
+{"event": "train", "step": 100, "loss": 2.305619236607209e+20, "flops": 555456921600.0, "wall": 1.24344, "time": 1792968268.20917}
+{"event": "train", "step": 200, "loss": 1.3103740575828763e+27, "flops": 1110913843200.0, "wall": 2.39754, "time": 1792968270.95812}
+{"event": "train", "step": 300, "loss": 4.706302881041516e+28, "flops": 1666370764800.0, "wall": 3.80165, "time": 1792968273.75504}
+{"event": "train", "step": 400, "loss": 1.020534073440803e+30, "flops": 2221827686400.0, "wall": 5.21096, "time": 1792968276.56749}
+{"event": "train", "step": 500, "loss": 5.284171236206038e+30, "flops": 2777284608000.0, "wall": 6.61796, "time": 1792968279.38083}
+{"event": "eval", "step": 500, "val_loss": 6.445354373991953e+30, "val_acc": 0.1966, "flops": 2777284608000.0, "flops_by": {"fwd": 1388642304000.0, "editor": 1388642304000.0}, "wall": 6.61796, "peak_mem_gb": 0.65632, "time": 1792968279.42626}
+{"event": "train", "step": 600, "loss": 1.3186462828637382e+32, "flops": 3332741529600.0, "wall": 7.89224, "time": 1792968281.86716}
+{"event": "train", "step": 700, "loss": 1.1679028852215378e+33, "flops": 3888198451200.0, "wall": 9.24897, "time": 1792968284.28559}
+{"event": "train", "step": 800, "loss": 6.913191969466535e+33, "flops": 4443655372800.0, "wall": 11.18065, "time": 1792968286.75784}
+{"event": "train", "step": 900, "loss": 1.5382274517204444e+35, "flops": 4999112294400.0, "wall": 13.10808, "time": 1792968289.21404}
+{"event": "train", "step": 1000, "loss": 2.574532451232322e+36, "flops": 5554569216000.0, "wall": 15.02553, "time": 1792968291.64598}
+{"event": "eval", "step": 1000, "val_loss": Infinity, "val_acc": 0.1404, "flops": 5554569216000.0, "flops_by": {"fwd": 2777284608000.0, "editor": 2777284608000.0}, "wall": 15.02553, "peak_mem_gb": 0.65632, "time": 1792968291.69653}
+{"event": "diverged", "step": 1000, "time": 1792968291.69658}
+{"event": "done", "time": 1792968291.80423}

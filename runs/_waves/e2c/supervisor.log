@@ -1,0 +1,27 @@
+Fetching 0 files: 0it [00:00, ?it/s]Fetching 0 files: 0it [00:00, ?it/s]
+22:44:06 restored from repo; 0 runs already done
+22:44:11 prefetched mnist 2s
+22:44:16 prefetched cifar10 5s
+22:44:16 start e2c_cnn_r2_s0 try 1
+22:44:16 start e2c_cnn_dfa_lr1e-4_s0 try 1
+22:44:16 start e2c_cnn_dfa_lr1e-4_s1 try 1
+22:44:16 start e2c_cnn_dfa_lr1e-4_s2 try 1
+22:44:16 start e2c_cnn_dfa_lr3e-5_s0 try 1
+22:44:16 start e2c_cnn_dfa_lr3e-5_s1 try 1
+22:44:16 start e2c_cnn_dfa_lr3e-5_s2 try 1
+22:44:16 start e2c_mlp_noa_s0 try 1
+22:44:16 start e2c_mlp_randfb_s0 try 1
+22:44:16 start e2c_mlp_ftpseq_s0 try 1
+22:44:16 start e2c_mlp_p05_s0 try 1
+22:44:56 exit e2c_cnn_dfa_lr1e-4_s1 0 done
+22:44:56 exit e2c_cnn_dfa_lr1e-4_s2 0 done
+22:45:16 exit e2c_cnn_dfa_lr1e-4_s0 0 done
+22:46:56 exit e2c_cnn_dfa_lr3e-5_s0 0 done
+22:46:56 exit e2c_cnn_dfa_lr3e-5_s1 0 done
+22:46:56 exit e2c_cnn_dfa_lr3e-5_s2 0 done
+23:32:39 exit e2c_mlp_randfb_s0 0 done
+23:33:59 exit e2c_mlp_ftpseq_s0 0 done
+23:37:39 exit e2c_mlp_noa_s0 0 done
+23:37:39 exit e2c_mlp_p05_s0 0 done
+23:41:19 exit e2c_cnn_r2_s0 0 done
+23:41:19 finished: done

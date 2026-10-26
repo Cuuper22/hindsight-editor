@@ -1,0 +1,34 @@
+Fetching 1 files:   0%|          | 0/1 [00:00<?, ?it/s]Fetching 1 files: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]Fetching 1 files: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]
+03:33:12 restored from repo; 0 runs already done
+03:33:16 prefetched mnist 1s
+03:33:16 start e5_meta_frozen_s0 try 1
+03:33:16 start e5_meta_frozen_s1 try 1
+03:33:16 start e5_meta_frozen_s2 try 1
+03:33:16 start e5_meta_self_eta1e-2_s0 try 1
+03:33:16 start e5_meta_self_eta1e-2_s1 try 1
+03:33:16 start e5_meta_self_eta1e-2_s2 try 1
+03:33:16 start e5_meta_self_eta5e-2_s0 try 1
+03:33:16 start e5_meta_self_eta5e-2_s1 try 1
+03:33:16 start e5_meta_self_eta5e-2_s2 try 1
+03:33:16 start e5_untrained_frozen_s0 try 1
+03:33:16 start e5_untrained_frozen_s1 try 1
+03:33:16 start e5_untrained_frozen_s2 try 1
+03:33:16 start e5_untrained_self_eta1e-2_s0 try 1
+03:33:16 start e5_untrained_self_eta1e-2_s1 try 1
+03:33:16 start e5_untrained_self_eta1e-2_s2 try 1
+03:38:37 exit e5_meta_frozen_s0 0 done
+03:38:37 exit e5_meta_frozen_s1 0 done
+03:38:37 exit e5_meta_frozen_s2 0 done
+03:38:37 exit e5_untrained_frozen_s0 0 done
+03:38:37 exit e5_untrained_frozen_s1 0 done
+03:38:37 exit e5_untrained_frozen_s2 0 done
+03:38:57 exit e5_meta_self_eta1e-2_s0 0 done
+03:38:57 exit e5_meta_self_eta1e-2_s1 0 done
+03:38:57 exit e5_meta_self_eta1e-2_s2 0 done
+03:38:57 exit e5_meta_self_eta5e-2_s0 0 done
+03:38:57 exit e5_meta_self_eta5e-2_s1 0 done
+03:38:57 exit e5_meta_self_eta5e-2_s2 0 done
+03:38:57 exit e5_untrained_self_eta1e-2_s0 0 done
+03:38:57 exit e5_untrained_self_eta1e-2_s1 0 done
+03:38:57 exit e5_untrained_self_eta1e-2_s2 0 done
+03:38:57 finished: done

@@ -1,0 +1,26 @@
+{
+ "wave": "smoke",
+ "start": 1792955139.6552203,
+ "now": 1792955159.9440207,
+ "hours": 0.005635777976777818,
+ "gpu": "",
+ "final": "done",
+ "jobs": {
+  "smoke_colab_adam": {
+   "state": "done",
+   "tries": 1,
+   "pid": 1136,
+   "started": 1792955139.9385543,
+   "rc": 0,
+   "ended": 1792955159.9429097
+  },
+  "smoke_colab_dfa": {
+   "state": "done",
+   "tries": 1,
+   "pid": 1137,
+   "started": 1792955139.9401877,
+   "rc": 0,
+   "ended": 1792955159.9430964
+  }
+ }
+}

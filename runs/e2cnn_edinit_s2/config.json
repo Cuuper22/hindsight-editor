@@ -1,0 +1,22 @@
+{
+ "mode": "train",
+ "task": "cifar10",
+ "net": "cnn",
+ "bs": 128,
+ "steps": 8000,
+ "beta": 1.0,
+ "delta_source": "hindsight_lc",
+ "gate": true,
+ "prop": 0.0,
+ "method": "editor",
+ "lr": 0.001,
+ "sched": "cos",
+ "eval_every": 500,
+ "log_every": 100,
+ "ckpt_every": 2000,
+ "seed": 2,
+ "editor": {
+  "lr_init": 0.001
+ },
+ "run_id": "e2cnn_edinit_s2"
+}
