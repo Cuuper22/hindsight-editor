@@ -1,0 +1,307 @@
+{
+ "wave": "r_cifar",
+ "gpu": "G4",
+ "max_parallel": 16,
+ "max_hours": 2.0,
+ "prefetch": [
+  "cifar10"
+ ],
+ "jobs": [
+  {
+   "run_id": "r_cifar_bp_lr3e-4_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_cifar_bp_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_bp_lr3e-4_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_cifar_bp_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_bp_lr1e-3_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_cifar_bp_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_bp_lr1e-3_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_cifar_bp_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_dfa_lr3e-4_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_cifar_dfa_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_dfa_lr3e-4_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_cifar_dfa_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_dfa_lr1e-3_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_cifar_dfa_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_dfa_lr1e-3_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_cifar_dfa_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_frozen_lr3e-4_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_cifar_frozen_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_frozen_lr3e-4_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_cifar_frozen_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_frozen_lr1e-3_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_cifar_frozen_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_frozen_lr1e-3_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_cifar_frozen_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_hlc_p0_lr3e-4_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_cifar_hlc_p0_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_hlc_p0_lr3e-4_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_cifar_hlc_p0_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_cifar_hlc_p0_lr1e-3_s0",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_cifar_hlc_p0_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_cifar_hlc_p0_lr1e-3_s1",
+   "config": "experiments/e2_cnn.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_cifar_hlc_p0_lr1e-3_s1"
+   }
+  }
+ ]
+}

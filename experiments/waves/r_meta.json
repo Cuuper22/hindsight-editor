@@ -1,0 +1,143 @@
+{
+ "wave": "r_meta",
+ "gpu": "A100",
+ "max_parallel": 4,
+ "max_hours": 3.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "r_meta_full_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 0,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "task": "mnist",
+      "net": "mlp",
+      "steps": 6000,
+      "eval_every": 500,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "r_meta_full_s0"
+   }
+  },
+  {
+   "run_id": "r_meta_full_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 0,
+     "lr_init": 0.001
+    },
+    "seed": 1,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "task": "mnist",
+      "net": "mlp",
+      "steps": 6000,
+      "eval_every": 500,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "r_meta_full_s1"
+   }
+  },
+  {
+   "run_id": "r_meta_r16_s0",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 0,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "task": "mnist",
+      "net": "mlp",
+      "steps": 6000,
+      "eval_every": 500,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "r_meta_r16_s0"
+   }
+  },
+  {
+   "run_id": "r_meta_r16_s1",
+   "config": "experiments/e2_meta_mnist.json",
+   "overrides": {
+    "prop": 0.0,
+    "unroll": 16,
+    "inner_steps": 2000,
+    "adam_warm_max": 1500,
+    "meta_lr": 0.0001,
+    "meta_steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.001
+    },
+    "seed": 1,
+    "eval": {
+     "seeds": [
+      0,
+      1,
+      2
+     ],
+     "overrides": {
+      "task": "mnist",
+      "net": "mlp",
+      "steps": 6000,
+      "eval_every": 500,
+      "log_every": 100,
+      "ckpt_every": 2000
+     }
+    },
+    "run_id": "r_meta_r16_s1"
+   }
+  }
+ ]
+}

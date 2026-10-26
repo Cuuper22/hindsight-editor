@@ -1,0 +1,1029 @@
+{
+ "wave": "r_mnistB",
+ "gpu": "T4",
+ "max_parallel": 20,
+ "max_hours": 2.0,
+ "prefetch": [
+  "mnist"
+ ],
+ "jobs": [
+  {
+   "run_id": "r_mnist_bp_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_bp_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_bp_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_bp_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_bp_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_bp_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_bp_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "backprop",
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_bp_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_dfa_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_mnist_dfa_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_dfa_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "r_mnist_dfa_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_dfa_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_mnist_dfa_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_dfa_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "r_mnist_dfa_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_dfa_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "r_mnist_dfa_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_frozen_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_frozen_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_frozen_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_frozen_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_frozen_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_frozen_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_frozen_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "dfa",
+    "freeze_body": true,
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_frozen_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p0_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p0_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p0_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p0_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p0_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p0_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p0_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p0_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p0_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p0_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p05_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p05_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p05_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p05_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p1_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema99_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.99,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p1_ema99_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema99_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.99,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_ema99_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema99_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.99,
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_ema99_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema99_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.99,
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p1_ema99_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema995_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.995,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_ema995_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema995_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.995,
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_ema995_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema995_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.995,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p1_ema995_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema995_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.995,
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_ema995_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_ema995_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "ema": 0.995,
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_ema995_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_ema99_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "ema": 0.99,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p05_ema99_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_ema99_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "ema": 0.99,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p05_ema99_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_ema99_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "ema": 0.99,
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p05_ema99_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p05_ema99_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 0.5,
+    "ema": 0.99,
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p05_ema99_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_copy100_lr3e-4_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "copy_every": 100,
+    "lr": 0.0003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_copy100_lr3e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_copy100_lr3e-4_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "copy_every": 100,
+    "lr": 0.0003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_copy100_lr3e-4_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_copy100_lr1e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "copy_every": 100,
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_mnist_hlc_p1_copy100_lr1e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_copy100_lr3e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "copy_every": 100,
+    "lr": 0.003,
+    "seed": 0,
+    "run_id": "r_mnist_hlc_p1_copy100_lr3e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_hlc_p1_copy100_lr3e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "hindsight_lc",
+    "prop": 1.0,
+    "copy_every": 100,
+    "lr": 0.003,
+    "seed": 2,
+    "run_id": "r_mnist_hlc_p1_copy100_lr3e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_ftp_lr3e-4_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "ftp_seq",
+    "prop": 1.0,
+    "lr": 0.0003,
+    "seed": 1,
+    "run_id": "r_mnist_ftp_lr3e-4_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_ftp_lr1e-3_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "ftp_seq",
+    "prop": 1.0,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_mnist_ftp_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_ftp_lr1e-3_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "ftp_seq",
+    "prop": 1.0,
+    "lr": 0.001,
+    "seed": 2,
+    "run_id": "r_mnist_ftp_lr1e-3_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_ftp_lr3e-3_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "hadam",
+    "gate": true,
+    "beta": 1.0,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "delta_source": "ftp_seq",
+    "prop": 1.0,
+    "lr": 0.003,
+    "seed": 1,
+    "run_id": "r_mnist_ftp_lr3e-3_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_ed_full_p0_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 0
+    },
+    "seed": 0,
+    "run_id": "r_mnist_ed_full_p0_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_ed_full_p0_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 0
+    },
+    "seed": 2,
+    "run_id": "r_mnist_ed_full_p0_s2"
+   }
+  },
+  {
+   "run_id": "r_mnist_ed_r16_p0_s1",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "hindsight_lc",
+    "gate": true,
+    "beta": 1.0,
+    "prop": 0.0,
+    "editor": {
+     "rank": 16
+    },
+    "seed": 1,
+    "run_id": "r_mnist_ed_r16_p0_s1"
+   }
+  },
+  {
+   "run_id": "r_mnist_ed_full_dfa_s0",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "dfa",
+    "gate": true,
+    "beta": 1.0,
+    "editor": {
+     "rank": 0
+    },
+    "seed": 0,
+    "run_id": "r_mnist_ed_full_dfa_s0"
+   }
+  },
+  {
+   "run_id": "r_mnist_ed_full_dfa_s2",
+   "config": "experiments/e1_mnist.json",
+   "overrides": {
+    "method": "editor",
+    "delta_source": "dfa",
+    "gate": true,
+    "beta": 1.0,
+    "editor": {
+     "rank": 0
+    },
+    "seed": 2,
+    "run_id": "r_mnist_ed_full_dfa_s2"
+   }
+  }
+ ]
+}

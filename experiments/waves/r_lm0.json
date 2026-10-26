@@ -1,0 +1,148 @@
+{
+ "wave": "r_lm0",
+ "gpu": "A100",
+ "max_parallel": 8,
+ "max_hours": 3.0,
+ "prefetch": [
+  "enwik8"
+ ],
+ "jobs": [
+  {
+   "run_id": "r_lm_dfa_lr1e-4_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "dfa",
+    "lr": 0.0001,
+    "seed": 0,
+    "run_id": "r_lm_dfa_lr1e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_dfa_lr1e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "dfa",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_lm_dfa_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_hlc_a0_lr1e-4_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.0001,
+    "seed": 0,
+    "run_id": "r_lm_hlc_a0_lr1e-4_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_hlc_a0_lr1e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_lm_hlc_a0_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_hlc_a0_ema_lr1e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "ema": 0.99,
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_lm_hlc_a0_ema_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_bp_lr1e-3_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "hadam",
+    "vib": false,
+    "betas": [
+     0.9,
+     0.999
+    ],
+    "wd": 0.0,
+    "steps": 6000,
+    "warmup": 200,
+    "delta_source": "backprop",
+    "lr": 0.001,
+    "seed": 0,
+    "run_id": "r_lm_bp_lr1e-3_s0"
+   }
+  },
+  {
+   "run_id": "r_lm_ed_r16_a0_s0",
+   "config": "experiments/e3_enwik8.json",
+   "overrides": {
+    "method": "editor",
+    "vib": false,
+    "delta_source": "hindsight_lc",
+    "prop": 0.0,
+    "steps": 6000,
+    "editor": {
+     "rank": 16,
+     "lr_init": 0.01,
+     "max_rel": 0.05,
+     "use_id": false
+    },
+    "seed": 0,
+    "run_id": "r_lm_ed_r16_a0_s0"
+   }
+  }
+ ]
+}
