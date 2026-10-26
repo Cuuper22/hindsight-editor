@@ -257,11 +257,12 @@ class Hindsight(nn.Module):
             D = {k: v if k == last else v * (rb.z[k].detach() > 0) for k, v in D.items()}
         return rb, blind, D, aux, info
 
-    def linear_correct_lm(self, D, code, blind, y, ridge=1e-2):
+    def linear_correct_lm(self, D, code, blind, y, ridge=None):
         """LM version: rows are tokens; the code is the bottleneck future summary z_t. Regress each
         site's delta on z, subtract the part explained by the code the blind pass expected
         (summary with token t+1 replaced by p_t). The head gets the exact next-token error
         beta * (onehot(y) - p): the answer injected at the output is the answer itself."""
+        ridge = self.cfg.get("lc_ridge", 1e-5) if ridge is None else ridge   # see linear_correct
         p = blind.detach().float().softmax(-1)                      # (B,T,V)
         with torch.no_grad(), torch.autocast(p.device.type, enabled=False):
             q = self.summary.predicted(y, p).float()               # (B,T,w)
@@ -284,7 +285,7 @@ class Hindsight(nn.Module):
                 out[name] = (Df - Q @ M).reshape(d.shape).to(d.dtype)
         return out
 
-    def linear_correct(self, D, code, blind, ridge=1e-2):
+    def linear_correct(self, D, code, blind, ridge=None):
         """Parallel hindsight with linear correction (`hindsight_lc`).
 
         Per batch, regress each site's delta on the injected code, d_b ~ code_b M (ridge least
@@ -293,9 +294,15 @@ class Hindsight(nn.Module):
         It vanishes as p -> y, like DFA's B(y - p), but M is the network's own measured response
         to the answer. Uses only forward quantities (p from the parallel blind pass).
         """
+        # NOTE ridge: with ridge r the fit M is shrunk by ~1/(1 + r K), so d - qM keeps a residual
+        # ~ (1 - shrink) * code that never vanishes (it encodes y, not y - p). The original 1e-2
+        # left ~10% of the answer in every delta; under a scale-free optimizer (Adam) that residual
+        # gets full-size steps forever. Default is now 1e-5, and the logits get the exact error.
+        ridge = self.cfg.get("lc_ridge", 1e-5) if ridge is None else ridge
         K = self.n_ans
         C = code.float()                                           # centered one-hot (N, K)
-        q = blind.detach().float().softmax(-1) - 1.0 / K           # predicted code
+        p = blind.detach().float().softmax(-1)
+        q = p - 1.0 / K                                            # predicted code
         G = C.t() @ C + ridge * C.shape[0] * torch.eye(K, device=C.device)
         out = {}
         with torch.autocast(C.device.type, enabled=False):         # fp32 solve
@@ -304,6 +311,11 @@ class Hindsight(nn.Module):
                 M = torch.linalg.solve(G, C.t() @ Df)              # (K, F)
                 flops.add("hint", 4 * Df.numel() * K)
                 out[name] = (Df - q @ M).reshape(d.shape).to(d.dtype)
+            last = self.net.sites[-1].name
+            if self.last_is_logits and self.cfg.get("exact_head", True):
+                # the logits' injection is the answer itself: its exact local error is beta*(y - p)
+                y1 = C + 1.0 / K
+                out[last] = (self.beta * (y1 - p)).reshape(D[last].shape).to(D[last].dtype)
         return out
 
 
