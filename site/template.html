@@ -63,7 +63,7 @@
         <header class="story-head">
           <p class="kicker">EXPERIMENT · MLPs, A CNN, TRANSFORMERS UP TO 163M · RENTED COLAB GPUs, AN AGENT AT THE WHEEL</p>
           <h1>Can a network learn without backprop if you just show it the answer?</h1>
-          <p class="story-lede">I'm Cuper. Every neural network you've heard of learns the same way: it guesses, then runs a second pass backwards through itself to work out who to blame, the <span class="term" data-term="backprop">backward pass</span>. I wanted to know whether you could skip that. Run the network twice instead, once normally and once with the right answer quietly fed in, and let a small learned network turn the difference into weight updates. I wrote the plan as a ladder of experiments with a pass-or-fail gate on each rung, from handwritten digits up to a GPT-2-sized model, and had an AI agent build and run all of it on rented GPUs. The answer is mostly no, and this page has every rung where it failed. Hover or tap any underlined word for a quick picture of what it means.</p>
+          <p class="story-lede">I'm Cuper. Every neural network you've heard of learns the same way: it guesses, then runs a second pass backwards through itself to work out who to blame, the <span class="term" data-term="backprop">backward pass</span>. I wanted to know whether you could skip that. Run the network twice instead, once normally and once with the right answer quietly fed in, and let a small learned network turn the difference into weight updates. I wrote the plan as a ladder of experiments with a pass-or-fail gate on each rung, from handwritten digits up to a GPT-2-sized model, and had an AI agent build and run all of it on rented GPUs. The answer is mostly no, and this page has every rung where it failed. Then I went back for a third round, found two bugs that had been hiding the real result, and reran everything with one optimizer for every method and a proper control. That round has the actual verdict, near the end. Hover or tap any underlined word for a quick picture of what it means.</p>
         </header>
 
         <section class="story-section">
@@ -148,6 +148,7 @@
             <figcaption>A made-up language where each token predicts the next, generated in code so nothing had to be downloaded. The same editor, the same data, one network dimension changed at a time.</figcaption></figure>
           <p>To separate "language is hard" from "big networks break it", I generated a toy language where each token strongly predicts the next one. On a tiny transformer, the editor learned it almost as well as Adam (1.06 against 0.91, where letter frequencies alone give 3.82). Then I changed one dimension at a time. A longer context was fine. Six layers mostly broke it. Making the layers wider, 384 instead of 64, broke it completely.</p>
           <p>So the failure is about width, not about language. My best guess at the mechanism is the compression: a rank-16 edit can only move 16 directions in a layer, and that's a shrinking share of what needs to move as layers get wider. I also found that the editor's default step size was about ten times too small for transformers. Fixing that was necessary but not enough.</p>
+          <p><span class="verdict na">ROUND 3</span>This guess was wrong. A full-rank editor fails on the transformer too. The real causes were a bug (the transformer runs used the one delta mode already known to break) and a deeper problem with feeding the body any local signal at all. See "Round 3" below.</p>
         </section>
 
         <section class="story-section">
@@ -163,6 +164,25 @@
             <figcaption>The step size the editor chose for itself while it edited its own weights, one line per run. The dashed line is where it started.</figcaption></figure>
           <p>The last rung was the stretch goal: let the editor edit its own weights, with no gradient. Each step it nudges its own settings in a random direction, applies its edit, checks whether held-out loss went down, and keeps nudging in directions that helped. That's <span class="term" data-term="perturb">weight perturbation</span> using its own results as hindsight, in the spirit of <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">self-referential weight matrices</a>.</p>
           <p><span class="verdict fail">E5 FAIL</span>It wasn't stable, and it didn't improve. A single batch of results is mostly noise, so the editor's own step size went on a random walk: up until training exploded, or down until it froze. The meta-trained editor went from 95.3 percent frozen to 76 percent editing itself, at 76 percent more compute per run.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Round 3: did I give it a fair shot?</h2>
+          <p>After the ladder failed, I went back through the code with a second agent and asked a narrower question: did the idea fail, or did the build? Two things turned up. First, <span class="term" data-term="lincorr">linear correction</span> had a bug. Its regression was regularized so strongly that about 10 percent of the raw answer stayed in every delta forever, so the signal never fully turned into "your mistake". The editor's trust region had been hiding this. Second, the transformer runs had silently used the fully propagated delta, the one mode that was already known to diverge on small networks.</p>
+          <p>I fixed both and changed the comparison. Instead of judging the editor against Adam, every method's signal now went into the <b>same</b> Adam update, with its own learning-rate sweep. That separates "is the signal any good" from "is the update rule any good". And I added the control the literature says every no-backprop paper needs: a <span class="term" data-term="frozen">frozen body</span>, where only the output layer learns. Anything that trains the rest of the network has to beat it.</p>
+          <div class="tbl-wrap"><table class="tbl">
+            <tr><th>Signal fed to Adam</th><th>MNIST, accuracy</th><th>CIFAR-10, accuracy</th><th>Char transformer, loss (nats, lower is better)</th></tr>
+            <tr><td>Backprop (true gradient)</td><td class="n">98.4%</td><td class="n">74.0%</td><td class="n">1.11</td></tr>
+            <tr><td>Random feedback (DFA)</td><td class="n">97.7%</td><td class="n">39.1%</td><td class="n">2.78</td></tr>
+            <tr><td>Hindsight, local, bug fixed</td><td class="n">97.4%</td><td class="n">37.5%</td><td class="n">3.18</td></tr>
+            <tr><td>Only the output layer learns (control)</td><td class="n">90.9%</td><td class="n">44.5%</td><td class="n">2.75</td></tr>
+            <tr><td>Hindsight through the layers, best variant</td><td class="n">90.6%</td><td class="n">—</td><td class="n">3.48</td></tr>
+          </table></div>
+          <p><span class="verdict pass">SIGNAL WORKS</span>With the bug fixed, the local hindsight signal trains a small network properly: 97.4 percent on digits, up from 87.9. The editor had been the bottleneck, not the signal. Untrained, at any rank, the editor sits right at the frozen-body level, so it had mostly been training the output layer all along. Meta-training lifts it to 95 to 96 percent, still below plain Adam on the same signal.</p>
+          <p><span class="verdict fail">NOT BETTER THAN RANDOM</span>But it ties random feedback, and that's the verdict that matters. The learned channel that shows each layer the answer adds nothing measurable over a random projection of the error.</p>
+          <p><span class="verdict fail">PROPAGATION IS WRONG-WAY</span>Letting the answer travel through the layers was supposed to be the point: deep layers getting goals that were informed by the answer. With the bug fixed it no longer blows up, but every version lands at or below the frozen-body control. That includes running the answer-aware pass on a slow-moving copy of the weights, and on a copy refreshed every 100 steps. The reason is structural. A forward pass can tell a layer how its <i>input</i> would change if earlier layers knew the answer. Credit has to come from how its <i>output</i> affects the loss, which is information flowing the other way. Lagging the weights can't reverse that.</p>
+          <p><span class="verdict fail">WORSE THAN NOTHING ON CONV AND ATTENTION</span>On the image network and the transformer, every local signal, hindsight and random feedback alike, does worse than leaving the body untrained. That matches the published random-feedback results for convolutions and transformers. So the "wider layers break it" story above was wrong. Nothing here learns those layers usefully without a backward pass.</p>
+          <p>What survives: linear correction (turning "here's the answer" into "here's your mistake" with no gradient) and the test setup itself. To go further, the signal would have to carry credit backward through the network, and a forward-only hindsight pass can't do that.</p>
         </section>
 
         <section class="story-section">
@@ -221,6 +241,20 @@
           <tr><td>E4 GPT ~163M (FineWeb-Edu)</td><td>report</td><td class="n" data-fill="e4-editor-cell">diverged</td><td class="n" data-fill="e4-adam-cell">4.316 nats</td><td>Reported</td></tr>
           <tr><td>E5 self-edit (MNIST)</td><td>stable, improves itself</td><td class="n">76.1 ± 23.9% vs 95.3% frozen</td><td class="n">—</td><td>Fail</td></tr>
         </table></div>
+        <h3>Round 3 (retry): every signal through the same Adam update</h3>
+        <p>Per-site pseudo-gradient g = −D<sup>T</sup>A/N fed to AdamW (β 0.9/0.999, no weight decay); with D = −dL/dz this is exactly AdamW (unit-tested). Learning rates swept per method; best shown. MNIST 3 seeds, 6,000 steps; CIFAR-10 2 seeds, 8,000 steps; enwik8 GPT 10.9M 1–2 seeds, 6,000 steps. Full per-lr tables in <code>RESULTS.md</code>.</p>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Signal</th><th>MNIST acc</th><th>CIFAR-10 acc</th><th>enwik8 nats</th></tr>
+          <tr><td>Backprop</td><td class="n">98.37 ± 0.08</td><td class="n">74.00 ± 0.22</td><td class="n">1.114 (round 2)</td></tr>
+          <tr><td>DFA</td><td class="n">97.67 ± 0.01</td><td class="n">39.14 ± 0.20</td><td class="n">2.78 ± 0.00</td></tr>
+          <tr><td>Hindsight, local (prop 0)</td><td class="n">97.36 ± 0.05</td><td class="n">37.49 ± 5.90</td><td class="n">3.18 ± 0.39</td></tr>
+          <tr><td>Frozen body (control)</td><td class="n">90.94 ± 0.39</td><td class="n">44.52 ± 0.32</td><td class="n">2.75 ± 0.01</td></tr>
+          <tr><td>Hindsight, prop 0.5 + EMA 0.99</td><td class="n">90.56 ± 0.50</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><td>Hindsight, prop 1 + EMA 0.995</td><td class="n">89.18 ± 0.97</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><td>Hindsight, prop 1 (no lag)</td><td class="n">82.70 ± 2.41</td><td class="n">—</td><td class="n">3.48</td></tr>
+          <tr><td>Editor, untrained, full rank / rank 16</td><td class="n">89.56 / 89.18</td><td class="n">—</td><td class="n">3.74 / 3.52</td></tr>
+          <tr><td>Editor, meta-trained, full rank</td><td class="n">95.35–96.17</td><td class="n">—</td><td class="n">—</td></tr>
+        </table></div>
         <h3>Central measurement (MNIST, shared initial networks)</h3>
         <div class="tbl-wrap"><table class="tbl">
           <tr><th>Method</th><th>Loss after 25 / 100 / 600 updates</th><th>Drop per update, first 25</th><th>Loss at 0.021 / 0.084 TFLOP</th><th>GFLOP per update</th></tr>
@@ -238,6 +272,8 @@
           <li>Meta-training instability: divergence resets, skip non-finite updates, slower meta learning rate, longer unrolls, warm-started trajectories.</li>
           <li>Transformers: step size about 10× too small; six of seven hindsight channels never trained (bug, fixed and tested); vocab padding mismatch at 50k tokens (bug, fixed).</li>
           <li>Measurement: editor evaluated on different initial networks than Adam (rerun on the same ones); an early "editor ahead" reading was an interpolation artifact (re-measured every 25 updates).</li>
+          <li>Round 3: linear-correction ridge (1e-2) shrank the fit and left ~10% of the answer code in every delta, so it never vanished; ridge now 1e-5 and classifier logits get the exact error β(y − p).</li>
+          <li>Round 3: the transformer path ignored the propagation setting and only injected between blocks, so every GPT weight got the fully propagated delta; added block-local mode.</li>
         </ul>
         <h3>What I wouldn't lean on</h3>
         <ul>
@@ -246,7 +282,9 @@
           <li>E4 is one seed and only 98M tokens, with no meta-training at that scale.</li>
           <li>The ablations of the meta-trained editor use one meta-training seed each (three test networks).</li>
           <li>Wall-clock is confounded: many jobs shared one GPU, and the editor runs as unfused Python. Charts show compute, not time.</li>
-          <li>The width diagnosis comes from a synthetic language and one bisection; the rank-starvation mechanism is a hypothesis, not a measurement.</li>
+          <li>The round-2 width diagnosis (rank starvation) is superseded by round 3: full-rank editors fail too.</li>
+          <li>Round 3 transformer results use 1–2 seeds; a Colab rerun of Adam on the true gradient through the new code path was not done (checked locally only), because Hugging Face rate-limited the results repo.</li>
+          <li>The propagation verdict is from MNIST MLPs and one transformer setting. A backward-flowing hindsight signal was not tested; that would be a different method.</li>
         </ul>
         <h3>References</h3>
         <ol class="refs">
@@ -383,6 +421,7 @@ const DATA = /*__DATA__*/null;
     vib: ["information penalty (VIB)", "A variational information bottleneck: the squeezed hint is made noisy and penalized for carrying information, to stop the network from just copying the future through.", "bottleneck"],
     unigram: ["unigram level", "The loss of a model that knows only how often each letter appears, and nothing about which letter comes next. Anything that actually reads should get well below it.", "unigram"],
     fineweb: ["FineWeb-Edu", "A large collection of educational web pages, used here pre-tokenized with GPT-2's tokenizer.", null],
+    frozen: ["frozen-body control", "Leave every layer at its random starting weights and train only the output layer, with the exact error. A method that trains the rest of the network has to beat this, or its body updates are doing harm.", "curve"],
     perturb: ["weight perturbation", "Nudge the weights randomly, see whether the result got better, and step in the directions that helped. It needs no gradient, and it's noisy.", "walk"],
   };
   const pop = $("#pop"), popVis = $("#pop-vis"), popTitle = $("#pop-title"), popText = $("#pop-text");
