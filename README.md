@@ -5,6 +5,8 @@ A learned, gradient-free training rule. The network runs twice on the same input
 The per-layer difference (the *hindsight delta*) goes to a small learned **editor**, which turns it
 into a low-rank weight edit. No backward pass touches the main network.
 
+**Story page:** [index.html](index.html), a CuperOS-style interactive write-up (same design system as
+[chicken-genes](https://cuuper22.github.io/chicken-genes/)). Short report: [WRITEUP.md](WRITEUP.md).
 Results: [RESULTS.md](RESULTS.md). Compute ledger: [runs/ledger.csv](runs/ledger.csv).
 
 ## Layout
@@ -79,4 +81,17 @@ python analysis/meta_table.py e2mlp
 
 ```bash
 python analysis/central.py "Adam=runs/e1base_adam_lr1e-3_s*/metrics.jsonl" "Editor=runs/e2mlp_bestre_m0_s*/metrics.jsonl"
+```
+
+### Story page
+
+`index.html` is generated: figure data is extracted from `runs/` and injected into `site/template.html`
+(the shared CuperOS stylesheet lives in `site/_cuperos.css`).
+
+```bash
+python analysis/build_site.py
+```
+
+```bash
+python analysis/plots.py
 ```

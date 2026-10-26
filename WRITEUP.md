@@ -20,7 +20,7 @@ stated; E4 is 1 seed).
 | E2 meta-trained, MNIST MLP | 96.0% (FTP-style sequential delta) / 94.8% (parallel); loss at 0.21 TFLOP 0.268 vs 0.096 | 98.4% | **fail** (2.8x loss at matched FLOPs) |
 | E2 meta-trained, CIFAR-10 CNN | 44.0%; loss at 16.7 TFLOP 1.76 vs 0.88 | 74.0% | **fail** |
 | E3 char transformer, enwik8 (10.9M) | 3.51 nats = unigram (5.07 bpc) | 1.114 nats (1.61 bpc) | **fail** (does not learn) |
-| E4 ~163M GPT, FineWeb-Edu, 98M tokens | E4_EDITOR_RESULT | 4.316 nats (AdamW, lr 6e-4) | reported |
+| E4 ~163M GPT, FineWeb-Edu, 98M tokens | diverged: 1,076-1,654 nats from step 500 on (run lost at 4,600/7,700) | 4.316 nats (AdamW, lr 6e-4) | reported: fails |
 | E5 self-editing (MNIST) | self-edited editor 76.1 ± 23.9% vs frozen 95.3% | n/a | **fail** (unstable, no self-improvement) |
 
 **Central measurement (handoff 1d).** On MNIST, with shared initial networks, Adam's held-out loss
@@ -75,7 +75,8 @@ editor costs 0.18 GFLOP per update vs Adam's 0.21 (two forward passes + editor v
 ## Honest caveats
 
 - E4 is a single seed and only 98M tokens; it is reported as-is ("report whatever happens"), with no
-  meta-training at that scale.
+  meta-training at that scale. The editor's VM was lost at step 4,600 of 7,700 (no error logged); it had
+  diverged by step 500, so it was not resumed.
 - E3 wave A ran with a bug (6 of 7 transformer hindsight channels untrained); it was found, fixed,
   unit-tested, and all later E3 runs use the fixed code. MLP/CNN rungs were unaffected.
 - Wall-clock comparisons are confounded: many jobs share one GPU, and the editor path is unfused

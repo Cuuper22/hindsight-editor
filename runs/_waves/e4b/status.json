@@ -1,0 +1,16 @@
+{
+ "wave": "e4b",
+ "start": 1792986218.1174684,
+ "now": 1792987468.1894085,
+ "hours": 0.34724220560656655,
+ "gpu": "90 %, 48015 MiB, 97887 MiB",
+ "final": null,
+ "jobs": {
+  "e4_editor_s1fix": {
+   "state": "running",
+   "tries": 1,
+   "pid": 1882,
+   "started": 1792986222.171711
+  }
+ }
+}

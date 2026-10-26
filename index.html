@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hindsight Editor</title>
+<meta name="description" content="Can a network learn without backprop if you just show it the answer? A learned, gradient-free training rule, tested from MNIST up to a 163M-parameter GPT.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Pixelify+Sans:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: CuperOS desktop (same system as chicken-genes). A Story window and a Lab notes window over a teal dotted desktop, taskbar at the bottom; phones get one plain page with a tab bar.
+   Single-theme by design (the CuperOS look is light only), every color set explicitly. */
+:root {
+  color-scheme: light;
+  --desktop-bg: oklch(0.45 0.10 195);
+  --desktop-dot: oklch(0.50 0.12 195);
+  --window-chrome: oklch(0.85 0.005 250);
+  --window-body: oklch(0.97 0.002 90);
+  --button-face: oklch(0.85 0.005 250);
+  --button-hover: oklch(0.88 0.005 250);
+  --inset-dark: oklch(0.40 0.005 250);
+  --inset-light: oklch(0.95 0.003 90);
+  --title-bar: oklch(0.40 0.15 260);
+  --title-bar-end: oklch(0.45 0.15 260);
+  --text-dark: oklch(0.15 0.005 250);
+  --text-soft: oklch(0.33 0.006 250);
+  --text-light: oklch(0.95 0.003 90);
+  --link-color: oklch(0.40 0.15 260);
+  --link-hover: oklch(0.50 0.18 260);
+  --accent-cyan: oklch(0.50 0.10 195);
+  --accent-cyan-deep: oklch(0.42 0.10 195);
+  --accent-gold: oklch(0.82 0.15 88);
+  --accent-green: oklch(0.62 0.17 135);
+  --accent-orange: oklch(0.66 0.16 50);
+  --danger-red: oklch(0.55 0.18 28);
+  --pane-bright: oklch(0.98 0.002 90);
+  --chrome-well: oklch(0.91 0.006 250);
+  --frame-line: oklch(0.72 0.006 250);
+  --gold-wash: oklch(0.94 0.07 88);
+  --gold-line: oklch(0.65 0.12 88);
+  --icon-label-veil: oklch(0.28 0.08 195 / 0.62);
+  --taskbar-bg: oklch(0.75 0.005 250);
+  --pixel-ink: oklch(0.08 0.004 250);
+  --shadow: 2px 2px 0 var(--pixel-ink);
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-display: "Pixelify Sans", ui-monospace, monospace;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+html { font-synthesis-weight: none; }
+body {
+  margin: 0; min-width: 320px; min-height: 100vh;
+  background-color: var(--desktop-bg);
+  background-image: radial-gradient(circle, var(--desktop-dot) 1px, transparent 1px);
+  background-size: 4px 4px;
+  color: var(--text-dark); font-family: var(--font-body); line-height: 1.6;
+  overflow-x: hidden; padding-bottom: 54px;
+}
+a { color: var(--link-color); text-decoration: underline; }
+a:hover { color: var(--link-hover); }
+:focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 2px; }
+button, a { touch-action: manipulation; }
+
+/* desktop + windows */
+.desktop { position: relative; width: min(100% - 20px, 1400px); height: calc(100vh - 54px); min-height: 560px; margin: 0 auto; }
+.desktop-icons { position: absolute; top: 22px; left: 0; display: grid; gap: 14px; z-index: 1; }
+.desktop-icon { width: 96px; min-height: 78px; display: grid; justify-items: center; align-content: start; gap: 6px; color: var(--text-light); text-decoration: none; text-align: center; text-shadow: 1px 1px 0 var(--pixel-ink); font: 500 13px var(--font-display); background: none; border: 0; cursor: pointer; padding: 0; }
+.desktop-icon:hover { color: var(--text-light); }
+.desktop-icon:hover .icon-image { transform: translate(-1px, -1px); }
+.desktop-icon .icon-image { width: 36px; height: 36px; image-rendering: pixelated; transition: transform 120ms ease-out; }
+.icon-label { padding: 1px 6px; background: var(--icon-label-veil); max-width: 100%; }
+.desktop-logo { position: absolute; top: 18px; right: 0; color: var(--text-light); text-shadow: 2px 2px 0 var(--pixel-ink); user-select: none; z-index: 1; font: 500 clamp(30px, 4vw, 58px)/0.9 var(--font-display); }
+.os-window { position: absolute; display: flex; flex-direction: column; min-width: 0; max-width: 100%; background: var(--window-chrome); border: 2px outset var(--button-face); box-shadow: var(--shadow); z-index: 2; }
+.os-window[hidden] { display: none; }
+.story-window { top: 14px; left: 116px; width: min(1000px, 100% - 128px); height: calc(100% - 28px); }
+.notes-window { top: 80px; right: 0; width: min(760px, 100% - 220px); height: calc(100% - 104px); }
+.os-window.is-max { top: 0 !important; left: 0 !important; right: 0; width: 100% !important; height: 100% !important; }
+.title-bar { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 5px 7px; background: linear-gradient(90deg, var(--title-bar), var(--title-bar-end)); color: var(--text-light); border-bottom: 2px solid var(--inset-dark); user-select: none; }
+.os-window:not(.is-front) .title-bar { background: linear-gradient(90deg, oklch(0.5 0.03 260), oklch(0.56 0.03 260)); }
+.title-text { display: flex; align-items: center; gap: 7px; min-width: 0; font: 500 14px var(--font-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.window-controls { display: flex; gap: 4px; }
+.window-btn { width: 22px; height: 22px; display: inline-grid; place-items: center; border: 2px outset var(--button-face); border-radius: 0; background: var(--button-face); color: var(--text-dark); padding: 0; font: 500 13px var(--font-display); cursor: pointer; }
+.window-btn:active { border-style: inset; }
+.window-content { flex: 1 1 auto; min-height: 0; margin: 4px; background: var(--window-body); border: 2px inset var(--window-chrome); min-width: 0; overflow: auto; overscroll-behavior: contain; }
+
+/* taskbar */
+.taskbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 8px env(safe-area-inset-bottom, 0px); background: var(--taskbar-bg); border-top: 2px solid var(--inset-light); box-shadow: 0 -2px 0 var(--inset-dark); }
+.taskbar-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.start-button, .task-button, .taskbar-clock { min-height: 32px; display: inline-flex; align-items: center; gap: 6px; border: 2px outset var(--button-face); border-radius: 0; background: var(--button-face); color: var(--text-dark); padding: 4px 10px; font: 500 14px var(--font-display); white-space: nowrap; text-decoration: none; cursor: pointer; }
+.task-button.is-active { border-style: inset; background: var(--chrome-well); }
+.task-button:hover, .start-button:hover { background: var(--button-hover); color: var(--text-dark); }
+.taskbar-clock { border-style: inset; cursor: default; }
+
+/* pixel icons */
+.px-icon { display: inline-block; width: 16px; height: 16px; background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; vertical-align: middle; flex: 0 0 auto; }
+.px-start { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='2' y='2' width='5' height='5' fill='%23FF0000'/%3E%3Crect x='9' y='2' width='5' height='5' fill='%2300A000'/%3E%3Crect x='2' y='9' width='5' height='5' fill='%230000FF'/%3E%3Crect x='9' y='9' width='5' height='5' fill='%23FFD800'/%3E%3C/svg%3E"); }
+.px-doc { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M3 1h7l3 3v11H3V1z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Cpath d='M10 1v3h3' fill='%23C9C9C9' stroke='%23808080'/%3E%3Crect x='5' y='6' width='6' height='1' fill='%23000080'/%3E%3Crect x='5' y='8' width='6' height='1' fill='%23000080'/%3E%3Crect x='5' y='10' width='4' height='1' fill='%23000080'/%3E%3C/svg%3E"); }
+.px-egg { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 2h4v1h1v2h1v3h1v4h-1v1h-1v1H6v-1H5v-1H4V8h1V5h1V3h0z' fill='%23F3E2B8' stroke='%231A1A1A'/%3E%3Crect x='6' y='5' width='2' height='2' fill='%23FFFFFF'/%3E%3C/svg%3E"); }
+.px-flask { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M6 1h4v1H9v4l4 7v2H3v-2l4-7V2H6z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Crect x='4' y='11' width='8' height='3' fill='%2300A0A0'/%3E%3Crect x='6' y='9' width='4' height='2' fill='%2300A0A0'/%3E%3C/svg%3E"); }
+
+/* phone tabs */
+.phone-tabs { display: none; }
+
+/* story */
+.story { --story-text: 18px; max-width: 65ch; margin: 0 auto; padding: clamp(20px, 4vw, 44px) clamp(18px, 3vw, 32px) 72px; font: 400 var(--story-text)/1.7 var(--font-body); color: var(--text-dark); }
+.story h1, .story h2 { font-family: var(--font-body); font-weight: 700; text-wrap: balance; color: var(--text-dark); }
+.story h1 { margin: 0 0 18px; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.15; color: var(--title-bar); }
+.story h2 { margin: 0 0 18px; font-size: clamp(23px, 2.4vw, 28px); line-height: 1.25; }
+.story p { margin: 0 0 1.1em; }
+.story-lede { font-size: 20px; line-height: 1.6; color: var(--text-soft); }
+.story-section { margin-top: 64px; padding-top: 8px; }
+.story-head + .story-section { margin-top: 48px; }
+.figure { margin: 0 0 28px; }
+.figure-slot { padding: 8px; background: var(--pane-bright); border: 2px inset var(--window-chrome); }
+.figure figcaption { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--text-soft); }
+.story ul.plain { margin: 0 0 1.1em; padding-left: 1.2em; }
+.story ul.plain li { margin: 0 0 0.5em; }
+.story a.cite, .notes a.cite { color: var(--title-bar); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.verdict { display: inline-block; font: 700 12px/1 var(--font-mono); padding: 3px 6px; margin-right: 6px; border: 1px solid currentColor; vertical-align: 2px; }
+.verdict.fail { color: var(--danger-red); } .verdict.pass { color: var(--accent-green); } .verdict.na { color: var(--text-soft); }
+.refs { padding-left: 1.2em; } .refs li { margin: 0 0 0.45em; }
+.mono, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.story .num { font-size: 0.92em; }
+.kicker { font: 500 14px var(--font-mono); color: var(--accent-cyan-deep); letter-spacing: 0.04em; margin: 0 0 6px; }
+
+/* lab notes */
+.notes { max-width: 70ch; margin: 0 auto; padding: 24px 22px 60px; font: 400 16px/1.6 var(--font-body); }
+.notes h2 { font: 700 22px/1.25 var(--font-body); margin: 0 0 10px; color: var(--title-bar); }
+.notes h3 { font: 700 17px/1.3 var(--font-body); margin: 26px 0 8px; }
+.notes p { margin: 0 0 0.9em; }
+.tbl-wrap { overflow-x: auto; margin: 0 0 14px; border: 2px inset var(--window-chrome); background: var(--pane-bright); }
+.tbl { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tbl th, .tbl td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--frame-line); vertical-align: top; }
+.tbl th { font-weight: 600; background: var(--chrome-well); }
+.tbl td.n { font-family: var(--font-mono); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* terms */
+.term { --acc: var(--accent-cyan-deep); text-decoration: underline dotted var(--acc); text-decoration-thickness: 1.5px; text-underline-offset: 0.22em; text-decoration-skip-ink: none; cursor: help; border-radius: 2px; padding-right: 0.42em; background-image: linear-gradient(var(--acc), var(--acc)); background-repeat: no-repeat; background-size: 0.28em 0.28em; background-position: right 0.08em top 0.28em; transition: background-color 150ms ease; }
+.term:hover, .term[aria-expanded="true"] { background-color: var(--gold-wash); text-decoration-style: solid; }
+.gsx-pop { position: fixed; z-index: 9000; top: 0; left: 0; width: 340px; max-width: calc(100vw - 16px); display: flex; flex-direction: column; background: var(--window-chrome); border: 2px outset var(--button-face); box-shadow: 3px 3px 0 var(--pixel-ink); color: var(--text-dark); font: 400 15px/1.5 var(--font-body); opacity: 0; visibility: hidden; pointer-events: none; transform: scale(0.94); transition: opacity 160ms ease, transform 160ms var(--ease-snap), visibility 0s linear 160ms; }
+.gsx-pop.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition: opacity 180ms ease, transform 220ms var(--ease-snap), visibility 0s; }
+.gsx-pop::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.gsx-pop.is-above::before { top: auto; bottom: -14px; }
+.gsx-bar { display: flex; align-items: center; gap: 8px; padding: 4px 5px 4px 7px; background: linear-gradient(90deg, var(--title-bar), var(--title-bar-end)); color: var(--text-light); border-bottom: 2px solid var(--inset-dark); }
+.gsx-title { flex: 1; min-width: 0; font: 500 14px/1.2 var(--font-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gsx-x { width: 22px; height: 22px; display: inline-grid; place-items: center; padding: 0; border: 2px outset var(--button-face); border-radius: 0; background: var(--button-face); color: var(--text-dark); cursor: pointer; font: 500 13px var(--font-display); }
+.gsx-main { margin: 4px; padding: 10px; background: var(--window-body); border: 2px inset var(--window-chrome); overflow-y: auto; }
+.gsx-visbox { aspect-ratio: 260 / 120; max-width: 100%; margin: 0 0 9px; border: 2px inset var(--window-chrome); background-color: var(--pane-bright); background-image: radial-gradient(circle, var(--chrome-well) 1px, transparent 1px); background-size: 6px 6px; overflow: hidden; }
+.gsx-visbox svg { width: 100%; height: 100%; display: block; }
+.gsx-text { margin: 0; text-wrap: pretty; }
+.gsx-face .h { fill: var(--accent-gold); } .gsx-face .e { fill: var(--pixel-ink); }
+
+/* figure windows */
+.gsf { --f-ink: var(--text-dark); --f-soft: var(--text-soft); --f-body: var(--window-body); --f-chrome: var(--window-chrome); --f-well: var(--chrome-well); --f-line: var(--frame-line); --f-blue: var(--title-bar); --f-cyan: var(--accent-cyan); --f-gold: var(--accent-gold); --f-red: var(--danger-red); --f-orange: var(--accent-orange);
+  position: relative; background: var(--f-chrome); border: 2px outset var(--button-face); box-shadow: var(--shadow); color: var(--f-ink); font: 400 15px/1.5 var(--font-body); container-type: inline-size; }
+.gsf-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 7px; background: linear-gradient(90deg, var(--title-bar), var(--title-bar-end)); border-bottom: 2px solid var(--inset-dark); color: var(--text-light); user-select: none; }
+.gsf-title { font: 500 14px/1.3 var(--font-display); min-width: 0; }
+.gsf-stage { padding: 14px; background: var(--f-body); border: 2px inset var(--f-chrome); }
+.gsf-note { margin: 10px 0 0; color: var(--f-soft); font-size: 13px; line-height: 1.45; }
+.gsf-note b { font-family: var(--font-mono); font-weight: 500; color: var(--f-ink); }
+.gsf-seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+.gsf-seg button { min-height: 34px; padding: 4px 11px; border: 2px outset var(--button-face); border-radius: 0; background: var(--button-face); color: var(--f-ink); font: 500 14px/1.3 var(--font-body); cursor: pointer; }
+.gsf-seg button:hover { background: var(--button-hover); }
+.gsf-seg button[aria-pressed="true"] { border-style: inset; background: var(--f-blue); color: var(--text-light); }
+.gsf input[type="range"] { width: 100%; height: 28px; margin: 0; accent-color: var(--f-blue); cursor: pointer; }
+.gsf svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gsf svg text { font-family: var(--font-body); fill: var(--f-soft); font-size: 12px; }
+.gsf svg text.m { font-family: var(--font-mono); }
+.gsf svg text.ink { fill: var(--f-ink); }
+.gsf svg text.b { font-weight: 600; }
+.ctl { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 14px; }
+.ctl label { color: var(--f-soft); }
+.ctl output { font: 500 14px var(--font-mono); min-width: 4ch; text-align: right; }
+.readout { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-top: 10px; }
+.readout div { padding: 8px 10px; background: var(--f-well); border: 2px inset var(--f-chrome); min-width: 0; }
+.readout small { display: block; color: var(--f-soft); font-size: 12px; line-height: 1.3; }
+.readout b { font: 600 22px/1.2 var(--font-mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 8px 0 0; font-size: 13px; color: var(--f-soft); }
+.sw { display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--f-ink); }
+.steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; padding: 9px 11px; background: var(--f-well); border: 2px outset var(--button-face); }
+.steps li::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; background: var(--f-blue); color: var(--text-light); font: 500 14px var(--font-display); }
+.steps b { display: block; font-weight: 700; }
+.steps span { color: var(--f-soft); font-size: 14px; line-height: 1.45; }
+.catch { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.catch li { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 9px 11px; background: var(--f-well); border: 1px solid var(--f-line); }
+.catch b { font-weight: 600; } .catch span.d { grid-column: 1 / -1; color: var(--f-soft); font-size: 14px; }
+.chip { align-self: start; padding: 1px 8px; font: 500 12px/1.6 var(--font-mono); border: 1px solid var(--f-ink); background: var(--gold-wash); white-space: nowrap; }
+.chip.ok { background: oklch(0.92 0.06 150); }
+.dials { display: grid; gap: 10px; }
+.dial { display: grid; grid-template-columns: minmax(0, 42%) 1fr 46px; gap: 10px; align-items: center; font-size: 14px; }
+.dial .tr { height: 18px; background: var(--f-well); border: 1px solid var(--f-line); }
+.dial .fl { height: 100%; width: 0; background: var(--f-blue); transition: width 0.25s var(--ease-snap); }
+.dial.side .fl { background: var(--f-red); }
+.dial .v { font: 500 13px var(--font-mono); text-align: right; }
+.dial.head { color: var(--f-soft); font-size: 12px; }
+
+@container (max-width: 480px) {
+  .dial { grid-template-columns: 1fr 40px; } .dial .lab { grid-column: 1 / -1; }
+}
+
+@media (max-width: 760px) {
+  body { padding-bottom: 0; background: var(--window-body); background-image: none; }
+  .phone-tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: grid; grid-template-columns: 1fr 1fr; background: var(--title-bar); border-bottom: 2px solid var(--inset-dark); }
+  .phone-tabs button { min-height: 46px; color: var(--text-light); font: 500 15px var(--font-display); background: transparent; border: 0; border-right: 2px solid var(--title-bar-end); cursor: pointer; }
+  .phone-tabs button[aria-current="page"] { background: var(--window-body); color: var(--title-bar); }
+  .desktop-icons, .desktop-logo, .taskbar, .title-bar { display: none; }
+  .desktop { width: 100%; height: auto; min-height: 0; margin: 0; }
+  .os-window, .story-window, .notes-window { position: static; width: 100%; height: auto; border: 0; box-shadow: none; background: var(--window-body); }
+  .window-content { margin: 0; border: 0; overflow: visible; }
+  .story { --story-text: 17px; max-width: none; padding: 22px 16px 56px; }
+  .notes { padding: 22px 16px 56px; }
+  .story-section { margin-top: 52px; }
+}
+@media (max-width: 600px) {
+  .gsx-pop { left: 0 !important; right: 0; top: auto !important; bottom: 0; width: auto; max-width: none; max-height: 82vh; border-width: 2px 0 0; box-shadow: 0 -3px 0 var(--pixel-ink); padding-bottom: env(safe-area-inset-bottom, 0px); transform: translateY(104%); }
+  .gsx-pop.is-open { transform: none; }
+  .gsx-pop::before { display: none; }
+  .gsx-x { width: 34px; height: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* page-specific additions */
+.px-eye { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M1 8h1V7h1V6h2V5h6v1h2v1h1v1h1v1h-1v1h-1v1h-2v1H5v-1H3v-1H2V9H1z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300A0A0'/%3E%3Crect x='7' y='7' width='2' height='2' fill='%231A1A1A'/%3E%3C/svg%3E"); }
+.gsf svg .grid { stroke: var(--frame-line); stroke-width: 1; opacity: 0.55; }
+.gsf svg .axis { stroke: var(--text-soft); stroke-width: 1; }
+.cell-grid { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 6px; font-size: 14px; }
+.cell-grid .hd { color: var(--text-soft); font-size: 12px; align-self: end; }
+.cell-grid .c { padding: 10px 8px; border: 2px inset var(--window-chrome); text-align: center; font: 600 15px/1.2 var(--font-mono); }
+.cell-grid .c small { display: block; font: 400 11px/1.3 var(--font-body); color: var(--text-soft); margin-top: 2px; }
+.passes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-items: stretch; }
+.passes .lay { padding: 8px 6px; background: var(--chrome-well); border: 2px outset var(--button-face); text-align: center; font: 500 13px/1.3 var(--font-body); min-width: 0; }
+.passes .lay b { display: block; font: 500 13px var(--font-display); }
+.passes .bar { height: 10px; margin-top: 6px; background: var(--frame-line); position: relative; }
+.passes .bar i { position: absolute; top: 0; bottom: 0; left: 50%; background: var(--title-bar); transition: width 0.3s var(--ease-snap), left 0.3s var(--ease-snap), background 0.2s; }
+.passes .inj { margin-top: 6px; font: 500 11px/1.2 var(--font-mono); color: var(--accent-orange); min-height: 14px; }
+@container (max-width: 480px) { .passes { grid-template-columns: repeat(2, 1fr); } .cell-grid { font-size: 12px; } }
+</style>
+<meta property="og:title" content="Hindsight Editor">
+<meta property="og:description" content="Can a network learn without backprop if you just show it the answer? A learned, gradient-free training rule, tested from MNIST up to a 163M-parameter GPT.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7d84">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Cpath d='M1 8h1V7h1V6h2V5h6v1h2v1h1v1h1v1h-1v1h-1v1h-2v1H5v-1H3v-1H2V9H1z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300A0A0'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="phone-tabs" aria-label="Sections">
+  <button type="button" data-open="story" aria-current="page">Story</button>
+  <button type="button" data-open="notes">Lab notes</button>
+</nav>
+
+<div class="desktop">
+  <div class="desktop-icons" aria-label="CuperOS shortcuts">
+    <button class="desktop-icon" type="button" data-open="story"><span class="icon-image px-icon px-eye"></span><span class="icon-label">Story</span></button>
+    <button class="desktop-icon" type="button" data-open="notes"><span class="icon-image px-icon px-flask"></span><span class="icon-label">Lab notes</span></button>
+  </div>
+  <div class="desktop-logo">CuperOS</div>
+
+  <main class="os-window story-window" data-window="story" aria-label="Story">
+    <div class="title-bar">
+      <div class="title-text"><span class="px-icon px-eye"></span> hindsight_editor.story</div>
+      <div class="window-controls">
+        <button class="window-btn" type="button" data-window-action="max" aria-label="Maximize Story">□</button>
+        <button class="window-btn" type="button" data-window-action="close" aria-label="Close Story">x</button>
+      </div>
+    </div>
+    <div class="window-content" tabindex="0" role="region" aria-label="Story, scrolling page">
+      <article class="story" id="story">
+        <header class="story-head">
+          <p class="kicker">EXPERIMENT · MLPs, A CNN, TRANSFORMERS UP TO 163M · RENTED COLAB GPUs, AN AGENT AT THE WHEEL</p>
+          <h1>Can a network learn without backprop if you just show it the answer?</h1>
+          <p class="story-lede">I'm Cuper. Every neural network you've heard of learns the same way: it guesses, then runs a second pass backwards through itself to work out who to blame, the <span class="term" data-term="backprop">backward pass</span>. I wanted to know whether you could skip that. Run the network twice instead, once normally and once with the right answer quietly fed in, and let a small learned network turn the difference into weight updates. I wrote the plan as a ladder of experiments with a pass-or-fail gate on each rung, from handwritten digits up to a GPT-2-sized model, and had an AI agent build and run all of it on rented GPUs. The answer is mostly no, and this page has every rung where it failed. Hover or tap any underlined word for a quick picture of what it means.</p>
+        </header>
+
+        <section class="story-section">
+          <h2>What's wrong with the backward pass?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="passes"></div>
+            <figcaption>The two forward passes, and the difference between them at each layer. Schematic.</figcaption></figure>
+          <p>Nothing, mostly. Backprop is the reason deep learning works. But it's one fixed rule: for every weight, multiply what came in by how much it should have come out differently, the <span class="term" data-term="gradient">gradient</span>. That's only guaranteed to be right for an infinitely small step on one batch. Everyone then bolts an optimizer like <span class="term" data-term="adam">Adam</span> on top to make the steps sensible.</p>
+          <p>My idea, which I called the <b>Hindsight Editor</b>: run the network twice, in parallel. The <span class="term" data-term="blind">blind pass</span> is the normal one. The <span class="term" data-term="sighted">sighted pass</span> uses the same weights but gets the correct answer injected into every layer through a small side channel. The difference between the two at each layer, the <span class="term" data-term="delta">hindsight delta</span>, says which way that layer "wished" it had gone. Then a small learned network, the <span class="term" data-term="editor">editor</span>, reads those deltas and writes the weight updates. No backward pass ever touches the network being trained.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Does showing the answer even point the right way?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e0"></div>
+            <figcaption>How closely each layer's hindsight delta points along the true backprop direction, per example on 2,000 held-out digits. 0 is unrelated, 1 is identical. Three seeds.</figcaption></figure>
+          <p>The first rung was plumbing. A small network reads handwritten digits (<span class="term" data-term="mnist">MNIST</span>), and I check whether the delta at each layer points the same way backprop would push. To make the sighted pass actually carry the answer through every layer, each layer gets a tiny <span class="term" data-term="readout">readout</span> trained to recover the answer from it.</p>
+          <p><span class="verdict pass">E0 PASS</span>It does point the right way, at every layer, but weakly in the hidden ones: a <span class="term" data-term="cosine">cosine</span> of about 0.14 and 0.22, against 0.70 at the output. The readouts are what make it work. Without them the delta is exactly as useful as noise, and so is the classic <span class="term" data-term="dfa">random-feedback</span> trick, at least on a network trained by backprop.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Plot twist: knowing the answer isn't knowing the mistake</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="correct"></div>
+            <figcaption>Slide how confident the network already is about the right digit, and watch what each version of the delta tells the output layer to do.</figcaption></figure>
+          <p>Applying the delta directly as an update failed hard. On digits it reached 15 percent, barely above guessing, and it diverged at every learning rate. The reason is simple once you see it. Injecting the answer pushes every example toward the right digit, even ones the network already gets right. Backprop's signal is the <i>error</i>, the right answer minus the network's guess, and it fades to nothing once the guess is right. My delta encoded the answer, not the mistake, so it never stopped pushing.</p>
+          <p>The fix keeps both passes parallel and needs no gradient, which made it the most useful idea in the project. The sighted pass responds roughly in a straight line to whatever code is injected. So for each batch I measure that response by regression, then subtract the part the blind pass already predicted. I call it <span class="term" data-term="lincorr">linear correction</span>. Two more things had to change. The answer injected at the output layer must be the answer itself: a learned map there rotates the error and drives the outputs the wrong way. And each example gets weighted by how wrong the blind pass was, which is just its loss, computed on the way forward.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>How does a small network write a weight update?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="editor"></div>
+            <figcaption>The editor's five steps, and how much the compression in step 4 costs.</figcaption></figure>
+          <p>The editor has to be cheap, or it's pointless. It reads each layer's inputs and deltas, reshapes them with tiny learned functions, and writes a <span class="term" data-term="lowrank">low-rank</span> edit: a handful of directions instead of a full matrix, in the spirit of model-editing networks like <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">MEND</a> and <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">RLEdit</a>, except they read gradients and this one reads hindsight.</p>
+          <p>My first compression mixed examples together with random signs, and it destroyed the signal. In the hidden layers, the edit's alignment with the right direction dropped from about 0.2 to zero. Swapping in a <span class="term" data-term="rangefinder">randomized range finder</span> kept essentially all of it. Rank turned out to matter a lot: rank 1 gets 37 percent of digits right, rank 16 gets 87.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it learn by copying Adam?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="mnist"></div>
+            <figcaption>Test accuracy on handwritten digits after 6,000 updates, three seeds (six for the meta-trained editors). Every bar except the first trains with no backward pass.</figcaption></figure>
+          <p>The plan's first training phase was <span class="term" data-term="imitation">imitation</span>: train the editor to reproduce Adam's updates, with backprop used only to make the answer key. It made things worse, down from 88 to 70 percent. Adam scales every weight separately; a low-rank edit can't express that, and trying to match Adam's step size crammed all the movement into a few directions and blew the network up.</p>
+          <p><span class="verdict fail">E1 FAIL</span>The untrained editor on the corrected delta got to 87.9 percent, against backprop's 98.4. The gate asked for "within a few points". It missed by ten, and also lost to plain random feedback at 96.9.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>What if it learns from its own results?</h2>
+          <p>That's phase two, cutting the cord. The editor edits a fresh network for 16 steps, then it's graded on one thing only: how much lower the loss is on data it hasn't seen. That grade trains the editor through all 16 steps, a setup called <span class="term" data-term="meta">meta-training</span>. The network being edited still never sees a gradient, and the code asserts it.</p>
+          <p>This was the part that worked best. Accuracy climbed from 87.9 to 90.0, then 94.8 percent once the editor saw longer stretches of training, from networks at different stages, with a slower learning rate of its own. Swapping the parallel sighted pass for a sequential one that first sees the network's guess, like <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">Forward Target Propagation</a>, got to 96.0. Within 2.4 points of backprop.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Is it worth the compute?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="central"></div>
+            <figcaption>Held-out loss against the compute spent so far, counting every forward pass, the editor and the optimizer for each method. Lower is better. Bands are the range across runs.</figcaption></figure>
+          <p>This was the measurement the whole project was built around: at <span class="term" data-term="flops">equal compute</span>, which lowers held-out loss more per update, a backprop step with a tuned Adam or a Hindsight Editor step? An editor step costs about 85 percent of a backprop step: two forward passes plus the editor, against one forward and one backward.</p>
+          <p><span class="verdict fail">E2 FAIL</span>Adam wins at every budget I measured. Over the very first 25 updates, the meta-trained editor lowers the loss about 40 percent as fast per update as Adam does, and at equal compute its held-out loss stays two to three times higher all the way out. A first, coarser version of this chart seemed to show the editor ahead early on. That was an artifact of evaluating Adam only every 500 steps, and it went away when I measured every 25.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Does the hindsight even matter?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="ablate"></div>
+            <figcaption>The same meta-training recipe with one piece swapped out, test accuracy on digits. One meta-trained editor each, tested on three fresh networks.</figcaption></figure>
+          <p>A little. Feeding the same meta-trained editor random feedback instead of hindsight costs about one point of accuracy. But random feedback is about 45 percent cheaper per update, so at equal compute the two end up close. The sequential pass that sees the network's guess first is the best signal. The editor's view of each layer's inputs adds nothing. And letting the hindsight signal travel through the layers, instead of only being injected at each one, diverges every time. A layer trained toward its own amplified reaction to the answer forms a <span class="term" data-term="hebbian">feedback loop</span>.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it see pictures?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="cnn"></div>
+            <figcaption>A small convolutional network on CIFAR-10 photos, 8,000 updates. Test accuracy.</figcaption></figure>
+          <p>Barely. On <span class="term" data-term="cifar">CIFAR-10</span>, Adam reaches 74 percent and the best meta-trained editor 44. The recipe that worked on digits made the image network worse, 33 percent, and random feedback diverged at every learning rate I tried on these layers. At equal compute the editor's held-out loss was about twice Adam's.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it read?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e3"></div>
+            <figcaption>A 10.9M-parameter character-level transformer on Wikipedia text. Held-out loss against compute; the dotted line is what you get by just knowing letter frequencies.</figcaption></figure>
+          <p>No. For language, the "answer" is the next few characters, so the sighted pass gets a squeezed summary of them through a narrow <span class="term" data-term="bottleneck">bottleneck</span>, optionally with an <span class="term" data-term="vib">information penalty</span> so it can't just copy the answer through. I tried widths 4, 16 and 64, with and without the penalty.</p>
+          <p><span class="verdict fail">E3 FAIL</span>Adam brought the loss down to 1.11 nats, or 1.6 bits per character. Every editor I tried, untrained or meta-trained, at every bottleneck width, stayed at the <span class="term" data-term="unigram">unigram</span> level of 3.51: it learned which letters are common and nothing else. Along the way I found a real bug: in the transformer, six of the seven hindsight channels were never trained. I fixed it and wrote a test for it, and the result didn't change.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Why does it fail on bigger networks?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="width"></div>
+            <figcaption>A made-up language where each token predicts the next, generated in code so nothing had to be downloaded. The same editor, the same data, one network dimension changed at a time.</figcaption></figure>
+          <p>To separate "language is hard" from "big networks break it", I generated a toy language where each token strongly predicts the next one. On a tiny transformer, the editor learned it almost as well as Adam (1.06 against 0.91, where letter frequencies alone give 3.82). Then I changed one dimension at a time. A longer context was fine. Six layers mostly broke it. Making the layers wider, 384 instead of 64, broke it completely.</p>
+          <p>So the failure is about width, not about language. My best guess at the mechanism is the compression: a rank-16 edit can only move 16 directions in a layer, and that's a shrinking share of what needs to move as layers get wider. I also found that the editor's default step size was about ten times too small for transformers. Fixing that was necessary but not enough.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>What happens at GPT-2 size?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e4"></div>
+            <figcaption>A 163M-parameter GPT on 98 million tokens of FineWeb-Edu, one seed each. Held-out loss against compute.</figcaption></figure>
+          <p>The plan said to run it anyway and report whatever happened. <span class="term" data-term="adamw">AdamW</span> with the published GPT-2-small settings reached <b data-fill="e4-adam">4.32</b> nats on <span class="term" data-term="fineweb">FineWeb-Edu</span> text, against 7.68 for knowing word frequencies. A higher learning rate did worse, 5.76. The editor, with layers twice as wide as the ones that already broke it, <span data-fill="e4-editor">diverged within the first 500 steps</span>. The rented machine running it vanished 60 percent of the way through, at step 4,600 of 7,700, with nothing in the log to say why. It had been diverged the whole way, so I didn't pay to finish it.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it improve itself?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e5"></div>
+            <figcaption>The step size the editor chose for itself while it edited its own weights, one line per run. The dashed line is where it started.</figcaption></figure>
+          <p>The last rung was the stretch goal: let the editor edit its own weights, with no gradient. Each step it nudges its own settings in a random direction, applies its edit, checks whether held-out loss went down, and keeps nudging in directions that helped. That's <span class="term" data-term="perturb">weight perturbation</span> using its own results as hindsight, in the spirit of <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">self-referential weight matrices</a>.</p>
+          <p><span class="verdict fail">E5 FAIL</span>It wasn't stable, and it didn't improve. A single batch of results is mostly noise, so the editor's own step size went on a random walk: up until training exploded, or down until it froze. The meta-trained editor went from 95.3 percent frozen to 76 percent editing itself, at 76 percent more compute per run.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Who else is working on this?</h2>
+          <p>Plenty of people, and the closest pieces of this are theirs:</p>
+          <ul class="plain">
+            <li><b>Learning without a backward pass.</b> <a class="cite" href="https://arxiv.org/abs/1411.0247" target="_blank" rel="noopener">Lillicrap et al.</a> showed random feedback weights can train networks, and <a class="cite" href="https://arxiv.org/abs/1609.01596" target="_blank" rel="noopener">Nøkland</a> sent the error straight to every layer (DFA), the random-feedback baseline here. <a class="cite" href="https://arxiv.org/abs/2212.13345" target="_blank" rel="noopener">Forward-Forward</a>, <a class="cite" href="https://arxiv.org/abs/2201.11665" target="_blank" rel="noopener">PEPITA</a>, <a class="cite" href="https://arxiv.org/abs/2204.01723" target="_blank" rel="noopener">Signal Propagation</a> and <a class="cite" href="https://arxiv.org/abs/2503.24322" target="_blank" rel="noopener">NoProp</a> feed the label or the error in through forward passes. <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">Forward Target Propagation</a> uses a second pass for per-layer targets, the sequential variant that did best here.</li>
+            <li><b>Learned editors and optimizers.</b> <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">MEND</a>, <a class="cite" href="https://arxiv.org/abs/2311.04661" target="_blank" rel="noopener">MALMEN</a> and <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">RLEdit</a> turn gradients into low-rank edits. <a class="cite" href="https://arxiv.org/abs/2211.09760" target="_blank" rel="noopener">VeLO</a> and <a class="cite" href="https://arxiv.org/abs/2602.19142" target="_blank" rel="noopener">Celo2</a> are learned optimizers, and both still read gradients. <a class="cite" href="https://arxiv.org/abs/2112.13835" target="_blank" rel="noopener">Persistent evolution strategies</a> are the obvious fix for my short-horizon meta-training.</li>
+            <li><b>Self-modification.</b> <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">Self-referential weight matrices</a> update themselves without gradients at small scale. <a class="cite" href="https://arxiv.org/abs/2506.10943" target="_blank" rel="noopener">SEAL</a> has a language model write its own training data, then applies it with ordinary gradients.</li>
+            <li><b>Backprop-free language models.</b> Recent work trains language models with local losses or forward gradients at hundreds of millions of parameters (<a class="cite" href="https://arxiv.org/abs/2610.04867" target="_blank" rel="noopener">local learning for LM pretraining</a>, <a class="cite" href="https://arxiv.org/abs/2609.35440" target="_blank" rel="noopener">SOLO</a>, <a class="cite" href="https://arxiv.org/abs/2607.16612" target="_blank" rel="noopener">split forward gradients</a>), with gaps to backprop far smaller than mine.</li>
+          </ul>
+          <p>What this page adds is narrow: a learned update rule fed only by a parallel "shown the answer" pass, a fix that turns that signal into an error signal without a gradient, and a full ladder of honest tests. Most rungs failed, and they're all here with the numbers that failed them.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>How did I build it?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="catches"></div>
+            <figcaption>Things that would have changed the conclusions if nobody had looked twice.</figcaption></figure>
+          <p>I wrote the plan as a handoff document: the idea, the ladder, the gates, the rules. An AI agent (Claude) built everything from it and ran it through the Colab command line on rented RTX PRO 6000 GPUs, with quick checks on my laptop's RTX 3060. That covered the library, the experiment runner, an on-machine supervisor that saves to a private Hugging Face repo and shuts its own machine down, and the analysis. My connection is bad. Launches failing on it cost about 13 of the roughly 88 compute units the whole ladder used, before the launcher was hardened against it.</p>
+          <p>Several early results were wrong in ways that looked like findings. Each fix made the conclusions smaller and more trustworthy. The setup, the numbers and the limitations are in Lab notes.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <section class="os-window notes-window" data-window="notes" aria-label="Lab notes" hidden>
+    <div class="title-bar">
+      <div class="title-text"><span class="px-icon px-flask"></span> lab_notes.txt</div>
+      <div class="window-controls">
+        <button class="window-btn" type="button" data-window-action="max" aria-label="Maximize Lab notes">□</button>
+        <button class="window-btn" type="button" data-window-action="close" aria-label="Close Lab notes">x</button>
+      </div>
+    </div>
+    <div class="window-content" tabindex="0" role="region" aria-label="Lab notes">
+      <div class="notes">
+        <h2>Lab notes</h2>
+        <p>Every number here comes from a run directory in the repository (<code>runs/</code>: per-run <code>metrics.jsonl</code>, <code>stdout.log</code>, <code>config.json</code>, <code>summary.json</code>), with full tables in <code>RESULTS.md</code> and the short report in <code>WRITEUP.md</code>. Mean ± standard deviation over 3 seeds unless stated; E4 is one seed. FLOPs are counted analytically and identically for every method: forward, backward as twice forward, optimizer at 12 FLOPs per parameter, plus the editor, hint and readout costs.</p>
+        <h3>Setup</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Piece</th><th>What it was</th></tr>
+          <tr><td>Hindsight channel</td><td>Per layer, the code (centered one-hot answer, or for language a discounted summary of the next 8 tokens through a width-w bottleneck) is mapped by C<sub>l</sub> and added to that layer's state. The logits' channel is the identity. Channels and readouts are trained only by a local readout loss; the sighted pass sees detached weights and cuts gradients between layers.</td></tr>
+          <tr><td>Linear correction</td><td>Per batch, ridge-regress each site's delta on the injected code (K × F), then d~ = d − (p − 1/K)M. Language: subtract the code expected from the blind pass's next-token distribution; the head gets β(onehot(y) − p).</td></tr>
+          <tr><td>Editor</td><td>Element-wise MLPs on row-normalized factors, conditioned on layer kind, depth and row statistics; per-example weights from the blind loss; rank-r edit Q(DQ)<sup>T</sup>A/N via a randomized range finder; learned step size and momentum; trust region of 2–5% of the layer's weight RMS.</td></tr>
+          <tr><td>Meta-training</td><td>Held-out log-loss after K edits (K = 8–16), backprop through the unroll into the editor only; fresh networks every 1,000–2,000 inner steps, some warm-started by Adam; reset on divergence; skip non-finite updates. Main-network weights never require or receive gradients (asserted, and unit-tested).</td></tr>
+          <tr><td>Models</td><td>MNIST MLP 784-256-256-10; CIFAR-10 CNN 32-64-128 conv + 256 fc; char GPT d=384, 6 layers, ctx 256, 10.9M; FineWeb-Edu GPT d=768, 12 layers, ctx 1024, vocab 50,304, ~163M (untied embeddings).</td></tr>
+          <tr><td>Compute</td><td>Colab G4 (RTX PRO 6000, 96 GB) at 8.9 units/hour, many jobs packed per GPU; quick checks on a laptop RTX 3060. About 88 units by the ledger, ~13 of them lost to launch failures.</td></tr>
+        </table></div>
+        <h3>Gates</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Rung</th><th>Gate</th><th>Best editor</th><th>Backprop</th><th>Verdict</th></tr>
+          <tr><td>E0 plumbing</td><td>cosine with −grad &gt; 0 at all layers</td><td class="n">+0.14 / +0.22 / +0.70</td><td class="n">—</td><td>Pass (weak)</td></tr>
+          <tr><td>E1 imitation (MNIST)</td><td>within a few points</td><td class="n">87.9 ± 0.4%</td><td class="n">98.4 ± 0.0%</td><td>Fail</td></tr>
+          <tr><td>E2 meta (MNIST)</td><td>match Adam at matched FLOPs</td><td class="n">96.0 ± 0.1%; loss 0.268 @ 0.21 TF</td><td class="n">0.096 @ 0.21 TF</td><td>Fail</td></tr>
+          <tr><td>E2 meta (CIFAR-10)</td><td>same</td><td class="n">44.0 ± 1.7%; loss 1.76 @ 16.7 TF</td><td class="n">74.0%; 0.88</td><td>Fail</td></tr>
+          <tr><td>E3 char LM (enwik8)</td><td>well below unigram (3.51)</td><td class="n">3.51–3.64 nats</td><td class="n">1.114 nats</td><td>Fail</td></tr>
+          <tr><td>E4 GPT ~163M (FineWeb-Edu)</td><td>report</td><td class="n" data-fill="e4-editor-cell">diverged</td><td class="n" data-fill="e4-adam-cell">4.316 nats</td><td>Reported</td></tr>
+          <tr><td>E5 self-edit (MNIST)</td><td>stable, improves itself</td><td class="n">76.1 ± 23.9% vs 95.3% frozen</td><td class="n">—</td><td>Fail</td></tr>
+        </table></div>
+        <h3>Central measurement (MNIST, shared initial networks)</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Method</th><th>Loss after 25 / 100 / 600 updates</th><th>Drop per update, first 25</th><th>Loss at 0.021 / 0.084 TFLOP</th><th>GFLOP per update</th></tr>
+          <tr><td>Adam (lr 1e-3)</td><td class="n">0.410 / 0.230 / 0.122</td><td class="n">0.098</td><td class="n">0.230 / 0.153</td><td class="n">0.21</td></tr>
+          <tr><td>Editor, meta (parallel)</td><td class="n">1.851 / 0.684 / 0.336</td><td class="n">0.041</td><td class="n">0.636 / 0.364</td><td class="n">0.18</td></tr>
+          <tr><td>Editor, meta (FTP-style)</td><td class="n">1.967 / 0.672 / 0.334</td><td class="n">0.036</td><td class="n">0.621 / 0.365</td><td class="n">0.18</td></tr>
+        </table></div>
+        <h3>Fixes, in the order they were found</h3>
+        <ul>
+          <li>Raw parallel delta encodes y, not y − p: linear correction plus per-example error weighting.</li>
+          <li>A random or learned map at the logits rotated the error: identity output channel.</li>
+          <li>Random-sign batch sketches drowned the signal: randomized range finder.</li>
+          <li>RMS-normalized edits removed the error's size and diverged: unnormalized edits, learned step size, trust region.</li>
+          <li>Propagated deltas form a Hebbian loop: propagation weight α = 0 (α &gt; 0 diverges, even meta-trained).</li>
+          <li>Meta-training instability: divergence resets, skip non-finite updates, slower meta learning rate, longer unrolls, warm-started trajectories.</li>
+          <li>Transformers: step size about 10× too small; six of seven hindsight channels never trained (bug, fixed and tested); vocab padding mismatch at 50k tokens (bug, fixed).</li>
+          <li>Measurement: editor evaluated on different initial networks than Adam (rerun on the same ones); an early "editor ahead" reading was an interpolation artifact (re-measured every 25 updates).</li>
+        </ul>
+        <h3>What I wouldn't lean on</h3>
+        <ul>
+          <li>Each rung got one or two focused fixes before moving on, by design. Better editors surely exist; this tests one family carefully, not the idea exhaustively.</li>
+          <li>Meta-training used short truncated unrolls (up to 16 steps), which are known to favor greedy updates.</li>
+          <li>E4 is one seed and only 98M tokens, with no meta-training at that scale.</li>
+          <li>The ablations of the meta-trained editor use one meta-training seed each (three test networks).</li>
+          <li>Wall-clock is confounded: many jobs shared one GPU, and the editor runs as unfused Python. Charts show compute, not time.</li>
+          <li>The width diagnosis comes from a synthetic language and one bisection; the rank-starvation mechanism is a hypothesis, not a measurement.</li>
+        </ul>
+        <h3>References</h3>
+        <ol class="refs">
+          <li>Lillicrap, Cownden, Tweed and Akerman (2016). Random synaptic feedback weights support error backpropagation for deep learning. Nature Communications. <a class="cite" href="https://arxiv.org/abs/1411.0247" target="_blank" rel="noopener">link</a></li>
+          <li>Nøkland (2016). Direct Feedback Alignment Provides Learning in Deep Neural Networks. <a class="cite" href="https://arxiv.org/abs/1609.01596" target="_blank" rel="noopener">link</a></li>
+          <li>Hinton (2022). The Forward-Forward Algorithm: Some Preliminary Investigations. <a class="cite" href="https://arxiv.org/abs/2212.13345" target="_blank" rel="noopener">link</a></li>
+          <li>Dellaferrera and Kreiman (2022). Error-driven Input Modulation: Solving the Credit Assignment Problem without a Backward Pass (PEPITA). <a class="cite" href="https://arxiv.org/abs/2201.11665" target="_blank" rel="noopener">link</a></li>
+          <li>Signal Propagation (2022). <a class="cite" href="https://arxiv.org/abs/2204.01723" target="_blank" rel="noopener">link</a></li>
+          <li>NoProp: Training Neural Networks without Back-propagation or Forward-propagation (2025). <a class="cite" href="https://arxiv.org/abs/2503.24322" target="_blank" rel="noopener">link</a></li>
+          <li>Forward Target Propagation (2025). <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">link</a></li>
+          <li>Mitchell, Lin, Bosselut, Finn and Manning (2022). Fast Model Editing at Scale (MEND). <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">link</a></li>
+          <li>MALMEN: massive editing for large language models via meta learning (2024). <a class="cite" href="https://arxiv.org/abs/2311.04661" target="_blank" rel="noopener">link</a></li>
+          <li>RLEdit (ICML 2025). <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">link</a></li>
+          <li>Irie, Schlag, Csordás and Schmidhuber (2022). A Modern Self-Referential Weight Matrix That Learns to Modify Itself. <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">link</a></li>
+          <li>Zweiger et al. (2025). Self-Adapting Language Models (SEAL). <a class="cite" href="https://arxiv.org/abs/2506.10943" target="_blank" rel="noopener">link</a></li>
+          <li>Metz et al. (2022). VeLO: Training Versatile Learned Optimizers by Scaling Up. <a class="cite" href="https://arxiv.org/abs/2211.09760" target="_blank" rel="noopener">link</a></li>
+          <li>Celo2 (2026). <a class="cite" href="https://arxiv.org/abs/2602.19142" target="_blank" rel="noopener">link</a></li>
+          <li>Vicol, Metz and Sohl-Dickstein (2021). Unbiased Gradient Estimation in Unrolled Computation Graphs with Persistent Evolution Strategies. <a class="cite" href="https://arxiv.org/abs/2112.13835" target="_blank" rel="noopener">link</a></li>
+          <li>Halko, Martinsson and Tropp (2011). Finding Structure with Randomness: Probabilistic Algorithms for Constructing Approximate Matrix Decompositions. <a class="cite" href="https://arxiv.org/abs/0909.4061" target="_blank" rel="noopener">link</a></li>
+          <li>Penedo et al. (2024). The FineWeb Datasets. <a class="cite" href="https://arxiv.org/abs/2406.17557" target="_blank" rel="noopener">link</a></li>
+          <li>Local learning for language-model pretraining (2026), SOLO (2026) and split forward gradients (2026), the backprop-free LM baselines named in the plan: <a class="cite" href="https://arxiv.org/abs/2610.04867" target="_blank" rel="noopener">1</a>, <a class="cite" href="https://arxiv.org/abs/2609.35440" target="_blank" rel="noopener">2</a>, <a class="cite" href="https://arxiv.org/abs/2607.16612" target="_blank" rel="noopener">3</a>.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="taskbar" aria-label="CuperOS taskbar">
+  <div class="taskbar-left">
+    <a class="start-button" href="https://cuuper22.github.io/"><span class="px-icon px-start"></span> Start</a>
+    <button class="task-button" type="button" data-task="story"><span class="px-icon px-eye"></span> Story</button>
+    <button class="task-button" type="button" data-task="notes"><span class="px-icon px-flask"></span> Lab notes</button>
+  </div>
+  <div class="taskbar-clock" id="clock">12:00 PM</div>
+</footer>
+
+<div class="gsx-pop" id="pop" role="dialog" aria-modal="false" aria-labelledby="pop-title">
+  <div class="gsx-bar">
+    <svg class="gsx-face" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><rect class="h" x="2" y="2" width="12" height="12"/><rect class="e" x="5" y="6" width="2" height="2"/><rect class="e" x="9" y="6" width="2" height="2"/><rect class="e" x="5" y="10" width="6" height="1"/></svg>
+    <span class="gsx-title" id="pop-title">term</span>
+    <button class="gsx-x" type="button" id="pop-x" aria-label="Close">x</button>
+  </div>
+  <div class="gsx-main">
+    <div class="gsx-visbox" id="pop-vis"></div>
+    <p class="gsx-text" id="pop-text"></p>
+  </div>
+</div>
+
+<script>
+const DATA = {"e0":{"hindsight":{"0":[-0.007,-0.001,-0.016],"50":[0.003,0.006,0.045],"200":[0.014,0.022,0.155],"500":[0.028,0.04,0.28],"1000":[0.03,0.051,0.408],"2000":[0.033,0.059,0.48],"3000":[0.031,0.058,0.461]},"hindsight_beta0.1":{"0":[0.011,0.002,0.025],"50":[0.023,0.02,0.135],"200":[0.081,0.1,0.459],"500":[0.14,0.188,0.668],"1000":[0.142,0.223,0.701],"2000":[0.085,0.198,0.634],"3000":[0.052,0.159,0.55]},"no_readout":{"0":[0.011,0.003,-0.032],"50":[0.002,-0.002,-0.072],"200":[-0.004,-0.009,-0.1],"500":[-0.001,-0.003,-0.081],"1000":[0.0,0.0,-0.052],"2000":[-0.002,-0.002,-0.046],"3000":[0.001,0.001,-0.01]},"ftp_seq":{"0":[-0.011,-0.007,0.005],"50":[0.012,0.013,0.083],"200":[0.017,0.02,0.188],"500":[0.035,0.046,0.382],"1000":[0.044,0.068,0.567],"2000":[0.063,0.097,0.651],"3000":[0.08,0.126,0.645]},"dfa":{"0":[-0.002,0.009,-0.01],"50":[0.002,-0.003,0.005],"200":[0.001,0.001,0.02],"500":[0.008,-0.0,0.028],"1000":[-0.004,-0.004,0.016],"2000":[0.005,0.001,0.008],"3000":[0.003,-0.005,0.028]}},"mnist_acc":{"Adam (backprop)":{"m":0.9841,"s":0.0002,"n":3},"DFA raw rule":{"m":0.9693,"s":0.0011,"n":3},"FTP-style raw rule":{"m":0.7356,"s":0.0079,"n":3},"Parallel hindsight, raw rule":{"m":0.1541,"s":0.0394,"n":3},"Editor, untrained":{"m":0.879,"s":0.0043,"n":3},"Editor + imitation (Phase 0)":{"m":0.695,"s":0.1369,"n":3},"Editor, meta round 1":{"m":0.9003,"s":0.013,"n":6},"Editor, meta round 2":{"m":0.9484,"s":0.0044,"n":6},"Editor, meta, FTP-style pass":{"m":0.96,"s":0.0008,"n":3}},"ablate":{"Parallel hindsight + correction":{"m":0.9484,"s":0.0044,"n":6},"Sequential (FTP-style) pass":{"m":0.96,"s":0.0008,"n":3},"No a_l inputs to the editor":{"m":0.9514,"s":0.0007,"n":3},"Random feedback instead":{"m":0.9387,"s":0.0013,"n":3},"Propagation alpha = 0.5":{"m":0.1684,"s":0.0243,"n":3}},"rank":{"1":{"m":0.3745,"s":0.174,"n":3},"4":{"m":0.7734,"s":0.0798,"n":3},"8":{"m":0.8573,"s":0.0072,"n":3},"16":{"m":0.8723,"s":0.0059,"n":3}},"cnn_acc":{"Adam lr 1e-3":{"m":0.7401,"s":0.0023,"n":3},"Adam lr 3e-4":{"m":0.7127,"s":0.0016,"n":3},"Editor, meta round 1":{"m":0.4396,"s":0.0169,"n":3},"Editor, meta round 2":{"m":0.3287,"s":0.0689,"n":3},"Editor, untrained":{"m":0.1653,"s":0.0253,"n":3}},"mlp_early":{"Adam":{"x":[0.0,0.00524,0.01048,0.01573,0.02097,0.02621,0.03145,0.03669,0.04193,0.04718,0.05242,0.05766,0.0629,0.06814,0.07338,0.07863,0.08387,0.08911,0.09435,0.09959,0.10484,0.11008,0.11532,0.12056,0.1258],"y":[2.8692,0.4099,0.3218,0.27,0.23,0.2198,0.2131,0.195,0.1817,0.1731,0.1627,0.1609,0.1549,0.1485,0.1572,0.1518,0.1533,0.1415,0.1418,0.1351,0.1277,0.1254,0.1359,0.1243,0.1223],"lo":[2.6364,0.3899,0.2974,0.2648,0.2185,0.207,0.208,0.1877,0.1755,0.1668,0.1508,0.1558,0.1378,0.1343,0.1542,0.1416,0.1481,0.1384,0.1384,0.1268,0.122,0.1209,0.1206,0.1208,0.1202],"hi":[3.1829,0.4257,0.3675,0.2727,0.2499,0.2288,0.2163,0.1988,0.19,0.1785,0.1738,0.1679,0.17,0.1656,0.1588,0.1662,0.1578,0.1468,0.1436,0.1419,0.1317,0.1305,0.1486,0.1264,0.1253],"n":3},"Editor (meta, parallel)":{"x":[0.0,0.00454,0.00908,0.01362,0.01816,0.0227,0.02724,0.03177,0.03631,0.04085,0.04539,0.04993,0.05447,0.05901,0.06355,0.06809,0.07263,0.07717,0.08171,0.08624,0.09078,0.09532,0.09986,0.1044,0.10894],"y":[2.8692,1.8505,1.1355,0.8264,0.6843,0.6062,0.5553,0.5155,0.4908,0.4699,0.4484,0.4339,0.4214,0.4097,0.3996,0.3886,0.3832,0.3743,0.3666,0.3615,0.355,0.3495,0.3434,0.3393,0.3356],"lo":[2.6364,1.7622,1.1247,0.7951,0.6523,0.582,0.5319,0.4963,0.4726,0.4503,0.4295,0.4152,0.4025,0.3943,0.3836,0.3736,0.3698,0.3649,0.3551,0.3507,0.3456,0.3397,0.3374,0.3335,0.3279],"hi":[3.1829,1.9172,1.1473,0.8438,0.7051,0.6227,0.5704,0.5286,0.5067,0.4842,0.462,0.4452,0.4348,0.4187,0.4129,0.4029,0.3973,0.3853,0.3782,0.3732,0.3651,0.3592,0.3522,0.3485,0.3467],"n":3},"Editor (meta, FTP-style)":{"x":[0.0,0.00447,0.00894,0.01342,0.01789,0.02236,0.02683,0.03131,0.03578,0.04025,0.04472,0.0492,0.05367,0.05814,0.06261,0.06709,0.07156,0.07603,0.0805,0.08498,0.08945,0.09392,0.09839,0.10286,0.10734],"y":[2.8692,1.9674,1.1431,0.8139,0.6717,0.5978,0.5518,0.513,0.4889,0.4703,0.4492,0.4342,0.4215,0.4108,0.4006,0.3889,0.3832,0.3768,0.3689,0.3636,0.3567,0.3513,0.3436,0.3401,0.3343],"lo":[2.6364,1.8048,1.1201,0.7739,0.6393,0.5735,0.5294,0.4908,0.4702,0.4479,0.4281,0.4156,0.402,0.3964,0.3837,0.3728,0.369,0.3664,0.3537,0.3505,0.344,0.3401,0.3357,0.3331,0.3237],"hi":[3.1829,2.091,1.1771,0.857,0.7088,0.6264,0.5769,0.5368,0.5111,0.4911,0.4684,0.4496,0.4393,0.423,0.4188,0.4066,0.4018,0.3938,0.3866,0.3786,0.3717,0.3648,0.3553,0.3499,0.3478],"n":3}},"mlp_full":{"Adam":{"x":[0.0,0.10484,0.20967,0.31451,0.41934,0.52418,0.62901,0.73385,0.83868,0.94352,1.04835,1.15319,1.25802],"y":[2.8692,0.1266,0.096,0.0958,0.0876,0.0815,0.0827,0.0765,0.0782,0.0765,0.0772,0.0776,0.0777],"lo":[2.6364,0.1232,0.0905,0.0905,0.081,0.0748,0.0809,0.0758,0.0761,0.0749,0.0755,0.0761,0.0761],"hi":[3.1829,0.129,0.1014,0.1045,0.0974,0.0857,0.0851,0.0771,0.0806,0.0784,0.0782,0.0787,0.0786],"n":3},"DFA raw rule":{"x":[0.0,0.06881,0.13763,0.20644,0.27525,0.34406,0.41288,0.48169,0.5505,0.61932,0.68813,0.75694,0.82575],"y":[2.8692,0.7481,0.3474,0.2709,0.2299,0.2205,0.1706,0.1641,0.1411,0.1373,0.1303,0.1299,0.128],"lo":[2.6364,0.3992,0.2809,0.2146,0.1891,0.1689,0.1461,0.1467,0.1281,0.121,0.1163,0.1159,0.1156],"hi":[3.1829,1.2658,0.4164,0.333,0.2887,0.321,0.2186,0.1957,0.1668,0.1616,0.1572,0.1543,0.1508],"n":3},"Editor (untrained)":{"x":[0.0,0.08491,0.16982,0.25473,0.33964,0.42455,0.50946,0.59437,0.67928,0.76419,0.8491,0.93401,1.01892],"y":[2.8692,1.2643,0.7742,0.6483,0.5819,0.544,0.5178,0.4971,0.4797,0.4624,0.45,0.4403,0.4304],"lo":[2.6364,1.2009,0.7316,0.6282,0.5699,0.5378,0.5154,0.4916,0.4714,0.4531,0.4422,0.4328,0.4258],"hi":[3.1829,1.3031,0.8395,0.6758,0.5949,0.5518,0.5214,0.4998,0.486,0.4687,0.4573,0.4472,0.4351],"n":3},"Editor (meta, parallel)":{"x":[0.0,0.04539,0.09078,0.13618,0.18157,0.22696,0.27235,0.31774,0.36313,0.40853,0.45392,0.49931,0.5447,0.59009,0.63549,0.68088,0.72627,0.77166,0.81705,0.86245,0.90784,0.95323,0.99862,1.04401,1.0894],"y":[2.8692,0.481,0.3792,0.3349,0.3051,0.2886,0.2735,0.2621,0.2531,0.2448,0.2384,0.2324,0.228,0.2234,0.2189,0.2166,0.2121,0.2076,0.2054,0.2034,0.1994,0.1981,0.1973,0.195,0.1943],"lo":[2.6364,0.4297,0.3451,0.3079,0.2803,0.2627,0.25,0.239,0.23,0.2225,0.2149,0.2093,0.2057,0.2029,0.1996,0.1973,0.1927,0.1885,0.1864,0.1838,0.1817,0.1806,0.1807,0.178,0.1783],"hi":[3.1829,0.5305,0.4175,0.3713,0.3371,0.3216,0.3012,0.2903,0.2808,0.2721,0.266,0.2581,0.2549,0.2483,0.2425,0.2413,0.2334,0.2293,0.2269,0.2251,0.2194,0.2181,0.2167,0.2149,0.2122],"n":6},"Editor (meta, FTP-style)":{"x":[0.0,0.04472,0.08945,0.13417,0.17889,0.22362,0.26834,0.31307,0.35779,0.40251,0.44724,0.49196,0.53668,0.58141,0.62613,0.67086,0.71558,0.7603,0.80503,0.84975,0.89447,0.9392,0.98392,1.02865,1.07337],"y":[2.8692,0.449,0.3566,0.3122,0.28,0.2627,0.2448,0.2318,0.2204,0.211,0.2029,0.1955,0.1895,0.1834,0.1785,0.175,0.17,0.1657,0.1621,0.1601,0.1559,0.1543,0.1528,0.1505,0.1484],"lo":[2.6364,0.4282,0.3442,0.3063,0.2765,0.2586,0.2415,0.2307,0.219,0.2085,0.1994,0.1939,0.1858,0.1806,0.1756,0.1709,0.1683,0.1622,0.1598,0.1572,0.1537,0.1514,0.1493,0.148,0.147],"hi":[3.1829,0.4682,0.3714,0.3241,0.2853,0.2684,0.2475,0.233,0.222,0.2145,0.2078,0.1984,0.193,0.1865,0.1813,0.1784,0.1717,0.168,0.164,0.1644,0.1582,0.1572,0.1549,0.1519,0.1491],"n":3}},"cnn_full":{"Adam":{"x":[0.0,4.16965,8.3393,12.50895,16.6786,20.84825,25.01789,29.18754,33.35719,37.52684,41.69649,45.86614,50.03579,54.20544,58.37509,62.54474,66.71439],"y":[5.348,1.075,0.9082,0.8839,0.8813,0.9542,1.0164,1.106,1.188,1.2637,1.3659,1.4414,1.5018,1.5444,1.5663,1.5773,1.5793],"lo":[4.7097,1.0482,0.9028,0.871,0.8521,0.9302,0.9797,1.0746,1.1316,1.1966,1.3058,1.3732,1.4278,1.4732,1.5067,1.5163,1.5185],"hi":[6.4262,1.0972,0.9144,0.8943,0.9171,0.9977,1.0605,1.1671,1.2519,1.3299,1.4336,1.5083,1.5673,1.6112,1.6306,1.6423,1.6436],"n":3},"Editor (meta round 1)":{"x":[0.0,3.12866,6.25733,9.38599,12.51465,15.64331,18.77198,21.90064,25.0293,28.15797,31.28663,34.41529,37.54395,40.67262,43.80128,46.92994,50.0586],"y":[5.348,2.095,1.9543,1.8763,1.82,1.773,1.7405,1.7123,1.6894,1.6715,1.6562,1.6438,1.634,1.6236,1.6171,1.6107,1.605],"lo":[4.7097,2.0838,1.9525,1.8698,1.8088,1.762,1.723,1.6972,1.6726,1.6505,1.6317,1.616,1.604,1.5912,1.5832,1.5703,1.5631],"hi":[6.4262,2.1092,1.9553,1.8856,1.8338,1.7908,1.7622,1.7386,1.721,1.7066,1.6928,1.6801,1.6724,1.6609,1.6608,1.6557,1.6518],"n":3}},"e3":{"Adam":{"x":[0.0,292.39168,584.78336,877.17505,1169.56673,1461.95841,1754.35009,2046.74177,2339.13346,2631.52514,2923.91682,3216.3085,3508.70018],"y":[5.6442,1.9281,1.5532,1.3947,1.3187,1.2707,1.2331,1.2006,1.1727,1.151,1.1351,1.1223,1.1142],"lo":[5.6336,1.9228,1.5355,1.3885,1.3131,1.2651,1.2293,1.1952,1.1689,1.1485,1.1331,1.1205,1.1119],"hi":[5.6609,1.9343,1.5639,1.4043,1.3248,1.2788,1.239,1.2055,1.1787,1.1557,1.1381,1.1257,1.1177],"n":3},"Editor":{"x":[0.0,226.69479,453.38958,680.08437,906.77916,1133.47396,1360.16875,1586.86354,1813.55833,2040.25312,2266.94791,2493.6427,2720.33749],"y":[5.6442,4.0761,3.6056,3.5254,3.7035,3.5147,4.1934,3.5263,3.5199,3.5153,3.5368,3.5406,3.5278],"lo":[5.6336,3.5887,3.5294,3.5165,3.5222,3.5116,3.5183,3.5169,3.5151,3.513,3.5115,3.5159,3.5166],"hi":[5.6609,4.5717,3.7464,3.5412,4.0589,3.5163,5.5198,3.5428,3.5256,3.5185,3.5716,3.5836,3.5467],"n":3},"Editor (meta-trained)":{"x":[0.0,226.69479,453.38958,680.08437,906.77916,1133.47396,1360.16875,1586.86354,1813.55833,2040.25312,2266.94791,2493.6427,2720.33749],"y":[5.6442,3.4873,3.5127,3.5134,3.5241,3.5632,3.5329,3.5367,3.5084,3.5244,3.545,3.5251,3.5327],"lo":[5.6336,3.4515,3.5065,3.5061,3.5108,3.5457,3.5064,3.5114,3.474,3.4685,3.5182,3.5077,3.4963],"hi":[5.6609,3.5062,3.5179,3.524,3.5359,3.5964,3.5528,3.5531,3.5461,3.563,3.5605,3.5469,3.5551],"n":3}},"e3_unigram":3.511,"e3_grid":{"4_novib":{"m":3.581,"s":0.0787,"n":3},"4_vib":{"m":7.0792,"s":5.0293,"n":3},"16_novib":{"m":3.6434,"s":0.1745,"n":3},"16_vib":{"m":3.6397,"s":0.159,"n":3},"64_novib":{"m":3.5131,"s":0.0089,"n":3},"64_vib":{"m":3.5987,"s":0.1219,"n":3}},"e3_adam":{"m":1.1142,"s":0.0025,"n":3},"bisect":{"unigram":3.823,"bigram":0.898,"adam":0.914,"rows":[["tiny  d=64, 2 layers, ctx 32",1.056],["longer context (256)",1.055],["deeper (6 layers)",3.201],["wider (d=384)",4.204],["full E3 size",3.989]]},"align":[["raw parallel delta",[0.006,0.011,-0.002]],["+ per-example error weight",[0.098,0.211,0.651]],["+ rank-16 range finder",[0.099,0.21,0.649]],["random-sign rank-8 sketch",[0.028,0.016,-0.116]],["sequential (FTP-style) delta",[0.114,0.24,0.802]]],"e4":{"AdamW lr 6e-4":{"x":[0.0,7002.31149,14004.62298,21006.93447,28009.24597,35011.55746,42013.86895,49016.18044,56018.49193,63020.80342,70023.11492,77025.42641,84027.7379],"y":[10.9408,6.1998,5.631,5.2668,5.0373,4.8442,4.6886,4.5774,4.4898,4.4226,4.3735,4.3382,4.3162],"lo":[10.9408,6.1998,5.631,5.2668,5.0373,4.8442,4.6886,4.5774,4.4898,4.4226,4.3735,4.3382,4.3162],"hi":[10.9408,6.1998,5.631,5.2668,5.0373,4.8442,4.6886,4.5774,4.4898,4.4226,4.3735,4.3382,4.3162],"n":1},"AdamW lr 1.8e-3":{"x":[0.0,7002.31149,14004.62298,21006.93447,28009.24597,35011.55746,42013.86895,49016.18044,56018.49193,63020.80342,70023.11492,77025.42641,84027.7379],"y":[10.9408,6.2616,5.99,6.1464,6.3687,6.4241,6.4555,6.3249,6.1077,5.965,5.865,5.8008,5.7578],"lo":[10.9408,6.2616,5.99,6.1464,6.3687,6.4241,6.4555,6.3249,6.1077,5.965,5.865,5.8008,5.7578],"hi":[10.9408,6.2616,5.99,6.1464,6.3687,6.4241,6.4555,6.3249,6.1077,5.965,5.865,5.8008,5.7578],"n":1},"Editor":{"x":[0.0,5075.88956,10151.78737,15227.62218,20303.35053,25379.14168,30455.01633,35530.91286,40606.83333,45682.67207],"y":[10.9408,1184.5387,1075.6435,1250.7939,1394.0272,1598.0561,1296.4806,1654.486,1471.7374,1304.7106],"lo":[10.9408,1184.5387,1075.6435,1250.7939,1394.0272,1598.0561,1296.4806,1654.486,1471.7374,1304.7106],"hi":[10.9408,1184.5387,1075.6435,1250.7939,1394.0272,1598.0561,1296.4806,1654.486,1471.7374,1304.7106],"n":1}},"e4_unigram":{"m":7.6831,"s":0.0,"n":1},"e5_lr":{"e5_meta_self_eta1e-2_s0":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.000991,0.00103,0.000981,0.000933,0.000937,0.00092,0.000902,0.000956,0.001049,0.000926,0.000956,0.001336,0.001557,0.001489,0.00158,0.00191,0.002724,0.003225,0.003626,0.003041,0.003167,0.003227,0.003264,0.00336,0.003486,0.002807,0.003184,0.003561,0.004159,0.005456]},"e5_meta_self_eta1e-2_s1":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.001039,0.001055,0.00094,0.000899,0.000894,0.000963,0.000898,0.00092,0.000765,0.000818,0.000886,0.000812,0.000726,0.000741,0.000655,0.000844,0.000684,0.000574,0.000579,0.000575,0.000542,0.000595,0.000584,0.000724,0.000767,0.000907,0.001128,0.001214,0.001462,0.00164]},"e5_meta_self_eta1e-2_s2":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.001007,0.001059,0.001067,0.001205,0.00114,0.001159,0.001183,0.001426,0.001568,0.001542,0.001724,0.00176,0.002075,0.00208,0.002309,0.001956,0.002082,0.002157,0.002098,0.001631,0.001737,0.001691,0.001796,0.002024,0.001776,0.00194,0.001806,0.002131,0.002414,0.002863]},"e5_meta_self_eta5e-2_s0":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.000646,0.001064,0.000974,0.001022,0.000618,0.000509,0.00093,0.000395,0.00064,0.001012,0.000984,0.000352,0.000132,0.000502,0.000931,0.001386,0.001465,0.003507,0.002544,0.003066,0.00181,0.003027,0.004043,0.00369,0.002208,0.00158,0.002198,0.003345,0.002758,0.003065]},"e5_meta_self_eta5e-2_s1":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.00087,0.000952,0.001035,0.002244,0.012757,0.005527,0.019727,0.022068,0.007376,0.00489,0.00891,0.009329,0.008274,0.007349,0.010404,0.035052,0.039597,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596,0.039596]},"e5_meta_self_eta5e-2_s2":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.000951,0.000879,0.000295,0.000515,0.000349,0.000182,0.000306,0.000207,0.000252,0.000157,8.9e-05,6.5e-05,7e-05,6.6e-05,6.6e-05,6.2e-05,5.7e-05,5.5e-05,5.3e-05,5.5e-05,5.7e-05,5.5e-05,5.6e-05,5.4e-05,5.4e-05,5.3e-05,5.3e-05,5.3e-05,5.4e-05,5.5e-05]},"e5_untrained_self_eta1e-2_s0":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.001027,0.001025,0.00098,0.00101,0.001008,0.001002,0.001035,0.000964,0.001001,0.001039,0.000936,0.000963,0.001025,0.000841,0.000914,0.000941,0.000936,0.000854,0.000852,0.000913,0.000828,0.000751,0.000788,0.000792,0.000748,0.000721,0.000668,0.000689,0.000662,0.000686]},"e5_untrained_self_eta1e-2_s1":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.000929,0.000834,0.000783,0.000844,0.000897,0.000838,0.00084,0.000855,0.000808,0.000997,0.000941,0.000956,0.000874,0.000885,0.000857,0.000805,0.000817,0.000865,0.000908,0.000817,0.000842,0.00088,0.000826,0.000871,0.000865,0.000775,0.000965,0.000972,0.000834,0.000813]},"e5_untrained_self_eta1e-2_s2":{"x":[100,300,500,700,900,1100,1300,1500,1700,1900,2100,2300,2500,2700,2900,3100,3300,3500,3700,3900,4100,4300,4500,4700,4900,5100,5300,5500,5700,5900],"y":[0.001019,0.001036,0.00098,0.000927,0.000933,0.000837,0.000831,0.000837,0.000922,0.000873,0.000857,0.000833,0.00095,0.000902,0.00092,0.001006,0.001013,0.001034,0.001068,0.001082,0.001092,0.001097,0.001003,0.000981,0.000983,0.00102,0.001037,0.001057,0.001024,0.001033]}},"e5_acc":{"meta, frozen":{"m":0.9525,"s":0.0012,"n":3},"meta, self-edit eta 0.01":{"m":0.7612,"s":0.2386,"n":3},"meta, self-edit eta 0.05":{"m":0.1049,"s":0.0064,"n":3},"untrained, frozen":{"m":0.9175,"s":0.0018,"n":3},"untrained, self-edit eta 0.01":{"m":0.8915,"s":0.0162,"n":3}}};
+(() => {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const h = (tag, attrs = {}, kids = []) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "text") el.textContent = v; else if (k === "html") el.innerHTML = v; else el.setAttribute(k, v);
+    }
+    (Array.isArray(kids) ? kids : [kids]).forEach((c) => c && el.append(c));
+    return el;
+  };
+  const S = (tag, attrs = {}) => { const el = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
+  const T = (x, y, txt, attrs = {}) => { const t = S("text", Object.assign({ x, y }, attrs)); t.textContent = txt; return t; };
+  const fmt = (v, d = 2) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d);
+  const pct = (v, d = 1) => (v * 100).toFixed(d) + "%";
+
+  /* ---------------- windows ---------------- */
+  const phone = matchMedia("(max-width: 760px)");
+  const wins = {}; $$("[data-window]").forEach((n) => (wins[n.dataset.window] = n));
+  let front = "story", z = 5;
+  const isOpen = (n) => wins[n] && !wins[n].hidden;
+  function refresh() {
+    $$("[data-task]").forEach((b) => b.classList.toggle("is-active", isOpen(b.dataset.task) && front === b.dataset.task));
+    $$(".phone-tabs [data-open]").forEach((b) => (b.dataset.open === front ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
+    Object.entries(wins).forEach(([n, el]) => el.classList.toggle("is-front", isOpen(n) && front === n));
+  }
+  function open(name) {
+    const el = wins[name]; if (!el) return;
+    if (phone.matches) Object.entries(wins).forEach(([o, w]) => (w.hidden = o !== name)); else el.hidden = false;
+    el.classList.remove("is-max"); front = name; el.style.zIndex = String(++z); refresh();
+    if (phone.matches) scrollTo(0, 0);
+  }
+  function close(name) { if (phone.matches) return; wins[name].hidden = true; if (front === name) front = Object.keys(wins).find(isOpen) || ""; refresh(); }
+  document.addEventListener("click", (e) => {
+    const o = e.target.closest("[data-open]"); if (o) { e.preventDefault(); open(o.dataset.open); return; }
+    const t = e.target.closest("[data-task]"); if (t) { const n = t.dataset.task; isOpen(n) && front === n && !phone.matches ? close(n) : open(n); return; }
+    const a = e.target.closest("[data-window-action]");
+    if (a) { const w = a.closest("[data-window]"); a.dataset.windowAction === "max" ? w.classList.toggle("is-max") : close(w.dataset.window); return; }
+    const w = e.target.closest("[data-window]"); if (w && !phone.matches && w.dataset.window !== front) { front = w.dataset.window; w.style.zIndex = String(++z); refresh(); }
+  });
+  phone.addEventListener("change", () => { if (phone.matches) open(isOpen(front) ? front : "story"); else { wins.story.hidden = false; refresh(); } });
+  if (location.hash === "#notes") open("notes"); else open("story");
+  const clock = $("#clock");
+  const tick = () => { const d = new Date(); clock.textContent = `${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")} ${d.getHours() >= 12 ? "PM" : "AM"}`; };
+  tick(); setInterval(tick, 30000);
+
+  /* ---------------- mini visuals for terms ---------------- */
+  const BL = "#2f4aa0", OR = "#d0662a", RD = "#c8483a", GR = "#8a8d96", SO = "#4a4c54", IN = "#1c1d21";
+  const V = {
+    passes: () => `<svg viewBox="0 0 260 120">${[0,1,2].map(i=>`<rect x="${30+i*75}" y="18" width="50" height="26" fill="#e6e8ec" stroke="${SO}"/><rect x="${30+i*75}" y="72" width="50" height="26" fill="#e6e8ec" stroke="${SO}"/>`).join("")}<text x="8" y="36" font-size="11" fill="${SO}">blind</text><text x="4" y="90" font-size="11" fill="${OR}">sighted</text>${[0,1,2].map(i=>`<line x1="${55+i*75}" y1="104" x2="${55+i*75}" y2="98" stroke="${OR}" stroke-width="2"/>`).join("")}<text x="96" y="116" font-size="11" fill="${OR}">answer injected</text></svg>`,
+    arrows: () => `<svg viewBox="0 0 260 120"><defs><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9z" fill="#7d8089"/></marker><marker id="ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9z" fill="${OR}"/></marker></defs><line x1="60" y1="92" x2="210" y2="92" stroke="#7d8089" stroke-width="2.5" marker-end="url(#ag)"/><line x1="60" y1="92" x2="185" y2="40" stroke="${OR}" stroke-width="3" marker-end="url(#ao)"/><text x="150" y="112" font-size="11" fill="${SO}">direction A</text><text x="108" y="36" font-size="11" fill="${OR}">direction B</text><path d="M110 92 A50 50 0 0 0 104 74" fill="none" stroke="${IN}"/><text x="116" y="84" font-size="11" fill="${IN}">angle</text></svg>`,
+    curve: () => `<svg viewBox="0 0 260 120"><line x1="30" y1="100" x2="240" y2="100" stroke="${GR}"/><line x1="30" y1="10" x2="30" y2="100" stroke="${GR}"/><path d="M30 20 C70 80 110 92 240 96" stroke="${BL}" stroke-width="2.5" fill="none"/><path d="M30 20 C80 50 140 70 240 82" stroke="${OR}" stroke-width="2.5" fill="none"/><text x="160" y="112" font-size="11" fill="${SO}">compute spent</text><text x="36" y="16" font-size="11" fill="${SO}">loss</text></svg>`,
+    lowrank: () => `<svg viewBox="0 0 260 120"><rect x="20" y="20" width="80" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="30" y="64" font-size="12" fill="${IN}">full edit</text><text x="110" y="64" font-size="16" fill="${IN}">≈</text><rect x="134" y="20" width="12" height="80" fill="${BL}"/><text x="152" y="64" font-size="14" fill="${IN}">×</text><rect x="168" y="20" width="80" height="12" fill="${OR}"/><text x="160" y="104" font-size="11" fill="${SO}">a few directions</text></svg>`,
+    loop: () => `<svg viewBox="0 0 260 120"><circle cx="130" cy="60" r="34" fill="none" stroke="${RD}" stroke-width="2.5" stroke-dasharray="6 4"/><text x="82" y="24" font-size="11" fill="${IN}">layer reacts to answer</text><text x="90" y="112" font-size="11" fill="${IN}">trained toward reaction</text><path d="M163 52 l5 9 l-10 0z" fill="${RD}"/><path d="M97 68 l-5 -9 l10 0z" fill="${RD}"/></svg>`,
+    unigram: () => `<svg viewBox="0 0 260 120">${"etaoinshr".split("").map((c,i)=>`<rect x="${20+i*25}" y="${100-[78,58,52,50,46,44,42,40,38][i]}" width="18" height="${[78,58,52,50,46,44,42,40,38][i]}" fill="${BL}"/><text x="${25+i*25}" y="114" font-size="11" fill="${SO}">${c}</text>`).join("")}</svg>`,
+    bottleneck: () => `<svg viewBox="0 0 260 120"><rect x="16" y="20" width="60" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="22" y="64" font-size="11" fill="${IN}">next 8</text><text x="22" y="78" font-size="11" fill="${IN}">chars</text><path d="M80 24 L120 50 L120 70 L80 96" fill="none" stroke="${SO}"/><rect x="120" y="50" width="20" height="20" fill="${OR}"/><path d="M140 50 L180 24 M140 70 L180 96" stroke="${SO}"/><rect x="184" y="20" width="60" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="190" y="64" font-size="11" fill="${IN}">each layer</text><text x="112" y="112" font-size="11" fill="${OR}">width w</text></svg>`,
+    walk: () => { let p = "M20 60", y = 60; for (let i = 1; i < 23; i++) { y += [7,-5,9,-3,8,6,-4,10,-6,9,5,-2,11,8,-7,12,9,-3,10,7,-5,9][i-1]*0.6; p += ` L${20+i*10} ${Math.max(8, 120 - y)}`; } return `<svg viewBox="0 0 260 120"><line x1="20" y1="60" x2="245" y2="60" stroke="${GR}" stroke-dasharray="4 4"/><path d="${p}" fill="none" stroke="${RD}" stroke-width="2"/><text x="24" y="54" font-size="11" fill="${SO}">start</text><text x="170" y="112" font-size="11" fill="${SO}">steps</text></svg>`; },
+    error: () => `<svg viewBox="0 0 260 120"><rect x="40" y="30" width="40" height="70" fill="${BL}"/><text x="40" y="114" font-size="11" fill="${SO}">answer</text><rect x="110" y="62" width="40" height="38" fill="${GR}"/><text x="112" y="114" font-size="11" fill="${SO}">guess</text><rect x="180" y="30" width="40" height="32" fill="${OR}"/><text x="178" y="114" font-size="11" fill="${OR}">error</text><text x="88" y="70" font-size="16" fill="${IN}">−</text><text x="158" y="70" font-size="16" fill="${IN}">=</text></svg>`,
+  };
+  const TERMS = {
+    backprop: ["backward pass", "After the network guesses, backprop runs through it in reverse, layer by layer, to compute how much each weight is to blame for the error. It costs about twice a forward pass.", "passes"],
+    gradient: ["gradient", "For each weight: how much the loss would change if you nudged it. Backprop computes all of them at once. Following it downhill is the basic training step.", "curve"],
+    adam: ["Adam", "The standard way to turn gradients into weight updates. It keeps running averages and scales every weight's step separately, so steps are a sensible size.", "curve"],
+    adamw: ["AdamW", "Adam with weight decay handled separately. The default optimizer for training GPT-style models.", "curve"],
+    blind: ["blind pass", "The normal forward pass: input in, guess out, nothing else.", "passes"],
+    sighted: ["sighted pass", "The same network and weights, but with the correct answer added to every layer through a small side channel, so each layer can see what it should have helped produce.", "passes"],
+    delta: ["hindsight delta", "Sighted pass minus blind pass, at each layer. It's an estimate of which way that layer should have moved, obtained without any backward pass.", "passes"],
+    editor: ["editor", "A small learned network that reads each layer's inputs and hindsight deltas and writes that layer's weight update. It's shared across all layers.", "lowrank"],
+    mnist: ["MNIST", "70,000 small images of handwritten digits, 0 to 9. The standard first test for any learning rule.", null],
+    cifar: ["CIFAR-10", "60,000 small color photos in 10 classes, like planes, cats and ships. Much harder than digits for simple networks.", null],
+    readout: ["readout", "A tiny classifier attached to one layer, trained to recover the answer from that layer's sighted state. Its training is what forces the answer to be carried through every layer.", null],
+    cosine: ["cosine", "How closely two directions point the same way. +1 is identical, 0 is unrelated, −1 is opposite.", "arrows"],
+    dfa: ["random feedback (DFA)", "Direct feedback alignment: send the output error to every layer through fixed random weights. It shouldn't work, but networks learn to align with the random feedback.", null],
+    lincorr: ["linear correction", "Measure, per batch, how each layer's delta responds to the injected answer, then subtract the part the network already predicted. What's left behaves like the error: it shrinks to zero when the guess is right.", "error"],
+    lowrank: ["low-rank edit", "An update built from a few directions multiplied together, instead of a full matrix. Far cheaper to compute, but it can only move the weights in those few directions.", "lowrank"],
+    rangefinder: ["randomized range finder", "Find the few directions the full update mostly lies in by probing it with random vectors, then project the exact update onto them. No cross-talk between examples.", "lowrank"],
+    imitation: ["imitation (Phase 0)", "Train the editor to produce Adam's updates from hindsight deltas. Backprop is used only to make the answer key, never to train the network itself.", null],
+    meta: ["meta-training", "Training the trainer: the editor edits a network for several steps, then is graded by the network's held-out loss. That grade is backpropagated into the editor, never into the edited network.", "curve"],
+    flops: ["equal compute (FLOPs)", "Counting the arithmetic each method spends. A fair race gives both methods the same budget, not the same number of steps.", "curve"],
+    hebbian: ["feedback loop", "If a layer is trained toward its own reaction to the answer, it learns to react more strongly, which makes the next target bigger. The weights grow until training blows up.", "loop"],
+    bottleneck: ["bottleneck", "The future text is squeezed into a few numbers before it's injected, so the sighted pass gets a hint about what's coming, not the answer key.", "bottleneck"],
+    vib: ["information penalty (VIB)", "A variational information bottleneck: the squeezed hint is made noisy and penalized for carrying information, to stop the network from just copying the future through.", "bottleneck"],
+    unigram: ["unigram level", "The loss of a model that knows only how often each letter appears, and nothing about which letter comes next. Anything that actually reads should get well below it.", "unigram"],
+    fineweb: ["FineWeb-Edu", "A large collection of educational web pages, used here pre-tokenized with GPT-2's tokenizer.", null],
+    perturb: ["weight perturbation", "Nudge the weights randomly, see whether the result got better, and step in the directions that helped. It needs no gradient, and it's noisy.", "walk"],
+  };
+  const pop = $("#pop"), popVis = $("#pop-vis"), popTitle = $("#pop-title"), popText = $("#pop-text");
+  let cur = null, hideT = 0;
+  function show(el) {
+    const d = TERMS[el.dataset.term]; if (!d) return;
+    clearTimeout(hideT);
+    if (cur && cur !== el) cur.setAttribute("aria-expanded", "false");
+    cur = el; el.setAttribute("aria-expanded", "true");
+    popTitle.textContent = d[0]; popText.textContent = d[1];
+    if (d[2]) { popVis.innerHTML = V[d[2]](); popVis.hidden = false; } else popVis.hidden = true;
+    if (!matchMedia("(max-width: 600px)").matches) {
+      const r = el.getBoundingClientRect(), w = Math.min(340, innerWidth - 16);
+      let left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8));
+      pop.style.left = left + "px"; pop.style.top = "0px"; pop.classList.add("is-open");
+      const ph = pop.offsetHeight; let top = r.bottom + 10;
+      pop.classList.toggle("is-above", top + ph > innerHeight - 8 && r.top - ph - 10 > 8);
+      if (pop.classList.contains("is-above")) top = r.top - ph - 10;
+      pop.style.top = Math.max(8, top) + "px";
+    } else pop.classList.add("is-open");
+  }
+  function hide() { pop.classList.remove("is-open"); if (cur) cur.setAttribute("aria-expanded", "false"); cur = null; }
+  const later = () => { clearTimeout(hideT); hideT = setTimeout(hide, 220); };
+  $$(".term").forEach((el) => {
+    el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-expanded", "false"); el.setAttribute("aria-controls", "pop");
+    el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") show(el); });
+    el.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") later(); });
+    el.addEventListener("click", (e) => { e.stopPropagation(); cur === el && pop.classList.contains("is-open") ? hide() : show(el); });
+    el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(el); } });
+  });
+  pop.addEventListener("pointerenter", () => clearTimeout(hideT));
+  pop.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") later(); });
+  $("#pop-x").addEventListener("click", hide);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+  document.addEventListener("click", (e) => { if (!pop.contains(e.target)) hide(); });
+  $$(".window-content").forEach((w) => w.addEventListener("scroll", () => { if (!matchMedia("(max-width: 600px)").matches) hide(); }, { passive: true }));
+
+  /* ---------------- figure helpers ---------------- */
+  function frame(slot, title) {
+    const stage = h("div", { class: "gsf-stage" });
+    slot.append(h("div", { class: "gsf" }, [h("div", { class: "gsf-bar" }, h("span", { class: "gsf-title", text: title })), stage]));
+    return stage;
+  }
+  function seg(names, onPick, start = 0) {
+    const wrap = h("div", { class: "gsf-seg", role: "group" });
+    const bs = names.map((n, i) => { const b = h("button", { type: "button", "aria-pressed": i === start ? "true" : "false", text: n }); b.addEventListener("click", () => { bs.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false")); onPick(i); }); return b; });
+    bs.forEach((b) => wrap.append(b)); return wrap;
+  }
+  const svgBox = (w, hgt, label) => S("svg", { viewBox: `0 0 ${w} ${hgt}`, role: "img", "aria-label": label });
+  const COL = { blue: "var(--title-bar)", cyan: "var(--accent-cyan)", red: "var(--danger-red)", orange: "var(--accent-orange)", gold: "var(--accent-gold)", green: "var(--accent-green)", line: "var(--frame-line)", soft: "var(--text-soft)", ink: "var(--text-dark)", well: "var(--chrome-well)" };
+  const SERIES = [COL.blue, COL.orange, COL.cyan, COL.red, COL.green, COL.gold];
+  const note = (txt) => h("p", { class: "gsf-note", html: txt });
+
+  /* horizontal bars (from the chicken-genes figure kit) */
+  function hbars(rows, { min, max, ticks, labelW = 150, w = 600, rowH = 26, fmtV = (v) => fmt(v, 1), color = COL.blue, refLine }) {
+    const inner = rows.length * rowH, hgt = inner + 34, plotW = w - labelW - 60;
+    const s = svgBox(w, hgt, "Bar chart");
+    const x = (v) => labelW + ((v - min) / (max - min)) * plotW;
+    ticks.forEach((t) => { s.append(S("line", { x1: x(t), x2: x(t), y1: 4, y2: inner + 6, class: "grid" })); s.append(T(x(t), inner + 22, String(t), { class: "m", "text-anchor": "middle" })); });
+    if (min < 0) s.append(S("line", { x1: x(0), x2: x(0), y1: 2, y2: inner + 8, stroke: COL.ink, "stroke-width": 1.5 }));
+    rows.forEach((r, i) => {
+      const y = 6 + i * rowH;
+      s.append(T(labelW - 10, y + rowH / 2 + 4, r.label, { "text-anchor": "end", class: "ink" }));
+      if (r.v == null || !isFinite(r.v)) { s.append(T(x(Math.max(min, 0)) + 6, y + rowH / 2 + 4, r.vLabel || "diverged", { class: "m", fill: COL.red })); return; }
+      const vv = Math.max(min, Math.min(max, r.v)), x0 = x(Math.max(min, 0)), x1 = x(vv);
+      s.append(S("rect", { x: Math.min(x0, x1), y: y + 3, width: Math.max(1.5, Math.abs(x1 - x0)), height: rowH - 8, fill: r.color || color }));
+      s.append(T(vv >= 0 ? x1 + 5 : x1 - 5, y + rowH / 2 + 3, r.vLabel || fmtV(r.v), { class: "m ink", "text-anchor": vv >= 0 ? "start" : "end" }));
+    });
+    if (refLine) { s.append(S("line", { x1: x(refLine.v), x2: x(refLine.v), y1: 0, y2: inner + 8, stroke: COL.ink, "stroke-dasharray": "4 3", "stroke-width": 1.5 })); s.append(T(x(refLine.v) + 4, inner + 34 - 2, refLine.label, { class: "ink", "font-size": 11 })); }
+    return s;
+  }
+
+  /* line chart with min-max bands */
+  function lines(series, { xmax, ymin, ymax, xlabel, ylabel, hline, w = 620, hgt = 300, logy = false, xfmt = (v) => v.toFixed(2), yticks, legend = true }) {
+    const L = 50, R = 14, Tp = 12, B = 40, pw = w - L - R, ph = hgt - Tp - B;
+    const s = svgBox(w, hgt, "Line chart");
+    const ty = (v) => logy ? Math.log10(v) : v;
+    const x = (v) => L + (v / xmax) * pw, y = (v) => Tp + ph - ((ty(Math.min(Math.max(v, ymin), ymax)) - ty(ymin)) / (ty(ymax) - ty(ymin))) * ph;
+    const yt = yticks || [0, 0.25, 0.5, 0.75, 1].map((f) => ymin + f * (ymax - ymin));
+    yt.forEach((v) => { s.append(S("line", { x1: L, x2: L + pw, y1: y(v), y2: y(v), class: "grid" })); s.append(T(L - 6, y(v) + 4, logy ? v.toExponential(0).replace("e-", "e−") : v.toFixed(v < 10 ? 2 : 0), { class: "m", "text-anchor": "end" })); });
+    [0, 0.25, 0.5, 0.75, 1].forEach((f) => { s.append(T(x(f * xmax), Tp + ph + 16, xfmt(f * xmax), { class: "m", "text-anchor": "middle" })); });
+    s.append(S("line", { x1: L, x2: L + pw, y1: Tp + ph, y2: Tp + ph, class: "axis" })); s.append(S("line", { x1: L, x2: L, y1: Tp, y2: Tp + ph, class: "axis" }));
+    s.append(T(L + pw / 2, hgt - 4, xlabel, { "text-anchor": "middle" }));
+    const yl = T(12, Tp + ph / 2, ylabel, { "text-anchor": "middle", transform: `rotate(-90 12 ${Tp + ph / 2})` }); s.append(yl);
+    if (hline) { s.append(S("line", { x1: L, x2: L + pw, y1: y(hline.v), y2: y(hline.v), stroke: COL.ink, "stroke-dasharray": "2 4", "stroke-width": 1.5 })); s.append(T(L + pw - 4, y(hline.v) - 5, hline.label, { "text-anchor": "end", class: "ink" })); }
+    series.forEach((se, k) => {
+      if (!se.d) return;
+      const c = se.color || SERIES[k % SERIES.length], d = se.d;
+      const keep = d.x.map((v, i) => i).filter((i) => d.x[i] <= xmax * 1.0001 && isFinite(d.y[i]));
+      if (d.lo && keep.length > 1) {
+        const top = keep.map((i) => `${x(d.x[i])},${y(d.hi[i])}`), bot = keep.slice().reverse().map((i) => `${x(d.x[i])},${y(d.lo[i])}`);
+        s.append(S("polygon", { points: top.concat(bot).join(" "), fill: c, "fill-opacity": 0.13, stroke: "none" }));
+      }
+      s.append(S("polyline", { points: keep.map((i) => `${x(d.x[i])},${y(d.y[i])}`).join(" "), fill: "none", stroke: c, "stroke-width": se.width || 2.2, "stroke-dasharray": se.dash || "none", "stroke-linejoin": "round" }));
+      const fin = d.y.filter((v, i) => d.x[i] <= xmax * 1.0001), endV = fin[fin.length - 1];
+      const off = !isFinite(endV) || endV > ymax;                  // only flag curves that END off the chart
+      if (off) s.append(T(L + pw - 4, Tp + 14 + 14 * k, `${se.name}: off the chart`, { "text-anchor": "end", fill: c, class: "b" }));
+    });
+    const wrap = h("div", {}, s);
+    if (legend) wrap.append(h("div", { class: "legend" }, series.filter((se) => se.d).map((se, k) => h("span", {}, [h("span", { class: "sw", style: `background:${se.color || SERIES[k % SERIES.length]}` }), document.createTextNode(se.name + (se.d.n > 1 ? ` (n=${se.d.n})` : ""))]))));
+    return wrap;
+  }
+  const interp = (d, xv) => { if (!d) return NaN; for (let i = 1; i < d.x.length; i++) if (d.x[i] >= xv) { const t = (xv - d.x[i - 1]) / (d.x[i] - d.x[i - 1] || 1); return d.y[i - 1] + t * (d.y[i] - d.y[i - 1]); } return NaN; };
+
+  const build = {};
+
+  /* 1. two passes */
+  build.passes = (st) => {
+    const names = ["input", "layer 1", "layer 2", "layer 3", "output"];
+    const blind = [0.1, 0.35, -0.2, 0.3, 0.15], sighted = [0.1, 0.48, -0.02, 0.62, 0.7];
+    const grid = h("div", { class: "passes" });
+    const cells = names.map((n) => { const bar = h("i"); const inj = h("div", { class: "inj" }); grid.append(h("div", { class: "lay" }, [h("b", { text: n }), h("div", { class: "bar" }, bar), inj])); return [bar, inj]; });
+    const nt = note("");
+    function draw(mode) {
+      cells.forEach(([bar, inj], i) => {
+        const v = mode === 0 ? blind[i] : mode === 1 ? sighted[i] : sighted[i] - blind[i];
+        bar.style.width = Math.abs(v) * 50 + "%"; bar.style.left = (v >= 0 ? 50 : 50 - Math.abs(v) * 50) + "%";
+        bar.style.background = mode === 2 ? "var(--accent-orange)" : "var(--title-bar)";
+        inj.textContent = mode === 1 && i > 0 ? "+ answer" : mode === 2 ? (i === 0 ? "no change" : fmt(v, 2)) : "";
+      });
+      nt.innerHTML = ["The normal forward pass. Each bar is one layer's state.", "Same weights, but the right answer is added into every layer through a small learned channel.", "The difference is the <b>hindsight delta</b>: which way each layer “wished” it had gone. The editor turns these into weight updates. No backward pass."][mode];
+    }
+    st.append(seg(["Blind pass", "Sighted pass", "Hindsight delta"], draw), grid, nt); draw(0);
+  };
+
+  /* 2. E0 cosine */
+  build.e0 = (st) => {
+    const vars = [["hindsight_beta0.1", "Learned channel"], ["no_readout", "No readout loss"], ["ftp_seq", "Sequential pass"], ["dfa", "Random feedback"]];
+    const steps = Object.keys(DATA.e0["hindsight_beta0.1"]).map(Number).sort((a, b) => a - b);
+    let vi = 0, si = steps.indexOf(1000);
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "e0s", text: "Training steps (backprop)" }), h("input", { type: "range", id: "e0s", min: "0", max: String(steps.length - 1), step: "1", value: String(si) }), h("output", { id: "e0v" })]);
+    const out = h("div"), nt = note("");
+    function draw() {
+      $("#e0v", st).textContent = steps[si];
+      const c = DATA.e0[vars[vi][0]][String(steps[si])];
+      out.replaceChildren(hbars([["layer 1", c[0]], ["layer 2", c[1]], ["output", c[2]]].map(([l, v]) => ({ label: l, v })), { min: -0.2, max: 0.8, ticks: [-0.2, 0, 0.2, 0.4, 0.6, 0.8], labelW: 90, fmtV: (v) => fmt(v, 3) }));
+      nt.innerHTML = vi === 0 ? "With a trained channel and readouts, every layer points the right way once training starts. The hidden layers only weakly: about <b>0.1–0.2</b>." : vi === 1 ? "Without the readout loss the channel never learns to carry the answer, and the delta is as useful as noise: about <b>0</b> everywhere." : vi === 2 ? "A pass that sees the network's guess first, then the answer, lines up a little better at the output." : "Random feedback is unrelated to backprop on a network that backprop trained. It only works when the network trains on it and aligns to it.";
+    }
+    st.append(seg(vars.map((v) => v[1]), (i) => { vi = i; draw(); }), ctl, out, nt);
+    $("#e0s", st).addEventListener("input", (e) => { si = +e.target.value; draw(); }); draw();
+  };
+
+  /* 3. linear correction */
+  build.correct = (st) => {
+    const K = 4, cls = ["the right digit", "wrong digit A", "wrong digit B", "wrong digit C"];
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "pc", text: "Network's confidence in the right digit" }), h("input", { type: "range", id: "pc", min: "0.05", max: "0.99", step: "0.01", value: "0.40" }), h("output", { id: "pcv" })]);
+    let mode = 0; const out = h("div"), ro = h("div", { class: "readout" }), nt = note("");
+    function draw() {
+      const p = +$("#pc", st).value; $("#pcv", st).textContent = pct(p, 0);
+      const probs = [p, ...Array(K - 1).fill((1 - p) / (K - 1))];
+      const raw = probs.map((_, i) => (i === 0 ? 1 : 0) - 1 / K), cor = probs.map((q, i) => (i === 0 ? 1 : 0) - q);
+      const v = mode === 0 ? raw : cor;
+      out.replaceChildren(hbars(cls.map((c, i) => ({ label: c, v: v[i], color: i === 0 ? COL.blue : COL.red })), { min: -0.4, max: 1, ticks: [-0.4, 0, 0.5, 1], labelW: 130, fmtV: (x) => fmt(x, 2) }));
+      const mag = (a) => Math.sqrt(a.reduce((s, x) => s + x * x, 0));
+      ro.replaceChildren(h("div", {}, [h("small", { text: "Raw delta: size of the push" }), h("b", { text: mag(raw).toFixed(2) })]), h("div", {}, [h("small", { text: "Corrected: size of the push" }), h("b", { text: mag(cor).toFixed(2) })]));
+      nt.innerHTML = mode === 0 ? "The raw hindsight delta pushes the same amount however right the network already is. At 99% confidence it is still shoving." : `The corrected delta is the <b>error</b>: answer minus guess. At ${pct(p, 0)} confidence it pushes ${mag(cor).toFixed(2)}, and it fades to zero as the network gets it right, just like backprop's signal.`;
+    }
+    st.append(seg(["Raw hindsight delta", "With linear correction"], (i) => { mode = i; draw(); }), ctl, out, ro, nt);
+    $("#pc", st).addEventListener("input", draw); draw();
+  };
+
+  /* 4. editor steps + alignment */
+  build.editor = (st) => {
+    const steps = [["Read", "Each layer's inputs a and hindsight deltas d, from the two forward passes."], ["Weigh", "Scale each example by how wrong the blind pass was (its loss, computed going forward)."], ["Reshape", "Tiny shared functions transform every number, conditioned on the layer's kind and depth."], ["Compress", "Find the r directions the update mostly lies in and project onto them (rank r)."], ["Step", "Learned step size and momentum, capped at a few percent of the layer's weights."]];
+    const ol = h("ol", { class: "steps" }, steps.map(([b, s]) => h("li", {}, h("div", {}, [h("b", { text: b }), h("span", { text: s })]))));
+    let li = 1; const out = h("div"), nt = note("");
+    function draw() {
+      out.replaceChildren(hbars(DATA.align.map(([l, c]) => ({ label: l, v: c[li], color: l.startsWith("random-sign") ? COL.red : COL.blue })), { min: -0.2, max: 0.9, ticks: [-0.2, 0, 0.2, 0.4, 0.6, 0.8], labelW: 200, fmtV: (v) => fmt(v, 2) }));
+      nt.innerHTML = "Alignment of the whole layer's update with backprop's, on a partly trained digit network. Error weighting is what makes the hidden layers line up; the range finder keeps it; random-sign mixing throws it away.";
+    }
+    st.append(ol, h("div", { style: "height:14px" }), seg(["Layer 1", "Layer 2", "Output"], (i) => { li = i; draw(); }, 1), out, nt); draw();
+  };
+
+  /* 5. MNIST accuracies */
+  build.mnist = (st) => {
+    const rows = Object.entries(DATA.mnist_acc).map(([k, v]) => ({ label: k, v: v ? v.m * 100 : null, vLabel: v ? `${(v.m * 100).toFixed(1)}%` : "n/a", color: k.startsWith("Adam") ? COL.ink : k.startsWith("Editor") ? COL.blue : COL.soft }));
+    st.append(hbars(rows, { min: 0, max: 100, ticks: [0, 25, 50, 75, 100], labelW: 230, refLine: { v: 98.4, label: "backprop" } }), note("Black: backprop. Gray: simple backprop-free rules. Blue: the Hindsight Editor at each stage."));
+  };
+
+  /* 6. central measurement */
+  build.central = (st) => {
+    let view = 0; const out = h("div"), ro = h("div", { class: "readout" }), nt = note("");
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "bud", text: "Compute budget" }), h("input", { type: "range", id: "bud", min: "1", max: "100", step: "1", value: "30" }), h("output", { id: "budv" })]);
+    function draw() {
+      const src = view === 0 ? DATA.mlp_early : DATA.mlp_full, xmax = view === 0 ? 0.1 : 1.1;
+      const ser = Object.entries(src).map(([n, d]) => ({ name: n, d, color: n === "Adam" ? COL.ink : n.includes("FTP") ? COL.orange : n.includes("untrained") ? COL.soft : n.includes("DFA") ? COL.green : COL.blue }));
+      out.replaceChildren(lines(ser, { xmax, ymin: 0, ymax: view === 0 ? 2.4 : 1.4, xlabel: "TFLOPs spent", ylabel: "held-out loss", xfmt: (v) => v.toFixed(view === 0 ? 3 : 2) }));
+      const b = (+$("#bud", st).value / 100) * xmax; $("#budv", st).textContent = b.toFixed(3) + " TF";
+      ro.replaceChildren(...ser.map((se) => { const v = interp(se.d, b); return h("div", {}, [h("small", { text: se.name }), h("b", { text: isFinite(v) ? v.toFixed(3) : "—" })]); }));
+      nt.innerHTML = view === 0 ? "The first 600 updates, evaluated every 25. Adam is lower at every budget, from the very first updates." : "Whole runs, 6,000 updates. The editor's cheaper steps never make up for what each one achieves.";
+    }
+    st.append(seg(["First 600 updates", "Whole run"], (i) => { view = i; draw(); }), out, ctl, ro, nt);
+    $("#bud", st).addEventListener("input", draw); draw();
+  };
+
+  /* 7. ablations */
+  build.ablate = (st) => {
+    const rows = Object.entries(DATA.ablate).map(([k, v]) => ({ label: k, v: v && v.m > 0.2 ? v.m * 100 : null, vLabel: v ? (v.m > 0.2 ? `${(v.m * 100).toFixed(1)}%` : `${(v.m * 100).toFixed(1)}% (diverged)`) : "n/a", color: k.startsWith("Random") ? COL.green : COL.blue }));
+    st.append(hbars(rows, { min: 80, max: 100, ticks: [80, 85, 90, 95, 100], labelW: 230, refLine: { v: 98.4, label: "backprop" } }), note("Axis starts at 80% to show the differences. Propagating the hindsight through layers diverged in all three test networks."));
+  };
+
+  /* 8. CNN */
+  build.cnn = (st) => {
+    const rows = Object.entries(DATA.cnn_acc).map(([k, v]) => ({ label: k, v: v ? v.m * 100 : null, vLabel: v ? `${(v.m * 100).toFixed(1)}%${v.m < 0.2 ? " (diverged)" : ""}` : "n/a", color: k.startsWith("Adam") ? COL.ink : COL.blue }));
+    rows.push({ label: "Random feedback (DFA)", v: null, vLabel: "diverged at every lr" });
+    st.append(hbars(rows, { min: 0, max: 80, ticks: [0, 20, 40, 60, 80], labelW: 200 }), note("Chance is 10%. Adam overfits a little by the end (no data augmentation); at its best lr for loss it reaches 71.3%."));
+  };
+
+  /* 9. E3 */
+  build.e3 = (st) => {
+    let view = 0; const out = h("div"), nt = note("");
+    function draw() {
+      if (view === 0) {
+        const ser = Object.entries(DATA.e3).map(([n, d]) => ({ name: n, d, color: n === "Adam" ? COL.ink : n.includes("meta") ? COL.orange : COL.blue }));
+        const xmax = Math.max(...ser.filter((s) => s.d).map((s) => s.d.x[s.d.x.length - 1]));
+        out.replaceChildren(lines(ser, { xmax, ymin: 0.8, ymax: 4.6, xlabel: "TFLOPs spent", ylabel: "held-out loss (nats)", hline: { v: DATA.e3_unigram, label: "letter frequencies only" }, xfmt: (v) => v.toFixed(0) }));
+        nt.innerHTML = `Adam reaches <b>${DATA.e3_adam.m.toFixed(3)}</b> nats. The editors flatten at the dotted line and stay there.`;
+      } else {
+        const g = DATA.e3_grid, cell = (k) => { const v = g[k]; const bad = !v || v.m > 4; return h("div", { class: "c", style: `background:${bad ? "oklch(0.93 0.06 28)" : "var(--chrome-well)"}` }, [document.createTextNode(v ? v.m.toFixed(2) : "—"), h("small", { text: v ? `± ${v.s.toFixed(2)}${bad ? ", unstable" : ""}` : "" })]); };
+        out.replaceChildren(h("div", { class: "cell-grid" }, [h("span", { class: "hd", text: "" }), ...[4, 16, 64].map((w) => h("span", { class: "hd", text: `width ${w}` })),
+          h("span", { class: "hd", text: "no penalty" }), ...[4, 16, 64].map((w) => cell(`${w}_novib`)),
+          h("span", { class: "hd", text: "with VIB" }), ...[4, 16, 64].map((w) => cell(`${w}_vib`))]));
+        nt.innerHTML = `Held-out loss after 6,000 steps, three seeds each. Letter frequencies alone give <b>${DATA.e3_unigram.toFixed(2)}</b>; Adam gets <b>${DATA.e3_adam.m.toFixed(2)}</b>. No bottleneck setting learns, so none can be ranked.`;
+      }
+    }
+    st.append(seg(["Training curves", "Bottleneck ablation"], (i) => { view = i; draw(); }), out, nt); draw();
+  };
+
+  /* 10. width */
+  build.width = (st) => {
+    const b = DATA.bisect;
+    const rows = b.rows.map(([l, v]) => ({ label: l, v, vLabel: v.toFixed(2), color: v < 2 ? COL.blue : COL.red }));
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "wd", text: "Layer width" }), h("input", { type: "range", id: "wd", min: "32", max: "768", step: "32", value: "64" }), h("output", { id: "wdv" })]);
+    const ro = h("div", { class: "readout" });
+    function upd() { const d = +$("#wd", st).value; $("#wdv", st).textContent = d; ro.replaceChildren(h("div", {}, [h("small", { text: "directions a rank-16 edit can move" }), h("b", { text: "16 of " + d })]), h("div", {}, [h("small", { text: "share of the layer's outputs" }), h("b", { text: pct(Math.min(1, 16 / d), 0) })])); }
+    st.append(hbars(rows, { min: 0, max: 4.5, ticks: [0, 1, 2, 3, 4], labelW: 210, fmtV: (v) => v.toFixed(2), refLine: { v: b.unigram, label: "letter freq." } }),
+      note(`Loss after 1,500 steps on the toy language (lower is better). Adam gets <b>${b.adam.toFixed(2)}</b> at both sizes; the best possible is about ${b.bigram.toFixed(2)}.`), h("div", { style: "height:10px" }), ctl, ro,
+      note("The suspected mechanism, illustrated: the edit's rank stays fixed while the layer gets wider."));
+    $("#wd", st).addEventListener("input", upd); upd();
+  };
+
+  /* 11. E4 */
+  build.e4 = (st) => {
+    const ser = Object.entries(DATA.e4).map(([n, d]) => ({ name: n, d, color: n.includes("6e-4") ? COL.ink : n.includes("1.8") ? COL.soft : COL.red }));
+    const ds = ser.filter((s) => s.d); if (!ds.length) { st.append(note("Results pending.")); return; }
+    const xmax = Math.max(...ds.map((s) => s.d.x[s.d.x.length - 1]));
+    st.append(lines(ser, { xmax, ymin: 3.5, ymax: 11.5, xlabel: "TFLOPs spent", ylabel: "held-out loss (nats)", hline: DATA.e4_unigram ? { v: DATA.e4_unigram.m, label: "word frequencies only" } : null, xfmt: (v) => (v / 1000).toFixed(0) + "k" }),
+      note("One seed each. The editor's loss leaves the top of the chart within its first evaluations."));
+  };
+
+  /* 12. E5 */
+  build.e5 = (st) => {
+    const groups = [["meta_self_eta1e-2", "Meta-trained, η = 0.01"], ["meta_self_eta5e-2", "Meta-trained, η = 0.05"], ["untrained_self_eta1e-2", "Untrained, η = 0.01"]];
+    let gi = 0; const out = h("div"), nt = note(""), acc = h("div");
+    function draw() {
+      const runs = Object.entries(DATA.e5_lr).filter(([k]) => k.includes(groups[gi][0]));
+      const xmax = Math.max(...runs.map(([, d]) => d.x[d.x.length - 1]));
+      const ser = runs.map(([k, d], i) => ({ name: "seed " + k.slice(-1), d: { x: d.x, y: d.y, n: 1 }, color: SERIES[i] }));
+      ser.push({ name: "starting step size", d: { x: [0, xmax], y: [1e-3, 1e-3], n: 1 }, color: COL.ink, dash: "4 4", width: 1.5 });
+      out.replaceChildren(lines(ser, { xmax, ymin: 3e-5, ymax: 0.1, logy: true, yticks: [1e-4, 1e-3, 1e-2, 1e-1], xlabel: "updates", ylabel: "self-chosen step size", xfmt: (v) => v.toFixed(0) }));
+      const a = DATA.e5_acc;
+      nt.innerHTML = gi === 2 ? `Untrained editor: frozen <b>${pct(a["untrained, frozen"].m)}</b>, editing itself <b>${pct(a["untrained, self-edit eta 0.01"].m)}</b>.` : `Meta-trained editor: frozen <b>${pct(a["meta, frozen"].m)}</b>, editing itself <b>${pct(a[gi === 0 ? "meta, self-edit eta 0.01" : "meta, self-edit eta 0.05"].m)}</b> (± ${pct(a[gi === 0 ? "meta, self-edit eta 0.01" : "meta, self-edit eta 0.05"].s)}).`;
+    }
+    st.append(seg(groups.map((g) => g[1]), (i) => { gi = i; draw(); }), out, nt); draw();
+  };
+
+  /* 13. catches */
+  build.catches = (st) => {
+    const items = [
+      ["The delta encoded the answer, not the error", "fixed", "The raw rule kept pushing on examples the network already got right and diverged. Fixed with linear correction, which became the project's main idea."],
+      ["A rotated error at the output", "fixed", "A learned channel at the logits pushed outputs the wrong way. The answer injected there is now the answer itself."],
+      ["Six of seven transformer channels never trained", "bug", "A gradient cut sat on the wrong side of the injection. Found while building something else, fixed, and covered by a test. The result didn't change."],
+      ["Comparing against different starting networks", "fixed", "The editor was first tested on different random initial networks than Adam, which made it look better per update. Rerun on the same ones."],
+      ["“91% as fast as Adam”", "retracted", "An average over 500 updates that hid the gap. Measured every 25 updates, it's about 40%."],
+      ["An early lead that wasn't there", "artifact", "A coarse chart showed the editor ahead early on. That came from evaluating Adam only every 500 steps."],
+      ["A padded vocabulary at 50k tokens", "bug", "The model's vocabulary is padded for speed; the hindsight channel used the data's. It crashed E4's first editor run, and a local test with the real mismatch caught the fix."],
+      ["A bad connection", "cost", "Uploads hung, Windows timeouts didn't fire, and stray machines kept billing. About 13 units lost before the launcher got watchdogs and hard timeouts."],
+    ];
+    st.append(h("ul", { class: "catch" }, items.map(([b, c, d]) => h("li", {}, [h("b", { text: b }), h("span", { class: "chip" + (c === "fixed" ? " ok" : ""), text: c }), h("span", { class: "d", text: d })]))));
+  };
+
+  $$("[data-figure]").forEach((slot) => {
+    const name = slot.dataset.figure;
+    const titles = { passes: "two_passes.exe", e0: "alignment_E0.exe", correct: "linear_correction.exe", editor: "editor.exe", mnist: "digits_E1_E2.exe", central: "central_measurement.exe", ablate: "ablations.exe", cnn: "cifar_E2.exe", e3: "enwik8_E3.exe", width: "width_bisection.exe", e4: "gpt_E4.exe", e5: "self_edit_E5.exe", catches: "catches.txt" };
+    try { build[name](frame(slot, titles[name] || name)); } catch (err) { slot.append(note("Figure failed to load.")); console.error(name, err); }
+  });
+
+  /* numbers filled from the run data (E4 lands last) */
+  const last = (d) => d && d.y.length ? d.y[d.y.length - 1] : NaN;
+  const e4ed = DATA.e4 && DATA.e4["Editor"], e4ad = DATA.e4 && DATA.e4["AdamW lr 6e-4"];
+  $$("[data-fill]").forEach((el) => {
+    const k = el.dataset.fill;
+    if (k === "e4-adam" && e4ad) el.textContent = last(e4ad).toFixed(2);
+    if (k === "e4-adam-cell" && e4ad) el.textContent = last(e4ad).toFixed(3) + " nats";
+    if (k === "e4-editor" && e4ed) { const ys = e4ed.y.slice(1).filter(isFinite); el.textContent = `diverged within the first 500 steps: its held-out loss sat between ${Math.round(Math.min(...ys)).toLocaleString()} and ${Math.round(Math.max(...ys)).toLocaleString()} nats from then on`; }
+    if (k === "e4-editor-cell" && e4ed) el.textContent = `diverged (${Math.round(last(e4ed)).toLocaleString()} nats at step ${e4ed.x.length ? "4,500" : "?"}; run lost at 4,600/7,700)`;
+  });
+})();
+</script>
+</body>
+</html>

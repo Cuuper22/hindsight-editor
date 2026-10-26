@@ -10,3 +10,5 @@ runs/_peek/
 # resume checkpoints (large, reproducible); trained editors (editor.pt) ARE kept
 **/ckpt.pt
 **/ckpt.pt.tmp
+# local preview server config
+.claude/

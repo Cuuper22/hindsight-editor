@@ -199,6 +199,28 @@ over unigram. The bottleneck width/VIB ablation shows no setting that learns (na
 additionally unstable), so it cannot rank bottlenecks by quality.
 
 
+
+## E4: LM scale (~163M-parameter GPT on FineWeb-Edu)
+
+Pre-LN decoder, d=768, 12 layers, 12 heads, context 1024, vocab 50,304 (untied embeddings, ~163M
+parameters), batch 16 x 1024 tokens, 6,000 AdamW steps = 98M tokens of FineWeb-Edu (karpathy's
+GPT-2-tokenized shards, downloaded on the VM). One seed each (cut seeds before cutting the rung).
+The editor (untrained, transformer step size, w=16 bottleneck, linear correction) was given 7,700
+steps to match AdamW's FLOPs. Table: [runs/e4_table.md](runs/e4_table.md).
+
+| method | held-out loss (nats) | bits/token | notes |
+|---|---|---|---|
+| **AdamW, lr 6e-4** (published GPT-2-small setting, 300-step warmup, cosine) | **4.316** | 6.23 | |
+| AdamW, lr 1.8e-3 | 5.758 | 8.31 | worse with the short warmup |
+| Hindsight Editor | 1,076 - 1,654 at every eval from step 500 on (1,305 at step 4,500) | n/a | diverged; run lost at step 4,600 of 7,700 |
+| unigram | 7.683 | 11.08 | |
+
+**E4 result (report whatever happens): the editor diverges at this scale**, as E3's width diagnosis
+predicted (it already failed at d=384; these layers are d=768). The VM running the editor vanished
+after its 21:04 sync with no error in the log (most likely reclaimed by Colab); since the run had
+been diverged for 4,100 steps, it was not resumed. Central measurement at this scale: AdamW reaches
+4.32 nats at 84 PFLOP; the editor's loss never returns below its initial 10.9 nats.
+
 ## E5: self-editing (Phase 2) on the best E2 setup (MNIST MLP)
 
 The editor edits its own control weights (step-size head, momentum head, per-example weighting

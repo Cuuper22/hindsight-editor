@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hindsight Editor</title>
+<meta name="description" content="Can a network learn without backprop if you just show it the answer? A learned, gradient-free training rule, tested from MNIST up to a 163M-parameter GPT.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Pixelify+Sans:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: CuperOS desktop (same system as chicken-genes). A Story window and a Lab notes window over a teal dotted desktop, taskbar at the bottom; phones get one plain page with a tab bar.
+   Single-theme by design (the CuperOS look is light only), every color set explicitly. */
+/*__CSS__*/
+/* page-specific additions */
+.px-eye { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M1 8h1V7h1V6h2V5h6v1h2v1h1v1h1v1h-1v1h-1v1h-2v1H5v-1H3v-1H2V9H1z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300A0A0'/%3E%3Crect x='7' y='7' width='2' height='2' fill='%231A1A1A'/%3E%3C/svg%3E"); }
+.gsf svg .grid { stroke: var(--frame-line); stroke-width: 1; opacity: 0.55; }
+.gsf svg .axis { stroke: var(--text-soft); stroke-width: 1; }
+.cell-grid { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 6px; font-size: 14px; }
+.cell-grid .hd { color: var(--text-soft); font-size: 12px; align-self: end; }
+.cell-grid .c { padding: 10px 8px; border: 2px inset var(--window-chrome); text-align: center; font: 600 15px/1.2 var(--font-mono); }
+.cell-grid .c small { display: block; font: 400 11px/1.3 var(--font-body); color: var(--text-soft); margin-top: 2px; }
+.passes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-items: stretch; }
+.passes .lay { padding: 8px 6px; background: var(--chrome-well); border: 2px outset var(--button-face); text-align: center; font: 500 13px/1.3 var(--font-body); min-width: 0; }
+.passes .lay b { display: block; font: 500 13px var(--font-display); }
+.passes .bar { height: 10px; margin-top: 6px; background: var(--frame-line); position: relative; }
+.passes .bar i { position: absolute; top: 0; bottom: 0; left: 50%; background: var(--title-bar); transition: width 0.3s var(--ease-snap), left 0.3s var(--ease-snap), background 0.2s; }
+.passes .inj { margin-top: 6px; font: 500 11px/1.2 var(--font-mono); color: var(--accent-orange); min-height: 14px; }
+@container (max-width: 480px) { .passes { grid-template-columns: repeat(2, 1fr); } .cell-grid { font-size: 12px; } }
+</style>
+<meta property="og:title" content="Hindsight Editor">
+<meta property="og:description" content="Can a network learn without backprop if you just show it the answer? A learned, gradient-free training rule, tested from MNIST up to a 163M-parameter GPT.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0e7d84">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23008080'/%3E%3Cpath d='M1 8h1V7h1V6h2V5h6v1h2v1h1v1h1v1h-1v1h-1v1h-2v1H5v-1H3v-1H2V9H1z' fill='%23F8F7ED' stroke='%231A1A1A'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300A0A0'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<nav class="phone-tabs" aria-label="Sections">
+  <button type="button" data-open="story" aria-current="page">Story</button>
+  <button type="button" data-open="notes">Lab notes</button>
+</nav>
+
+<div class="desktop">
+  <div class="desktop-icons" aria-label="CuperOS shortcuts">
+    <button class="desktop-icon" type="button" data-open="story"><span class="icon-image px-icon px-eye"></span><span class="icon-label">Story</span></button>
+    <button class="desktop-icon" type="button" data-open="notes"><span class="icon-image px-icon px-flask"></span><span class="icon-label">Lab notes</span></button>
+  </div>
+  <div class="desktop-logo">CuperOS</div>
+
+  <main class="os-window story-window" data-window="story" aria-label="Story">
+    <div class="title-bar">
+      <div class="title-text"><span class="px-icon px-eye"></span> hindsight_editor.story</div>
+      <div class="window-controls">
+        <button class="window-btn" type="button" data-window-action="max" aria-label="Maximize Story">□</button>
+        <button class="window-btn" type="button" data-window-action="close" aria-label="Close Story">x</button>
+      </div>
+    </div>
+    <div class="window-content" tabindex="0" role="region" aria-label="Story, scrolling page">
+      <article class="story" id="story">
+        <header class="story-head">
+          <p class="kicker">EXPERIMENT · MLPs, A CNN, TRANSFORMERS UP TO 163M · RENTED COLAB GPUs, AN AGENT AT THE WHEEL</p>
+          <h1>Can a network learn without backprop if you just show it the answer?</h1>
+          <p class="story-lede">I'm Cuper. Every neural network you've heard of learns the same way: it guesses, then runs a second pass backwards through itself to work out who to blame, the <span class="term" data-term="backprop">backward pass</span>. I wanted to know whether you could skip that. Run the network twice instead, once normally and once with the right answer quietly fed in, and let a small learned network turn the difference into weight updates. I wrote the plan as a ladder of experiments with a pass-or-fail gate on each rung, from handwritten digits up to a GPT-2-sized model, and had an AI agent build and run all of it on rented GPUs. The answer is mostly no, and this page has every rung where it failed. Hover or tap any underlined word for a quick picture of what it means.</p>
+        </header>
+
+        <section class="story-section">
+          <h2>What's wrong with the backward pass?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="passes"></div>
+            <figcaption>The two forward passes, and the difference between them at each layer. Schematic.</figcaption></figure>
+          <p>Nothing, mostly. Backprop is the reason deep learning works. But it's one fixed rule: for every weight, multiply what came in by how much it should have come out differently, the <span class="term" data-term="gradient">gradient</span>. That's only guaranteed to be right for an infinitely small step on one batch. Everyone then bolts an optimizer like <span class="term" data-term="adam">Adam</span> on top to make the steps sensible.</p>
+          <p>My idea, which I called the <b>Hindsight Editor</b>: run the network twice, in parallel. The <span class="term" data-term="blind">blind pass</span> is the normal one. The <span class="term" data-term="sighted">sighted pass</span> uses the same weights but gets the correct answer injected into every layer through a small side channel. The difference between the two at each layer, the <span class="term" data-term="delta">hindsight delta</span>, says which way that layer "wished" it had gone. Then a small learned network, the <span class="term" data-term="editor">editor</span>, reads those deltas and writes the weight updates. No backward pass ever touches the network being trained.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Does showing the answer even point the right way?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e0"></div>
+            <figcaption>How closely each layer's hindsight delta points along the true backprop direction, per example on 2,000 held-out digits. 0 is unrelated, 1 is identical. Three seeds.</figcaption></figure>
+          <p>The first rung was plumbing. A small network reads handwritten digits (<span class="term" data-term="mnist">MNIST</span>), and I check whether the delta at each layer points the same way backprop would push. To make the sighted pass actually carry the answer through every layer, each layer gets a tiny <span class="term" data-term="readout">readout</span> trained to recover the answer from it.</p>
+          <p><span class="verdict pass">E0 PASS</span>It does point the right way, at every layer, but weakly in the hidden ones: a <span class="term" data-term="cosine">cosine</span> of about 0.14 and 0.22, against 0.70 at the output. The readouts are what make it work. Without them the delta is exactly as useful as noise, and so is the classic <span class="term" data-term="dfa">random-feedback</span> trick, at least on a network trained by backprop.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Plot twist: knowing the answer isn't knowing the mistake</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="correct"></div>
+            <figcaption>Slide how confident the network already is about the right digit, and watch what each version of the delta tells the output layer to do.</figcaption></figure>
+          <p>Applying the delta directly as an update failed hard. On digits it reached 15 percent, barely above guessing, and it diverged at every learning rate. The reason is simple once you see it. Injecting the answer pushes every example toward the right digit, even ones the network already gets right. Backprop's signal is the <i>error</i>, the right answer minus the network's guess, and it fades to nothing once the guess is right. My delta encoded the answer, not the mistake, so it never stopped pushing.</p>
+          <p>The fix keeps both passes parallel and needs no gradient, which made it the most useful idea in the project. The sighted pass responds roughly in a straight line to whatever code is injected. So for each batch I measure that response by regression, then subtract the part the blind pass already predicted. I call it <span class="term" data-term="lincorr">linear correction</span>. Two more things had to change. The answer injected at the output layer must be the answer itself: a learned map there rotates the error and drives the outputs the wrong way. And each example gets weighted by how wrong the blind pass was, which is just its loss, computed on the way forward.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>How does a small network write a weight update?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="editor"></div>
+            <figcaption>The editor's five steps, and how much the compression in step 4 costs.</figcaption></figure>
+          <p>The editor has to be cheap, or it's pointless. It reads each layer's inputs and deltas, reshapes them with tiny learned functions, and writes a <span class="term" data-term="lowrank">low-rank</span> edit: a handful of directions instead of a full matrix, in the spirit of model-editing networks like <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">MEND</a> and <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">RLEdit</a>, except they read gradients and this one reads hindsight.</p>
+          <p>My first compression mixed examples together with random signs, and it destroyed the signal. In the hidden layers, the edit's alignment with the right direction dropped from about 0.2 to zero. Swapping in a <span class="term" data-term="rangefinder">randomized range finder</span> kept essentially all of it. Rank turned out to matter a lot: rank 1 gets 37 percent of digits right, rank 16 gets 87.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it learn by copying Adam?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="mnist"></div>
+            <figcaption>Test accuracy on handwritten digits after 6,000 updates, three seeds (six for the meta-trained editors). Every bar except the first trains with no backward pass.</figcaption></figure>
+          <p>The plan's first training phase was <span class="term" data-term="imitation">imitation</span>: train the editor to reproduce Adam's updates, with backprop used only to make the answer key. It made things worse, down from 88 to 70 percent. Adam scales every weight separately; a low-rank edit can't express that, and trying to match Adam's step size crammed all the movement into a few directions and blew the network up.</p>
+          <p><span class="verdict fail">E1 FAIL</span>The untrained editor on the corrected delta got to 87.9 percent, against backprop's 98.4. The gate asked for "within a few points". It missed by ten, and also lost to plain random feedback at 96.9.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>What if it learns from its own results?</h2>
+          <p>That's phase two, cutting the cord. The editor edits a fresh network for 16 steps, then it's graded on one thing only: how much lower the loss is on data it hasn't seen. That grade trains the editor through all 16 steps, a setup called <span class="term" data-term="meta">meta-training</span>. The network being edited still never sees a gradient, and the code asserts it.</p>
+          <p>This was the part that worked best. Accuracy climbed from 87.9 to 90.0, then 94.8 percent once the editor saw longer stretches of training, from networks at different stages, with a slower learning rate of its own. Swapping the parallel sighted pass for a sequential one that first sees the network's guess, like <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">Forward Target Propagation</a>, got to 96.0. Within 2.4 points of backprop.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Is it worth the compute?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="central"></div>
+            <figcaption>Held-out loss against the compute spent so far, counting every forward pass, the editor and the optimizer for each method. Lower is better. Bands are the range across runs.</figcaption></figure>
+          <p>This was the measurement the whole project was built around: at <span class="term" data-term="flops">equal compute</span>, which lowers held-out loss more per update, a backprop step with a tuned Adam or a Hindsight Editor step? An editor step costs about 85 percent of a backprop step: two forward passes plus the editor, against one forward and one backward.</p>
+          <p><span class="verdict fail">E2 FAIL</span>Adam wins at every budget I measured. Over the very first 25 updates, the meta-trained editor lowers the loss about 40 percent as fast per update as Adam does, and at equal compute its held-out loss stays two to three times higher all the way out. A first, coarser version of this chart seemed to show the editor ahead early on. That was an artifact of evaluating Adam only every 500 steps, and it went away when I measured every 25.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Does the hindsight even matter?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="ablate"></div>
+            <figcaption>The same meta-training recipe with one piece swapped out, test accuracy on digits. One meta-trained editor each, tested on three fresh networks.</figcaption></figure>
+          <p>A little. Feeding the same meta-trained editor random feedback instead of hindsight costs about one point of accuracy. But random feedback is about 45 percent cheaper per update, so at equal compute the two end up close. The sequential pass that sees the network's guess first is the best signal. The editor's view of each layer's inputs adds nothing. And letting the hindsight signal travel through the layers, instead of only being injected at each one, diverges every time. A layer trained toward its own amplified reaction to the answer forms a <span class="term" data-term="hebbian">feedback loop</span>.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it see pictures?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="cnn"></div>
+            <figcaption>A small convolutional network on CIFAR-10 photos, 8,000 updates. Test accuracy.</figcaption></figure>
+          <p>Barely. On <span class="term" data-term="cifar">CIFAR-10</span>, Adam reaches 74 percent and the best meta-trained editor 44. The recipe that worked on digits made the image network worse, 33 percent, and random feedback diverged at every learning rate I tried on these layers. At equal compute the editor's held-out loss was about twice Adam's.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it read?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e3"></div>
+            <figcaption>A 10.9M-parameter character-level transformer on Wikipedia text. Held-out loss against compute; the dotted line is what you get by just knowing letter frequencies.</figcaption></figure>
+          <p>No. For language, the "answer" is the next few characters, so the sighted pass gets a squeezed summary of them through a narrow <span class="term" data-term="bottleneck">bottleneck</span>, optionally with an <span class="term" data-term="vib">information penalty</span> so it can't just copy the answer through. I tried widths 4, 16 and 64, with and without the penalty.</p>
+          <p><span class="verdict fail">E3 FAIL</span>Adam brought the loss down to 1.11 nats, or 1.6 bits per character. Every editor I tried, untrained or meta-trained, at every bottleneck width, stayed at the <span class="term" data-term="unigram">unigram</span> level of 3.51: it learned which letters are common and nothing else. Along the way I found a real bug: in the transformer, six of the seven hindsight channels were never trained. I fixed it and wrote a test for it, and the result didn't change.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Why does it fail on bigger networks?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="width"></div>
+            <figcaption>A made-up language where each token predicts the next, generated in code so nothing had to be downloaded. The same editor, the same data, one network dimension changed at a time.</figcaption></figure>
+          <p>To separate "language is hard" from "big networks break it", I generated a toy language where each token strongly predicts the next one. On a tiny transformer, the editor learned it almost as well as Adam (1.06 against 0.91, where letter frequencies alone give 3.82). Then I changed one dimension at a time. A longer context was fine. Six layers mostly broke it. Making the layers wider, 384 instead of 64, broke it completely.</p>
+          <p>So the failure is about width, not about language. My best guess at the mechanism is the compression: a rank-16 edit can only move 16 directions in a layer, and that's a shrinking share of what needs to move as layers get wider. I also found that the editor's default step size was about ten times too small for transformers. Fixing that was necessary but not enough.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>What happens at GPT-2 size?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e4"></div>
+            <figcaption>A 163M-parameter GPT on 98 million tokens of FineWeb-Edu, one seed each. Held-out loss against compute.</figcaption></figure>
+          <p>The plan said to run it anyway and report whatever happened. <span class="term" data-term="adamw">AdamW</span> with the published GPT-2-small settings reached <b data-fill="e4-adam">4.32</b> nats on <span class="term" data-term="fineweb">FineWeb-Edu</span> text, against 7.68 for knowing word frequencies. A higher learning rate did worse, 5.76. The editor, with layers twice as wide as the ones that already broke it, <span data-fill="e4-editor">diverged within the first 500 steps</span>. The rented machine running it vanished 60 percent of the way through, at step 4,600 of 7,700, with nothing in the log to say why. It had been diverged the whole way, so I didn't pay to finish it.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Can it improve itself?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="e5"></div>
+            <figcaption>The step size the editor chose for itself while it edited its own weights, one line per run. The dashed line is where it started.</figcaption></figure>
+          <p>The last rung was the stretch goal: let the editor edit its own weights, with no gradient. Each step it nudges its own settings in a random direction, applies its edit, checks whether held-out loss went down, and keeps nudging in directions that helped. That's <span class="term" data-term="perturb">weight perturbation</span> using its own results as hindsight, in the spirit of <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">self-referential weight matrices</a>.</p>
+          <p><span class="verdict fail">E5 FAIL</span>It wasn't stable, and it didn't improve. A single batch of results is mostly noise, so the editor's own step size went on a random walk: up until training exploded, or down until it froze. The meta-trained editor went from 95.3 percent frozen to 76 percent editing itself, at 76 percent more compute per run.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>Who else is working on this?</h2>
+          <p>Plenty of people, and the closest pieces of this are theirs:</p>
+          <ul class="plain">
+            <li><b>Learning without a backward pass.</b> <a class="cite" href="https://arxiv.org/abs/1411.0247" target="_blank" rel="noopener">Lillicrap et al.</a> showed random feedback weights can train networks, and <a class="cite" href="https://arxiv.org/abs/1609.01596" target="_blank" rel="noopener">Nøkland</a> sent the error straight to every layer (DFA), the random-feedback baseline here. <a class="cite" href="https://arxiv.org/abs/2212.13345" target="_blank" rel="noopener">Forward-Forward</a>, <a class="cite" href="https://arxiv.org/abs/2201.11665" target="_blank" rel="noopener">PEPITA</a>, <a class="cite" href="https://arxiv.org/abs/2204.01723" target="_blank" rel="noopener">Signal Propagation</a> and <a class="cite" href="https://arxiv.org/abs/2503.24322" target="_blank" rel="noopener">NoProp</a> feed the label or the error in through forward passes. <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">Forward Target Propagation</a> uses a second pass for per-layer targets, the sequential variant that did best here.</li>
+            <li><b>Learned editors and optimizers.</b> <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">MEND</a>, <a class="cite" href="https://arxiv.org/abs/2311.04661" target="_blank" rel="noopener">MALMEN</a> and <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">RLEdit</a> turn gradients into low-rank edits. <a class="cite" href="https://arxiv.org/abs/2211.09760" target="_blank" rel="noopener">VeLO</a> and <a class="cite" href="https://arxiv.org/abs/2602.19142" target="_blank" rel="noopener">Celo2</a> are learned optimizers, and both still read gradients. <a class="cite" href="https://arxiv.org/abs/2112.13835" target="_blank" rel="noopener">Persistent evolution strategies</a> are the obvious fix for my short-horizon meta-training.</li>
+            <li><b>Self-modification.</b> <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">Self-referential weight matrices</a> update themselves without gradients at small scale. <a class="cite" href="https://arxiv.org/abs/2506.10943" target="_blank" rel="noopener">SEAL</a> has a language model write its own training data, then applies it with ordinary gradients.</li>
+            <li><b>Backprop-free language models.</b> Recent work trains language models with local losses or forward gradients at hundreds of millions of parameters (<a class="cite" href="https://arxiv.org/abs/2610.04867" target="_blank" rel="noopener">local learning for LM pretraining</a>, <a class="cite" href="https://arxiv.org/abs/2609.35440" target="_blank" rel="noopener">SOLO</a>, <a class="cite" href="https://arxiv.org/abs/2607.16612" target="_blank" rel="noopener">split forward gradients</a>), with gaps to backprop far smaller than mine.</li>
+          </ul>
+          <p>What this page adds is narrow: a learned update rule fed only by a parallel "shown the answer" pass, a fix that turns that signal into an error signal without a gradient, and a full ladder of honest tests. Most rungs failed, and they're all here with the numbers that failed them.</p>
+        </section>
+
+        <section class="story-section">
+          <h2>How did I build it?</h2>
+          <figure class="figure"><div class="figure-slot" data-figure="catches"></div>
+            <figcaption>Things that would have changed the conclusions if nobody had looked twice.</figcaption></figure>
+          <p>I wrote the plan as a handoff document: the idea, the ladder, the gates, the rules. An AI agent (Claude) built everything from it and ran it through the Colab command line on rented RTX PRO 6000 GPUs, with quick checks on my laptop's RTX 3060. That covered the library, the experiment runner, an on-machine supervisor that saves to a private Hugging Face repo and shuts its own machine down, and the analysis. My connection is bad. Launches failing on it cost about 13 of the roughly 88 compute units the whole ladder used, before the launcher was hardened against it.</p>
+          <p>Several early results were wrong in ways that looked like findings. Each fix made the conclusions smaller and more trustworthy. The setup, the numbers and the limitations are in Lab notes.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <section class="os-window notes-window" data-window="notes" aria-label="Lab notes" hidden>
+    <div class="title-bar">
+      <div class="title-text"><span class="px-icon px-flask"></span> lab_notes.txt</div>
+      <div class="window-controls">
+        <button class="window-btn" type="button" data-window-action="max" aria-label="Maximize Lab notes">□</button>
+        <button class="window-btn" type="button" data-window-action="close" aria-label="Close Lab notes">x</button>
+      </div>
+    </div>
+    <div class="window-content" tabindex="0" role="region" aria-label="Lab notes">
+      <div class="notes">
+        <h2>Lab notes</h2>
+        <p>Every number here comes from a run directory in the repository (<code>runs/</code>: per-run <code>metrics.jsonl</code>, <code>stdout.log</code>, <code>config.json</code>, <code>summary.json</code>), with full tables in <code>RESULTS.md</code> and the short report in <code>WRITEUP.md</code>. Mean ± standard deviation over 3 seeds unless stated; E4 is one seed. FLOPs are counted analytically and identically for every method: forward, backward as twice forward, optimizer at 12 FLOPs per parameter, plus the editor, hint and readout costs.</p>
+        <h3>Setup</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Piece</th><th>What it was</th></tr>
+          <tr><td>Hindsight channel</td><td>Per layer, the code (centered one-hot answer, or for language a discounted summary of the next 8 tokens through a width-w bottleneck) is mapped by C<sub>l</sub> and added to that layer's state. The logits' channel is the identity. Channels and readouts are trained only by a local readout loss; the sighted pass sees detached weights and cuts gradients between layers.</td></tr>
+          <tr><td>Linear correction</td><td>Per batch, ridge-regress each site's delta on the injected code (K × F), then d~ = d − (p − 1/K)M. Language: subtract the code expected from the blind pass's next-token distribution; the head gets β(onehot(y) − p).</td></tr>
+          <tr><td>Editor</td><td>Element-wise MLPs on row-normalized factors, conditioned on layer kind, depth and row statistics; per-example weights from the blind loss; rank-r edit Q(DQ)<sup>T</sup>A/N via a randomized range finder; learned step size and momentum; trust region of 2–5% of the layer's weight RMS.</td></tr>
+          <tr><td>Meta-training</td><td>Held-out log-loss after K edits (K = 8–16), backprop through the unroll into the editor only; fresh networks every 1,000–2,000 inner steps, some warm-started by Adam; reset on divergence; skip non-finite updates. Main-network weights never require or receive gradients (asserted, and unit-tested).</td></tr>
+          <tr><td>Models</td><td>MNIST MLP 784-256-256-10; CIFAR-10 CNN 32-64-128 conv + 256 fc; char GPT d=384, 6 layers, ctx 256, 10.9M; FineWeb-Edu GPT d=768, 12 layers, ctx 1024, vocab 50,304, ~163M (untied embeddings).</td></tr>
+          <tr><td>Compute</td><td>Colab G4 (RTX PRO 6000, 96 GB) at 8.9 units/hour, many jobs packed per GPU; quick checks on a laptop RTX 3060. About 88 units by the ledger, ~13 of them lost to launch failures.</td></tr>
+        </table></div>
+        <h3>Gates</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Rung</th><th>Gate</th><th>Best editor</th><th>Backprop</th><th>Verdict</th></tr>
+          <tr><td>E0 plumbing</td><td>cosine with −grad &gt; 0 at all layers</td><td class="n">+0.14 / +0.22 / +0.70</td><td class="n">—</td><td>Pass (weak)</td></tr>
+          <tr><td>E1 imitation (MNIST)</td><td>within a few points</td><td class="n">87.9 ± 0.4%</td><td class="n">98.4 ± 0.0%</td><td>Fail</td></tr>
+          <tr><td>E2 meta (MNIST)</td><td>match Adam at matched FLOPs</td><td class="n">96.0 ± 0.1%; loss 0.268 @ 0.21 TF</td><td class="n">0.096 @ 0.21 TF</td><td>Fail</td></tr>
+          <tr><td>E2 meta (CIFAR-10)</td><td>same</td><td class="n">44.0 ± 1.7%; loss 1.76 @ 16.7 TF</td><td class="n">74.0%; 0.88</td><td>Fail</td></tr>
+          <tr><td>E3 char LM (enwik8)</td><td>well below unigram (3.51)</td><td class="n">3.51–3.64 nats</td><td class="n">1.114 nats</td><td>Fail</td></tr>
+          <tr><td>E4 GPT ~163M (FineWeb-Edu)</td><td>report</td><td class="n" data-fill="e4-editor-cell">diverged</td><td class="n" data-fill="e4-adam-cell">4.316 nats</td><td>Reported</td></tr>
+          <tr><td>E5 self-edit (MNIST)</td><td>stable, improves itself</td><td class="n">76.1 ± 23.9% vs 95.3% frozen</td><td class="n">—</td><td>Fail</td></tr>
+        </table></div>
+        <h3>Central measurement (MNIST, shared initial networks)</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <tr><th>Method</th><th>Loss after 25 / 100 / 600 updates</th><th>Drop per update, first 25</th><th>Loss at 0.021 / 0.084 TFLOP</th><th>GFLOP per update</th></tr>
+          <tr><td>Adam (lr 1e-3)</td><td class="n">0.410 / 0.230 / 0.122</td><td class="n">0.098</td><td class="n">0.230 / 0.153</td><td class="n">0.21</td></tr>
+          <tr><td>Editor, meta (parallel)</td><td class="n">1.851 / 0.684 / 0.336</td><td class="n">0.041</td><td class="n">0.636 / 0.364</td><td class="n">0.18</td></tr>
+          <tr><td>Editor, meta (FTP-style)</td><td class="n">1.967 / 0.672 / 0.334</td><td class="n">0.036</td><td class="n">0.621 / 0.365</td><td class="n">0.18</td></tr>
+        </table></div>
+        <h3>Fixes, in the order they were found</h3>
+        <ul>
+          <li>Raw parallel delta encodes y, not y − p: linear correction plus per-example error weighting.</li>
+          <li>A random or learned map at the logits rotated the error: identity output channel.</li>
+          <li>Random-sign batch sketches drowned the signal: randomized range finder.</li>
+          <li>RMS-normalized edits removed the error's size and diverged: unnormalized edits, learned step size, trust region.</li>
+          <li>Propagated deltas form a Hebbian loop: propagation weight α = 0 (α &gt; 0 diverges, even meta-trained).</li>
+          <li>Meta-training instability: divergence resets, skip non-finite updates, slower meta learning rate, longer unrolls, warm-started trajectories.</li>
+          <li>Transformers: step size about 10× too small; six of seven hindsight channels never trained (bug, fixed and tested); vocab padding mismatch at 50k tokens (bug, fixed).</li>
+          <li>Measurement: editor evaluated on different initial networks than Adam (rerun on the same ones); an early "editor ahead" reading was an interpolation artifact (re-measured every 25 updates).</li>
+        </ul>
+        <h3>What I wouldn't lean on</h3>
+        <ul>
+          <li>Each rung got one or two focused fixes before moving on, by design. Better editors surely exist; this tests one family carefully, not the idea exhaustively.</li>
+          <li>Meta-training used short truncated unrolls (up to 16 steps), which are known to favor greedy updates.</li>
+          <li>E4 is one seed and only 98M tokens, with no meta-training at that scale.</li>
+          <li>The ablations of the meta-trained editor use one meta-training seed each (three test networks).</li>
+          <li>Wall-clock is confounded: many jobs shared one GPU, and the editor runs as unfused Python. Charts show compute, not time.</li>
+          <li>The width diagnosis comes from a synthetic language and one bisection; the rank-starvation mechanism is a hypothesis, not a measurement.</li>
+        </ul>
+        <h3>References</h3>
+        <ol class="refs">
+          <li>Lillicrap, Cownden, Tweed and Akerman (2016). Random synaptic feedback weights support error backpropagation for deep learning. Nature Communications. <a class="cite" href="https://arxiv.org/abs/1411.0247" target="_blank" rel="noopener">link</a></li>
+          <li>Nøkland (2016). Direct Feedback Alignment Provides Learning in Deep Neural Networks. <a class="cite" href="https://arxiv.org/abs/1609.01596" target="_blank" rel="noopener">link</a></li>
+          <li>Hinton (2022). The Forward-Forward Algorithm: Some Preliminary Investigations. <a class="cite" href="https://arxiv.org/abs/2212.13345" target="_blank" rel="noopener">link</a></li>
+          <li>Dellaferrera and Kreiman (2022). Error-driven Input Modulation: Solving the Credit Assignment Problem without a Backward Pass (PEPITA). <a class="cite" href="https://arxiv.org/abs/2201.11665" target="_blank" rel="noopener">link</a></li>
+          <li>Signal Propagation (2022). <a class="cite" href="https://arxiv.org/abs/2204.01723" target="_blank" rel="noopener">link</a></li>
+          <li>NoProp: Training Neural Networks without Back-propagation or Forward-propagation (2025). <a class="cite" href="https://arxiv.org/abs/2503.24322" target="_blank" rel="noopener">link</a></li>
+          <li>Forward Target Propagation (2025). <a class="cite" href="https://arxiv.org/abs/2506.11030" target="_blank" rel="noopener">link</a></li>
+          <li>Mitchell, Lin, Bosselut, Finn and Manning (2022). Fast Model Editing at Scale (MEND). <a class="cite" href="https://arxiv.org/abs/2110.11309" target="_blank" rel="noopener">link</a></li>
+          <li>MALMEN: massive editing for large language models via meta learning (2024). <a class="cite" href="https://arxiv.org/abs/2311.04661" target="_blank" rel="noopener">link</a></li>
+          <li>RLEdit (ICML 2025). <a class="cite" href="https://arxiv.org/abs/2502.05759" target="_blank" rel="noopener">link</a></li>
+          <li>Irie, Schlag, Csordás and Schmidhuber (2022). A Modern Self-Referential Weight Matrix That Learns to Modify Itself. <a class="cite" href="https://arxiv.org/abs/2202.05780" target="_blank" rel="noopener">link</a></li>
+          <li>Zweiger et al. (2025). Self-Adapting Language Models (SEAL). <a class="cite" href="https://arxiv.org/abs/2506.10943" target="_blank" rel="noopener">link</a></li>
+          <li>Metz et al. (2022). VeLO: Training Versatile Learned Optimizers by Scaling Up. <a class="cite" href="https://arxiv.org/abs/2211.09760" target="_blank" rel="noopener">link</a></li>
+          <li>Celo2 (2026). <a class="cite" href="https://arxiv.org/abs/2602.19142" target="_blank" rel="noopener">link</a></li>
+          <li>Vicol, Metz and Sohl-Dickstein (2021). Unbiased Gradient Estimation in Unrolled Computation Graphs with Persistent Evolution Strategies. <a class="cite" href="https://arxiv.org/abs/2112.13835" target="_blank" rel="noopener">link</a></li>
+          <li>Halko, Martinsson and Tropp (2011). Finding Structure with Randomness: Probabilistic Algorithms for Constructing Approximate Matrix Decompositions. <a class="cite" href="https://arxiv.org/abs/0909.4061" target="_blank" rel="noopener">link</a></li>
+          <li>Penedo et al. (2024). The FineWeb Datasets. <a class="cite" href="https://arxiv.org/abs/2406.17557" target="_blank" rel="noopener">link</a></li>
+          <li>Local learning for language-model pretraining (2026), SOLO (2026) and split forward gradients (2026), the backprop-free LM baselines named in the plan: <a class="cite" href="https://arxiv.org/abs/2610.04867" target="_blank" rel="noopener">1</a>, <a class="cite" href="https://arxiv.org/abs/2609.35440" target="_blank" rel="noopener">2</a>, <a class="cite" href="https://arxiv.org/abs/2607.16612" target="_blank" rel="noopener">3</a>.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="taskbar" aria-label="CuperOS taskbar">
+  <div class="taskbar-left">
+    <a class="start-button" href="https://cuuper22.github.io/"><span class="px-icon px-start"></span> Start</a>
+    <button class="task-button" type="button" data-task="story"><span class="px-icon px-eye"></span> Story</button>
+    <button class="task-button" type="button" data-task="notes"><span class="px-icon px-flask"></span> Lab notes</button>
+  </div>
+  <div class="taskbar-clock" id="clock">12:00 PM</div>
+</footer>
+
+<div class="gsx-pop" id="pop" role="dialog" aria-modal="false" aria-labelledby="pop-title">
+  <div class="gsx-bar">
+    <svg class="gsx-face" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><rect class="h" x="2" y="2" width="12" height="12"/><rect class="e" x="5" y="6" width="2" height="2"/><rect class="e" x="9" y="6" width="2" height="2"/><rect class="e" x="5" y="10" width="6" height="1"/></svg>
+    <span class="gsx-title" id="pop-title">term</span>
+    <button class="gsx-x" type="button" id="pop-x" aria-label="Close">x</button>
+  </div>
+  <div class="gsx-main">
+    <div class="gsx-visbox" id="pop-vis"></div>
+    <p class="gsx-text" id="pop-text"></p>
+  </div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+(() => {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const h = (tag, attrs = {}, kids = []) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "text") el.textContent = v; else if (k === "html") el.innerHTML = v; else el.setAttribute(k, v);
+    }
+    (Array.isArray(kids) ? kids : [kids]).forEach((c) => c && el.append(c));
+    return el;
+  };
+  const S = (tag, attrs = {}) => { const el = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
+  const T = (x, y, txt, attrs = {}) => { const t = S("text", Object.assign({ x, y }, attrs)); t.textContent = txt; return t; };
+  const fmt = (v, d = 2) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d);
+  const pct = (v, d = 1) => (v * 100).toFixed(d) + "%";
+
+  /* ---------------- windows ---------------- */
+  const phone = matchMedia("(max-width: 760px)");
+  const wins = {}; $$("[data-window]").forEach((n) => (wins[n.dataset.window] = n));
+  let front = "story", z = 5;
+  const isOpen = (n) => wins[n] && !wins[n].hidden;
+  function refresh() {
+    $$("[data-task]").forEach((b) => b.classList.toggle("is-active", isOpen(b.dataset.task) && front === b.dataset.task));
+    $$(".phone-tabs [data-open]").forEach((b) => (b.dataset.open === front ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
+    Object.entries(wins).forEach(([n, el]) => el.classList.toggle("is-front", isOpen(n) && front === n));
+  }
+  function open(name) {
+    const el = wins[name]; if (!el) return;
+    if (phone.matches) Object.entries(wins).forEach(([o, w]) => (w.hidden = o !== name)); else el.hidden = false;
+    el.classList.remove("is-max"); front = name; el.style.zIndex = String(++z); refresh();
+    if (phone.matches) scrollTo(0, 0);
+  }
+  function close(name) { if (phone.matches) return; wins[name].hidden = true; if (front === name) front = Object.keys(wins).find(isOpen) || ""; refresh(); }
+  document.addEventListener("click", (e) => {
+    const o = e.target.closest("[data-open]"); if (o) { e.preventDefault(); open(o.dataset.open); return; }
+    const t = e.target.closest("[data-task]"); if (t) { const n = t.dataset.task; isOpen(n) && front === n && !phone.matches ? close(n) : open(n); return; }
+    const a = e.target.closest("[data-window-action]");
+    if (a) { const w = a.closest("[data-window]"); a.dataset.windowAction === "max" ? w.classList.toggle("is-max") : close(w.dataset.window); return; }
+    const w = e.target.closest("[data-window]"); if (w && !phone.matches && w.dataset.window !== front) { front = w.dataset.window; w.style.zIndex = String(++z); refresh(); }
+  });
+  phone.addEventListener("change", () => { if (phone.matches) open(isOpen(front) ? front : "story"); else { wins.story.hidden = false; refresh(); } });
+  if (location.hash === "#notes") open("notes"); else open("story");
+  const clock = $("#clock");
+  const tick = () => { const d = new Date(); clock.textContent = `${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")} ${d.getHours() >= 12 ? "PM" : "AM"}`; };
+  tick(); setInterval(tick, 30000);
+
+  /* ---------------- mini visuals for terms ---------------- */
+  const BL = "#2f4aa0", OR = "#d0662a", RD = "#c8483a", GR = "#8a8d96", SO = "#4a4c54", IN = "#1c1d21";
+  const V = {
+    passes: () => `<svg viewBox="0 0 260 120">${[0,1,2].map(i=>`<rect x="${30+i*75}" y="18" width="50" height="26" fill="#e6e8ec" stroke="${SO}"/><rect x="${30+i*75}" y="72" width="50" height="26" fill="#e6e8ec" stroke="${SO}"/>`).join("")}<text x="8" y="36" font-size="11" fill="${SO}">blind</text><text x="4" y="90" font-size="11" fill="${OR}">sighted</text>${[0,1,2].map(i=>`<line x1="${55+i*75}" y1="104" x2="${55+i*75}" y2="98" stroke="${OR}" stroke-width="2"/>`).join("")}<text x="96" y="116" font-size="11" fill="${OR}">answer injected</text></svg>`,
+    arrows: () => `<svg viewBox="0 0 260 120"><defs><marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9z" fill="#7d8089"/></marker><marker id="ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9z" fill="${OR}"/></marker></defs><line x1="60" y1="92" x2="210" y2="92" stroke="#7d8089" stroke-width="2.5" marker-end="url(#ag)"/><line x1="60" y1="92" x2="185" y2="40" stroke="${OR}" stroke-width="3" marker-end="url(#ao)"/><text x="150" y="112" font-size="11" fill="${SO}">direction A</text><text x="108" y="36" font-size="11" fill="${OR}">direction B</text><path d="M110 92 A50 50 0 0 0 104 74" fill="none" stroke="${IN}"/><text x="116" y="84" font-size="11" fill="${IN}">angle</text></svg>`,
+    curve: () => `<svg viewBox="0 0 260 120"><line x1="30" y1="100" x2="240" y2="100" stroke="${GR}"/><line x1="30" y1="10" x2="30" y2="100" stroke="${GR}"/><path d="M30 20 C70 80 110 92 240 96" stroke="${BL}" stroke-width="2.5" fill="none"/><path d="M30 20 C80 50 140 70 240 82" stroke="${OR}" stroke-width="2.5" fill="none"/><text x="160" y="112" font-size="11" fill="${SO}">compute spent</text><text x="36" y="16" font-size="11" fill="${SO}">loss</text></svg>`,
+    lowrank: () => `<svg viewBox="0 0 260 120"><rect x="20" y="20" width="80" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="30" y="64" font-size="12" fill="${IN}">full edit</text><text x="110" y="64" font-size="16" fill="${IN}">≈</text><rect x="134" y="20" width="12" height="80" fill="${BL}"/><text x="152" y="64" font-size="14" fill="${IN}">×</text><rect x="168" y="20" width="80" height="12" fill="${OR}"/><text x="160" y="104" font-size="11" fill="${SO}">a few directions</text></svg>`,
+    loop: () => `<svg viewBox="0 0 260 120"><circle cx="130" cy="60" r="34" fill="none" stroke="${RD}" stroke-width="2.5" stroke-dasharray="6 4"/><text x="82" y="24" font-size="11" fill="${IN}">layer reacts to answer</text><text x="90" y="112" font-size="11" fill="${IN}">trained toward reaction</text><path d="M163 52 l5 9 l-10 0z" fill="${RD}"/><path d="M97 68 l-5 -9 l10 0z" fill="${RD}"/></svg>`,
+    unigram: () => `<svg viewBox="0 0 260 120">${"etaoinshr".split("").map((c,i)=>`<rect x="${20+i*25}" y="${100-[78,58,52,50,46,44,42,40,38][i]}" width="18" height="${[78,58,52,50,46,44,42,40,38][i]}" fill="${BL}"/><text x="${25+i*25}" y="114" font-size="11" fill="${SO}">${c}</text>`).join("")}</svg>`,
+    bottleneck: () => `<svg viewBox="0 0 260 120"><rect x="16" y="20" width="60" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="22" y="64" font-size="11" fill="${IN}">next 8</text><text x="22" y="78" font-size="11" fill="${IN}">chars</text><path d="M80 24 L120 50 L120 70 L80 96" fill="none" stroke="${SO}"/><rect x="120" y="50" width="20" height="20" fill="${OR}"/><path d="M140 50 L180 24 M140 70 L180 96" stroke="${SO}"/><rect x="184" y="20" width="60" height="80" fill="#e6e8ec" stroke="${SO}"/><text x="190" y="64" font-size="11" fill="${IN}">each layer</text><text x="112" y="112" font-size="11" fill="${OR}">width w</text></svg>`,
+    walk: () => { let p = "M20 60", y = 60; for (let i = 1; i < 23; i++) { y += [7,-5,9,-3,8,6,-4,10,-6,9,5,-2,11,8,-7,12,9,-3,10,7,-5,9][i-1]*0.6; p += ` L${20+i*10} ${Math.max(8, 120 - y)}`; } return `<svg viewBox="0 0 260 120"><line x1="20" y1="60" x2="245" y2="60" stroke="${GR}" stroke-dasharray="4 4"/><path d="${p}" fill="none" stroke="${RD}" stroke-width="2"/><text x="24" y="54" font-size="11" fill="${SO}">start</text><text x="170" y="112" font-size="11" fill="${SO}">steps</text></svg>`; },
+    error: () => `<svg viewBox="0 0 260 120"><rect x="40" y="30" width="40" height="70" fill="${BL}"/><text x="40" y="114" font-size="11" fill="${SO}">answer</text><rect x="110" y="62" width="40" height="38" fill="${GR}"/><text x="112" y="114" font-size="11" fill="${SO}">guess</text><rect x="180" y="30" width="40" height="32" fill="${OR}"/><text x="178" y="114" font-size="11" fill="${OR}">error</text><text x="88" y="70" font-size="16" fill="${IN}">−</text><text x="158" y="70" font-size="16" fill="${IN}">=</text></svg>`,
+  };
+  const TERMS = {
+    backprop: ["backward pass", "After the network guesses, backprop runs through it in reverse, layer by layer, to compute how much each weight is to blame for the error. It costs about twice a forward pass.", "passes"],
+    gradient: ["gradient", "For each weight: how much the loss would change if you nudged it. Backprop computes all of them at once. Following it downhill is the basic training step.", "curve"],
+    adam: ["Adam", "The standard way to turn gradients into weight updates. It keeps running averages and scales every weight's step separately, so steps are a sensible size.", "curve"],
+    adamw: ["AdamW", "Adam with weight decay handled separately. The default optimizer for training GPT-style models.", "curve"],
+    blind: ["blind pass", "The normal forward pass: input in, guess out, nothing else.", "passes"],
+    sighted: ["sighted pass", "The same network and weights, but with the correct answer added to every layer through a small side channel, so each layer can see what it should have helped produce.", "passes"],
+    delta: ["hindsight delta", "Sighted pass minus blind pass, at each layer. It's an estimate of which way that layer should have moved, obtained without any backward pass.", "passes"],
+    editor: ["editor", "A small learned network that reads each layer's inputs and hindsight deltas and writes that layer's weight update. It's shared across all layers.", "lowrank"],
+    mnist: ["MNIST", "70,000 small images of handwritten digits, 0 to 9. The standard first test for any learning rule.", null],
+    cifar: ["CIFAR-10", "60,000 small color photos in 10 classes, like planes, cats and ships. Much harder than digits for simple networks.", null],
+    readout: ["readout", "A tiny classifier attached to one layer, trained to recover the answer from that layer's sighted state. Its training is what forces the answer to be carried through every layer.", null],
+    cosine: ["cosine", "How closely two directions point the same way. +1 is identical, 0 is unrelated, −1 is opposite.", "arrows"],
+    dfa: ["random feedback (DFA)", "Direct feedback alignment: send the output error to every layer through fixed random weights. It shouldn't work, but networks learn to align with the random feedback.", null],
+    lincorr: ["linear correction", "Measure, per batch, how each layer's delta responds to the injected answer, then subtract the part the network already predicted. What's left behaves like the error: it shrinks to zero when the guess is right.", "error"],
+    lowrank: ["low-rank edit", "An update built from a few directions multiplied together, instead of a full matrix. Far cheaper to compute, but it can only move the weights in those few directions.", "lowrank"],
+    rangefinder: ["randomized range finder", "Find the few directions the full update mostly lies in by probing it with random vectors, then project the exact update onto them. No cross-talk between examples.", "lowrank"],
+    imitation: ["imitation (Phase 0)", "Train the editor to produce Adam's updates from hindsight deltas. Backprop is used only to make the answer key, never to train the network itself.", null],
+    meta: ["meta-training", "Training the trainer: the editor edits a network for several steps, then is graded by the network's held-out loss. That grade is backpropagated into the editor, never into the edited network.", "curve"],
+    flops: ["equal compute (FLOPs)", "Counting the arithmetic each method spends. A fair race gives both methods the same budget, not the same number of steps.", "curve"],
+    hebbian: ["feedback loop", "If a layer is trained toward its own reaction to the answer, it learns to react more strongly, which makes the next target bigger. The weights grow until training blows up.", "loop"],
+    bottleneck: ["bottleneck", "The future text is squeezed into a few numbers before it's injected, so the sighted pass gets a hint about what's coming, not the answer key.", "bottleneck"],
+    vib: ["information penalty (VIB)", "A variational information bottleneck: the squeezed hint is made noisy and penalized for carrying information, to stop the network from just copying the future through.", "bottleneck"],
+    unigram: ["unigram level", "The loss of a model that knows only how often each letter appears, and nothing about which letter comes next. Anything that actually reads should get well below it.", "unigram"],
+    fineweb: ["FineWeb-Edu", "A large collection of educational web pages, used here pre-tokenized with GPT-2's tokenizer.", null],
+    perturb: ["weight perturbation", "Nudge the weights randomly, see whether the result got better, and step in the directions that helped. It needs no gradient, and it's noisy.", "walk"],
+  };
+  const pop = $("#pop"), popVis = $("#pop-vis"), popTitle = $("#pop-title"), popText = $("#pop-text");
+  let cur = null, hideT = 0;
+  function show(el) {
+    const d = TERMS[el.dataset.term]; if (!d) return;
+    clearTimeout(hideT);
+    if (cur && cur !== el) cur.setAttribute("aria-expanded", "false");
+    cur = el; el.setAttribute("aria-expanded", "true");
+    popTitle.textContent = d[0]; popText.textContent = d[1];
+    if (d[2]) { popVis.innerHTML = V[d[2]](); popVis.hidden = false; } else popVis.hidden = true;
+    if (!matchMedia("(max-width: 600px)").matches) {
+      const r = el.getBoundingClientRect(), w = Math.min(340, innerWidth - 16);
+      let left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, innerWidth - w - 8));
+      pop.style.left = left + "px"; pop.style.top = "0px"; pop.classList.add("is-open");
+      const ph = pop.offsetHeight; let top = r.bottom + 10;
+      pop.classList.toggle("is-above", top + ph > innerHeight - 8 && r.top - ph - 10 > 8);
+      if (pop.classList.contains("is-above")) top = r.top - ph - 10;
+      pop.style.top = Math.max(8, top) + "px";
+    } else pop.classList.add("is-open");
+  }
+  function hide() { pop.classList.remove("is-open"); if (cur) cur.setAttribute("aria-expanded", "false"); cur = null; }
+  const later = () => { clearTimeout(hideT); hideT = setTimeout(hide, 220); };
+  $$(".term").forEach((el) => {
+    el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-expanded", "false"); el.setAttribute("aria-controls", "pop");
+    el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") show(el); });
+    el.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") later(); });
+    el.addEventListener("click", (e) => { e.stopPropagation(); cur === el && pop.classList.contains("is-open") ? hide() : show(el); });
+    el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(el); } });
+  });
+  pop.addEventListener("pointerenter", () => clearTimeout(hideT));
+  pop.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") later(); });
+  $("#pop-x").addEventListener("click", hide);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+  document.addEventListener("click", (e) => { if (!pop.contains(e.target)) hide(); });
+  $$(".window-content").forEach((w) => w.addEventListener("scroll", () => { if (!matchMedia("(max-width: 600px)").matches) hide(); }, { passive: true }));
+
+  /* ---------------- figure helpers ---------------- */
+  function frame(slot, title) {
+    const stage = h("div", { class: "gsf-stage" });
+    slot.append(h("div", { class: "gsf" }, [h("div", { class: "gsf-bar" }, h("span", { class: "gsf-title", text: title })), stage]));
+    return stage;
+  }
+  function seg(names, onPick, start = 0) {
+    const wrap = h("div", { class: "gsf-seg", role: "group" });
+    const bs = names.map((n, i) => { const b = h("button", { type: "button", "aria-pressed": i === start ? "true" : "false", text: n }); b.addEventListener("click", () => { bs.forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false")); onPick(i); }); return b; });
+    bs.forEach((b) => wrap.append(b)); return wrap;
+  }
+  const svgBox = (w, hgt, label) => S("svg", { viewBox: `0 0 ${w} ${hgt}`, role: "img", "aria-label": label });
+  const COL = { blue: "var(--title-bar)", cyan: "var(--accent-cyan)", red: "var(--danger-red)", orange: "var(--accent-orange)", gold: "var(--accent-gold)", green: "var(--accent-green)", line: "var(--frame-line)", soft: "var(--text-soft)", ink: "var(--text-dark)", well: "var(--chrome-well)" };
+  const SERIES = [COL.blue, COL.orange, COL.cyan, COL.red, COL.green, COL.gold];
+  const note = (txt) => h("p", { class: "gsf-note", html: txt });
+
+  /* horizontal bars (from the chicken-genes figure kit) */
+  function hbars(rows, { min, max, ticks, labelW = 150, w = 600, rowH = 26, fmtV = (v) => fmt(v, 1), color = COL.blue, refLine }) {
+    const inner = rows.length * rowH, hgt = inner + 34, plotW = w - labelW - 60;
+    const s = svgBox(w, hgt, "Bar chart");
+    const x = (v) => labelW + ((v - min) / (max - min)) * plotW;
+    ticks.forEach((t) => { s.append(S("line", { x1: x(t), x2: x(t), y1: 4, y2: inner + 6, class: "grid" })); s.append(T(x(t), inner + 22, String(t), { class: "m", "text-anchor": "middle" })); });
+    if (min < 0) s.append(S("line", { x1: x(0), x2: x(0), y1: 2, y2: inner + 8, stroke: COL.ink, "stroke-width": 1.5 }));
+    rows.forEach((r, i) => {
+      const y = 6 + i * rowH;
+      s.append(T(labelW - 10, y + rowH / 2 + 4, r.label, { "text-anchor": "end", class: "ink" }));
+      if (r.v == null || !isFinite(r.v)) { s.append(T(x(Math.max(min, 0)) + 6, y + rowH / 2 + 4, r.vLabel || "diverged", { class: "m", fill: COL.red })); return; }
+      const vv = Math.max(min, Math.min(max, r.v)), x0 = x(Math.max(min, 0)), x1 = x(vv);
+      s.append(S("rect", { x: Math.min(x0, x1), y: y + 3, width: Math.max(1.5, Math.abs(x1 - x0)), height: rowH - 8, fill: r.color || color }));
+      s.append(T(vv >= 0 ? x1 + 5 : x1 - 5, y + rowH / 2 + 3, r.vLabel || fmtV(r.v), { class: "m ink", "text-anchor": vv >= 0 ? "start" : "end" }));
+    });
+    if (refLine) { s.append(S("line", { x1: x(refLine.v), x2: x(refLine.v), y1: 0, y2: inner + 8, stroke: COL.ink, "stroke-dasharray": "4 3", "stroke-width": 1.5 })); s.append(T(x(refLine.v) + 4, inner + 34 - 2, refLine.label, { class: "ink", "font-size": 11 })); }
+    return s;
+  }
+
+  /* line chart with min-max bands */
+  function lines(series, { xmax, ymin, ymax, xlabel, ylabel, hline, w = 620, hgt = 300, logy = false, xfmt = (v) => v.toFixed(2), yticks, legend = true }) {
+    const L = 50, R = 14, Tp = 12, B = 40, pw = w - L - R, ph = hgt - Tp - B;
+    const s = svgBox(w, hgt, "Line chart");
+    const ty = (v) => logy ? Math.log10(v) : v;
+    const x = (v) => L + (v / xmax) * pw, y = (v) => Tp + ph - ((ty(Math.min(Math.max(v, ymin), ymax)) - ty(ymin)) / (ty(ymax) - ty(ymin))) * ph;
+    const yt = yticks || [0, 0.25, 0.5, 0.75, 1].map((f) => ymin + f * (ymax - ymin));
+    yt.forEach((v) => { s.append(S("line", { x1: L, x2: L + pw, y1: y(v), y2: y(v), class: "grid" })); s.append(T(L - 6, y(v) + 4, logy ? v.toExponential(0).replace("e-", "e−") : v.toFixed(v < 10 ? 2 : 0), { class: "m", "text-anchor": "end" })); });
+    [0, 0.25, 0.5, 0.75, 1].forEach((f) => { s.append(T(x(f * xmax), Tp + ph + 16, xfmt(f * xmax), { class: "m", "text-anchor": "middle" })); });
+    s.append(S("line", { x1: L, x2: L + pw, y1: Tp + ph, y2: Tp + ph, class: "axis" })); s.append(S("line", { x1: L, x2: L, y1: Tp, y2: Tp + ph, class: "axis" }));
+    s.append(T(L + pw / 2, hgt - 4, xlabel, { "text-anchor": "middle" }));
+    const yl = T(12, Tp + ph / 2, ylabel, { "text-anchor": "middle", transform: `rotate(-90 12 ${Tp + ph / 2})` }); s.append(yl);
+    if (hline) { s.append(S("line", { x1: L, x2: L + pw, y1: y(hline.v), y2: y(hline.v), stroke: COL.ink, "stroke-dasharray": "2 4", "stroke-width": 1.5 })); s.append(T(L + pw - 4, y(hline.v) - 5, hline.label, { "text-anchor": "end", class: "ink" })); }
+    series.forEach((se, k) => {
+      if (!se.d) return;
+      const c = se.color || SERIES[k % SERIES.length], d = se.d;
+      const keep = d.x.map((v, i) => i).filter((i) => d.x[i] <= xmax * 1.0001 && isFinite(d.y[i]));
+      if (d.lo && keep.length > 1) {
+        const top = keep.map((i) => `${x(d.x[i])},${y(d.hi[i])}`), bot = keep.slice().reverse().map((i) => `${x(d.x[i])},${y(d.lo[i])}`);
+        s.append(S("polygon", { points: top.concat(bot).join(" "), fill: c, "fill-opacity": 0.13, stroke: "none" }));
+      }
+      s.append(S("polyline", { points: keep.map((i) => `${x(d.x[i])},${y(d.y[i])}`).join(" "), fill: "none", stroke: c, "stroke-width": se.width || 2.2, "stroke-dasharray": se.dash || "none", "stroke-linejoin": "round" }));
+      const fin = d.y.filter((v, i) => d.x[i] <= xmax * 1.0001), endV = fin[fin.length - 1];
+      const off = !isFinite(endV) || endV > ymax;                  // only flag curves that END off the chart
+      if (off) s.append(T(L + pw - 4, Tp + 14 + 14 * k, `${se.name}: off the chart`, { "text-anchor": "end", fill: c, class: "b" }));
+    });
+    const wrap = h("div", {}, s);
+    if (legend) wrap.append(h("div", { class: "legend" }, series.filter((se) => se.d).map((se, k) => h("span", {}, [h("span", { class: "sw", style: `background:${se.color || SERIES[k % SERIES.length]}` }), document.createTextNode(se.name + (se.d.n > 1 ? ` (n=${se.d.n})` : ""))]))));
+    return wrap;
+  }
+  const interp = (d, xv) => { if (!d) return NaN; for (let i = 1; i < d.x.length; i++) if (d.x[i] >= xv) { const t = (xv - d.x[i - 1]) / (d.x[i] - d.x[i - 1] || 1); return d.y[i - 1] + t * (d.y[i] - d.y[i - 1]); } return NaN; };
+
+  const build = {};
+
+  /* 1. two passes */
+  build.passes = (st) => {
+    const names = ["input", "layer 1", "layer 2", "layer 3", "output"];
+    const blind = [0.1, 0.35, -0.2, 0.3, 0.15], sighted = [0.1, 0.48, -0.02, 0.62, 0.7];
+    const grid = h("div", { class: "passes" });
+    const cells = names.map((n) => { const bar = h("i"); const inj = h("div", { class: "inj" }); grid.append(h("div", { class: "lay" }, [h("b", { text: n }), h("div", { class: "bar" }, bar), inj])); return [bar, inj]; });
+    const nt = note("");
+    function draw(mode) {
+      cells.forEach(([bar, inj], i) => {
+        const v = mode === 0 ? blind[i] : mode === 1 ? sighted[i] : sighted[i] - blind[i];
+        bar.style.width = Math.abs(v) * 50 + "%"; bar.style.left = (v >= 0 ? 50 : 50 - Math.abs(v) * 50) + "%";
+        bar.style.background = mode === 2 ? "var(--accent-orange)" : "var(--title-bar)";
+        inj.textContent = mode === 1 && i > 0 ? "+ answer" : mode === 2 ? (i === 0 ? "no change" : fmt(v, 2)) : "";
+      });
+      nt.innerHTML = ["The normal forward pass. Each bar is one layer's state.", "Same weights, but the right answer is added into every layer through a small learned channel.", "The difference is the <b>hindsight delta</b>: which way each layer “wished” it had gone. The editor turns these into weight updates. No backward pass."][mode];
+    }
+    st.append(seg(["Blind pass", "Sighted pass", "Hindsight delta"], draw), grid, nt); draw(0);
+  };
+
+  /* 2. E0 cosine */
+  build.e0 = (st) => {
+    const vars = [["hindsight_beta0.1", "Learned channel"], ["no_readout", "No readout loss"], ["ftp_seq", "Sequential pass"], ["dfa", "Random feedback"]];
+    const steps = Object.keys(DATA.e0["hindsight_beta0.1"]).map(Number).sort((a, b) => a - b);
+    let vi = 0, si = steps.indexOf(1000);
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "e0s", text: "Training steps (backprop)" }), h("input", { type: "range", id: "e0s", min: "0", max: String(steps.length - 1), step: "1", value: String(si) }), h("output", { id: "e0v" })]);
+    const out = h("div"), nt = note("");
+    function draw() {
+      $("#e0v", st).textContent = steps[si];
+      const c = DATA.e0[vars[vi][0]][String(steps[si])];
+      out.replaceChildren(hbars([["layer 1", c[0]], ["layer 2", c[1]], ["output", c[2]]].map(([l, v]) => ({ label: l, v })), { min: -0.2, max: 0.8, ticks: [-0.2, 0, 0.2, 0.4, 0.6, 0.8], labelW: 90, fmtV: (v) => fmt(v, 3) }));
+      nt.innerHTML = vi === 0 ? "With a trained channel and readouts, every layer points the right way once training starts. The hidden layers only weakly: about <b>0.1–0.2</b>." : vi === 1 ? "Without the readout loss the channel never learns to carry the answer, and the delta is as useful as noise: about <b>0</b> everywhere." : vi === 2 ? "A pass that sees the network's guess first, then the answer, lines up a little better at the output." : "Random feedback is unrelated to backprop on a network that backprop trained. It only works when the network trains on it and aligns to it.";
+    }
+    st.append(seg(vars.map((v) => v[1]), (i) => { vi = i; draw(); }), ctl, out, nt);
+    $("#e0s", st).addEventListener("input", (e) => { si = +e.target.value; draw(); }); draw();
+  };
+
+  /* 3. linear correction */
+  build.correct = (st) => {
+    const K = 4, cls = ["the right digit", "wrong digit A", "wrong digit B", "wrong digit C"];
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "pc", text: "Network's confidence in the right digit" }), h("input", { type: "range", id: "pc", min: "0.05", max: "0.99", step: "0.01", value: "0.40" }), h("output", { id: "pcv" })]);
+    let mode = 0; const out = h("div"), ro = h("div", { class: "readout" }), nt = note("");
+    function draw() {
+      const p = +$("#pc", st).value; $("#pcv", st).textContent = pct(p, 0);
+      const probs = [p, ...Array(K - 1).fill((1 - p) / (K - 1))];
+      const raw = probs.map((_, i) => (i === 0 ? 1 : 0) - 1 / K), cor = probs.map((q, i) => (i === 0 ? 1 : 0) - q);
+      const v = mode === 0 ? raw : cor;
+      out.replaceChildren(hbars(cls.map((c, i) => ({ label: c, v: v[i], color: i === 0 ? COL.blue : COL.red })), { min: -0.4, max: 1, ticks: [-0.4, 0, 0.5, 1], labelW: 130, fmtV: (x) => fmt(x, 2) }));
+      const mag = (a) => Math.sqrt(a.reduce((s, x) => s + x * x, 0));
+      ro.replaceChildren(h("div", {}, [h("small", { text: "Raw delta: size of the push" }), h("b", { text: mag(raw).toFixed(2) })]), h("div", {}, [h("small", { text: "Corrected: size of the push" }), h("b", { text: mag(cor).toFixed(2) })]));
+      nt.innerHTML = mode === 0 ? "The raw hindsight delta pushes the same amount however right the network already is. At 99% confidence it is still shoving." : `The corrected delta is the <b>error</b>: answer minus guess. At ${pct(p, 0)} confidence it pushes ${mag(cor).toFixed(2)}, and it fades to zero as the network gets it right, just like backprop's signal.`;
+    }
+    st.append(seg(["Raw hindsight delta", "With linear correction"], (i) => { mode = i; draw(); }), ctl, out, ro, nt);
+    $("#pc", st).addEventListener("input", draw); draw();
+  };
+
+  /* 4. editor steps + alignment */
+  build.editor = (st) => {
+    const steps = [["Read", "Each layer's inputs a and hindsight deltas d, from the two forward passes."], ["Weigh", "Scale each example by how wrong the blind pass was (its loss, computed going forward)."], ["Reshape", "Tiny shared functions transform every number, conditioned on the layer's kind and depth."], ["Compress", "Find the r directions the update mostly lies in and project onto them (rank r)."], ["Step", "Learned step size and momentum, capped at a few percent of the layer's weights."]];
+    const ol = h("ol", { class: "steps" }, steps.map(([b, s]) => h("li", {}, h("div", {}, [h("b", { text: b }), h("span", { text: s })]))));
+    let li = 1; const out = h("div"), nt = note("");
+    function draw() {
+      out.replaceChildren(hbars(DATA.align.map(([l, c]) => ({ label: l, v: c[li], color: l.startsWith("random-sign") ? COL.red : COL.blue })), { min: -0.2, max: 0.9, ticks: [-0.2, 0, 0.2, 0.4, 0.6, 0.8], labelW: 200, fmtV: (v) => fmt(v, 2) }));
+      nt.innerHTML = "Alignment of the whole layer's update with backprop's, on a partly trained digit network. Error weighting is what makes the hidden layers line up; the range finder keeps it; random-sign mixing throws it away.";
+    }
+    st.append(ol, h("div", { style: "height:14px" }), seg(["Layer 1", "Layer 2", "Output"], (i) => { li = i; draw(); }, 1), out, nt); draw();
+  };
+
+  /* 5. MNIST accuracies */
+  build.mnist = (st) => {
+    const rows = Object.entries(DATA.mnist_acc).map(([k, v]) => ({ label: k, v: v ? v.m * 100 : null, vLabel: v ? `${(v.m * 100).toFixed(1)}%` : "n/a", color: k.startsWith("Adam") ? COL.ink : k.startsWith("Editor") ? COL.blue : COL.soft }));
+    st.append(hbars(rows, { min: 0, max: 100, ticks: [0, 25, 50, 75, 100], labelW: 230, refLine: { v: 98.4, label: "backprop" } }), note("Black: backprop. Gray: simple backprop-free rules. Blue: the Hindsight Editor at each stage."));
+  };
+
+  /* 6. central measurement */
+  build.central = (st) => {
+    let view = 0; const out = h("div"), ro = h("div", { class: "readout" }), nt = note("");
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "bud", text: "Compute budget" }), h("input", { type: "range", id: "bud", min: "1", max: "100", step: "1", value: "30" }), h("output", { id: "budv" })]);
+    function draw() {
+      const src = view === 0 ? DATA.mlp_early : DATA.mlp_full, xmax = view === 0 ? 0.1 : 1.1;
+      const ser = Object.entries(src).map(([n, d]) => ({ name: n, d, color: n === "Adam" ? COL.ink : n.includes("FTP") ? COL.orange : n.includes("untrained") ? COL.soft : n.includes("DFA") ? COL.green : COL.blue }));
+      out.replaceChildren(lines(ser, { xmax, ymin: 0, ymax: view === 0 ? 2.4 : 1.4, xlabel: "TFLOPs spent", ylabel: "held-out loss", xfmt: (v) => v.toFixed(view === 0 ? 3 : 2) }));
+      const b = (+$("#bud", st).value / 100) * xmax; $("#budv", st).textContent = b.toFixed(3) + " TF";
+      ro.replaceChildren(...ser.map((se) => { const v = interp(se.d, b); return h("div", {}, [h("small", { text: se.name }), h("b", { text: isFinite(v) ? v.toFixed(3) : "—" })]); }));
+      nt.innerHTML = view === 0 ? "The first 600 updates, evaluated every 25. Adam is lower at every budget, from the very first updates." : "Whole runs, 6,000 updates. The editor's cheaper steps never make up for what each one achieves.";
+    }
+    st.append(seg(["First 600 updates", "Whole run"], (i) => { view = i; draw(); }), out, ctl, ro, nt);
+    $("#bud", st).addEventListener("input", draw); draw();
+  };
+
+  /* 7. ablations */
+  build.ablate = (st) => {
+    const rows = Object.entries(DATA.ablate).map(([k, v]) => ({ label: k, v: v && v.m > 0.2 ? v.m * 100 : null, vLabel: v ? (v.m > 0.2 ? `${(v.m * 100).toFixed(1)}%` : `${(v.m * 100).toFixed(1)}% (diverged)`) : "n/a", color: k.startsWith("Random") ? COL.green : COL.blue }));
+    st.append(hbars(rows, { min: 80, max: 100, ticks: [80, 85, 90, 95, 100], labelW: 230, refLine: { v: 98.4, label: "backprop" } }), note("Axis starts at 80% to show the differences. Propagating the hindsight through layers diverged in all three test networks."));
+  };
+
+  /* 8. CNN */
+  build.cnn = (st) => {
+    const rows = Object.entries(DATA.cnn_acc).map(([k, v]) => ({ label: k, v: v ? v.m * 100 : null, vLabel: v ? `${(v.m * 100).toFixed(1)}%${v.m < 0.2 ? " (diverged)" : ""}` : "n/a", color: k.startsWith("Adam") ? COL.ink : COL.blue }));
+    rows.push({ label: "Random feedback (DFA)", v: null, vLabel: "diverged at every lr" });
+    st.append(hbars(rows, { min: 0, max: 80, ticks: [0, 20, 40, 60, 80], labelW: 200 }), note("Chance is 10%. Adam overfits a little by the end (no data augmentation); at its best lr for loss it reaches 71.3%."));
+  };
+
+  /* 9. E3 */
+  build.e3 = (st) => {
+    let view = 0; const out = h("div"), nt = note("");
+    function draw() {
+      if (view === 0) {
+        const ser = Object.entries(DATA.e3).map(([n, d]) => ({ name: n, d, color: n === "Adam" ? COL.ink : n.includes("meta") ? COL.orange : COL.blue }));
+        const xmax = Math.max(...ser.filter((s) => s.d).map((s) => s.d.x[s.d.x.length - 1]));
+        out.replaceChildren(lines(ser, { xmax, ymin: 0.8, ymax: 4.6, xlabel: "TFLOPs spent", ylabel: "held-out loss (nats)", hline: { v: DATA.e3_unigram, label: "letter frequencies only" }, xfmt: (v) => v.toFixed(0) }));
+        nt.innerHTML = `Adam reaches <b>${DATA.e3_adam.m.toFixed(3)}</b> nats. The editors flatten at the dotted line and stay there.`;
+      } else {
+        const g = DATA.e3_grid, cell = (k) => { const v = g[k]; const bad = !v || v.m > 4; return h("div", { class: "c", style: `background:${bad ? "oklch(0.93 0.06 28)" : "var(--chrome-well)"}` }, [document.createTextNode(v ? v.m.toFixed(2) : "—"), h("small", { text: v ? `± ${v.s.toFixed(2)}${bad ? ", unstable" : ""}` : "" })]); };
+        out.replaceChildren(h("div", { class: "cell-grid" }, [h("span", { class: "hd", text: "" }), ...[4, 16, 64].map((w) => h("span", { class: "hd", text: `width ${w}` })),
+          h("span", { class: "hd", text: "no penalty" }), ...[4, 16, 64].map((w) => cell(`${w}_novib`)),
+          h("span", { class: "hd", text: "with VIB" }), ...[4, 16, 64].map((w) => cell(`${w}_vib`))]));
+        nt.innerHTML = `Held-out loss after 6,000 steps, three seeds each. Letter frequencies alone give <b>${DATA.e3_unigram.toFixed(2)}</b>; Adam gets <b>${DATA.e3_adam.m.toFixed(2)}</b>. No bottleneck setting learns, so none can be ranked.`;
+      }
+    }
+    st.append(seg(["Training curves", "Bottleneck ablation"], (i) => { view = i; draw(); }), out, nt); draw();
+  };
+
+  /* 10. width */
+  build.width = (st) => {
+    const b = DATA.bisect;
+    const rows = b.rows.map(([l, v]) => ({ label: l, v, vLabel: v.toFixed(2), color: v < 2 ? COL.blue : COL.red }));
+    const ctl = h("div", { class: "ctl" }, [h("label", { for: "wd", text: "Layer width" }), h("input", { type: "range", id: "wd", min: "32", max: "768", step: "32", value: "64" }), h("output", { id: "wdv" })]);
+    const ro = h("div", { class: "readout" });
+    function upd() { const d = +$("#wd", st).value; $("#wdv", st).textContent = d; ro.replaceChildren(h("div", {}, [h("small", { text: "directions a rank-16 edit can move" }), h("b", { text: "16 of " + d })]), h("div", {}, [h("small", { text: "share of the layer's outputs" }), h("b", { text: pct(Math.min(1, 16 / d), 0) })])); }
+    st.append(hbars(rows, { min: 0, max: 4.5, ticks: [0, 1, 2, 3, 4], labelW: 210, fmtV: (v) => v.toFixed(2), refLine: { v: b.unigram, label: "letter freq." } }),
+      note(`Loss after 1,500 steps on the toy language (lower is better). Adam gets <b>${b.adam.toFixed(2)}</b> at both sizes; the best possible is about ${b.bigram.toFixed(2)}.`), h("div", { style: "height:10px" }), ctl, ro,
+      note("The suspected mechanism, illustrated: the edit's rank stays fixed while the layer gets wider."));
+    $("#wd", st).addEventListener("input", upd); upd();
+  };
+
+  /* 11. E4 */
+  build.e4 = (st) => {
+    const ser = Object.entries(DATA.e4).map(([n, d]) => ({ name: n, d, color: n.includes("6e-4") ? COL.ink : n.includes("1.8") ? COL.soft : COL.red }));
+    const ds = ser.filter((s) => s.d); if (!ds.length) { st.append(note("Results pending.")); return; }
+    const xmax = Math.max(...ds.map((s) => s.d.x[s.d.x.length - 1]));
+    st.append(lines(ser, { xmax, ymin: 3.5, ymax: 11.5, xlabel: "TFLOPs spent", ylabel: "held-out loss (nats)", hline: DATA.e4_unigram ? { v: DATA.e4_unigram.m, label: "word frequencies only" } : null, xfmt: (v) => (v / 1000).toFixed(0) + "k" }),
+      note("One seed each. The editor's loss leaves the top of the chart within its first evaluations."));
+  };
+
+  /* 12. E5 */
+  build.e5 = (st) => {
+    const groups = [["meta_self_eta1e-2", "Meta-trained, η = 0.01"], ["meta_self_eta5e-2", "Meta-trained, η = 0.05"], ["untrained_self_eta1e-2", "Untrained, η = 0.01"]];
+    let gi = 0; const out = h("div"), nt = note(""), acc = h("div");
+    function draw() {
+      const runs = Object.entries(DATA.e5_lr).filter(([k]) => k.includes(groups[gi][0]));
+      const xmax = Math.max(...runs.map(([, d]) => d.x[d.x.length - 1]));
+      const ser = runs.map(([k, d], i) => ({ name: "seed " + k.slice(-1), d: { x: d.x, y: d.y, n: 1 }, color: SERIES[i] }));
+      ser.push({ name: "starting step size", d: { x: [0, xmax], y: [1e-3, 1e-3], n: 1 }, color: COL.ink, dash: "4 4", width: 1.5 });
+      out.replaceChildren(lines(ser, { xmax, ymin: 3e-5, ymax: 0.1, logy: true, yticks: [1e-4, 1e-3, 1e-2, 1e-1], xlabel: "updates", ylabel: "self-chosen step size", xfmt: (v) => v.toFixed(0) }));
+      const a = DATA.e5_acc;
+      nt.innerHTML = gi === 2 ? `Untrained editor: frozen <b>${pct(a["untrained, frozen"].m)}</b>, editing itself <b>${pct(a["untrained, self-edit eta 0.01"].m)}</b>.` : `Meta-trained editor: frozen <b>${pct(a["meta, frozen"].m)}</b>, editing itself <b>${pct(a[gi === 0 ? "meta, self-edit eta 0.01" : "meta, self-edit eta 0.05"].m)}</b> (± ${pct(a[gi === 0 ? "meta, self-edit eta 0.01" : "meta, self-edit eta 0.05"].s)}).`;
+    }
+    st.append(seg(groups.map((g) => g[1]), (i) => { gi = i; draw(); }), out, nt); draw();
+  };
+
+  /* 13. catches */
+  build.catches = (st) => {
+    const items = [
+      ["The delta encoded the answer, not the error", "fixed", "The raw rule kept pushing on examples the network already got right and diverged. Fixed with linear correction, which became the project's main idea."],
+      ["A rotated error at the output", "fixed", "A learned channel at the logits pushed outputs the wrong way. The answer injected there is now the answer itself."],
+      ["Six of seven transformer channels never trained", "bug", "A gradient cut sat on the wrong side of the injection. Found while building something else, fixed, and covered by a test. The result didn't change."],
+      ["Comparing against different starting networks", "fixed", "The editor was first tested on different random initial networks than Adam, which made it look better per update. Rerun on the same ones."],
+      ["“91% as fast as Adam”", "retracted", "An average over 500 updates that hid the gap. Measured every 25 updates, it's about 40%."],
+      ["An early lead that wasn't there", "artifact", "A coarse chart showed the editor ahead early on. That came from evaluating Adam only every 500 steps."],
+      ["A padded vocabulary at 50k tokens", "bug", "The model's vocabulary is padded for speed; the hindsight channel used the data's. It crashed E4's first editor run, and a local test with the real mismatch caught the fix."],
+      ["A bad connection", "cost", "Uploads hung, Windows timeouts didn't fire, and stray machines kept billing. About 13 units lost before the launcher got watchdogs and hard timeouts."],
+    ];
+    st.append(h("ul", { class: "catch" }, items.map(([b, c, d]) => h("li", {}, [h("b", { text: b }), h("span", { class: "chip" + (c === "fixed" ? " ok" : ""), text: c }), h("span", { class: "d", text: d })]))));
+  };
+
+  $$("[data-figure]").forEach((slot) => {
+    const name = slot.dataset.figure;
+    const titles = { passes: "two_passes.exe", e0: "alignment_E0.exe", correct: "linear_correction.exe", editor: "editor.exe", mnist: "digits_E1_E2.exe", central: "central_measurement.exe", ablate: "ablations.exe", cnn: "cifar_E2.exe", e3: "enwik8_E3.exe", width: "width_bisection.exe", e4: "gpt_E4.exe", e5: "self_edit_E5.exe", catches: "catches.txt" };
+    try { build[name](frame(slot, titles[name] || name)); } catch (err) { slot.append(note("Figure failed to load.")); console.error(name, err); }
+  });
+
+  /* numbers filled from the run data (E4 lands last) */
+  const last = (d) => d && d.y.length ? d.y[d.y.length - 1] : NaN;
+  const e4ed = DATA.e4 && DATA.e4["Editor"], e4ad = DATA.e4 && DATA.e4["AdamW lr 6e-4"];
+  $$("[data-fill]").forEach((el) => {
+    const k = el.dataset.fill;
+    if (k === "e4-adam" && e4ad) el.textContent = last(e4ad).toFixed(2);
+    if (k === "e4-adam-cell" && e4ad) el.textContent = last(e4ad).toFixed(3) + " nats";
+    if (k === "e4-editor" && e4ed) { const ys = e4ed.y.slice(1).filter(isFinite); el.textContent = `diverged within the first 500 steps: its held-out loss sat between ${Math.round(Math.min(...ys)).toLocaleString()} and ${Math.round(Math.max(...ys)).toLocaleString()} nats from then on`; }
+    if (k === "e4-editor-cell" && e4ed) el.textContent = `diverged (${Math.round(last(e4ed)).toLocaleString()} nats at step ${e4ed.x.length ? "4,500" : "?"}; run lost at 4,600/7,700)`;
+  });
+})();
+</script>
+</body>
+</html>
