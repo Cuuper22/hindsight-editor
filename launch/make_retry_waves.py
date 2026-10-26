@@ -13,6 +13,8 @@ def job(rid, config, ov):
 def tag(lr):
     return f"{lr:.0e}".replace("e-0", "e-")
 
+import sys
+ONLY_LM = "--lm" in sys.argv
 # ---------------- MNIST MLP: signal quality under one optimizer -------------------------
 SRC = {
     "bp": {"delta_source": "backprop"},
@@ -39,7 +41,7 @@ for k, ed in {"ed_full_p0": {"rank": 0}, "ed_r16_p0": {"rank": 16}}.items():
 for s in (0, 1, 2):
     jobs.append(job(f"r_mnist_ed_full_dfa_s{s}", "experiments/e1_mnist.json",
                     {"method": "editor", "delta_source": "dfa", "gate": True, "beta": 1.0, "editor": {"rank": 0}, "seed": s}))
-wave("r_mnist", "G4", 24, 2.0, jobs, ["mnist"])
+if not ONLY_LM: wave("r_mnist", "G4", 24, 2.0, jobs, ["mnist"])
 
 # ---------------- meta-training: full-rank editor, round-2 recipe ------------------------
 meta = []
@@ -50,13 +52,13 @@ for k, ed in {"full": {"rank": 0, "lr_init": 1e-3}, "r16": {"rank": 16, "lr_init
                          "meta_steps": 6000, "editor": ed, "seed": s,
                          "eval": {"seeds": [0, 1, 2], "overrides": {"task": "mnist", "net": "mlp", "steps": 6000,
                                   "eval_every": 500, "log_every": 100, "ckpt_every": 2000}}}))
-wave("r_meta", "A100", 4, 3.0, meta, ["mnist"])
+if not ONLY_LM: wave("r_meta", "A100", 4, 3.0, meta, ["mnist"])
 
 # ---------------- CIFAR-10 CNN ---------------------------------------------------------
 CS = {k: SRC[k] for k in ("bp", "dfa", "frozen", "hlc_p0")}
 cj = [job(f"r_cifar_{k}_lr{tag(lr)}_s{s}", "experiments/e2_cnn.json", {**base, **v, "lr": lr, "seed": s})
       for k, v in CS.items() for lr in (3e-4, 1e-3) for s in (0, 1)]
-wave("r_cifar", "G4", 16, 2.0, cj, ["cifar10"])
+if not ONLY_LM: wave("r_cifar", "G4", 16, 2.0, cj, ["cifar10"])
 
 # ---------------- enwik8 char GPT (10.9M) -----------------------------------------------
 lb = {"method": "hadam", "vib": False, "betas": [0.9, 0.999], "wd": 0.0, "steps": 6000, "warmup": 200}
@@ -66,6 +68,8 @@ LS = {
     "hlc_a0": ({"delta_source": "hindsight_lc", "prop": 0.0}, (1e-4, 3e-4, 1e-3)),
     "hlc_a0_ema": ({"delta_source": "hindsight_lc", "prop": 0.0, "ema": 0.99}, (3e-4, 1e-3)),
     "hlc_a1": ({"delta_source": "hindsight_lc", "prop": 1.0}, (3e-4,)),
+    "hlc_a0_body01": ({"delta_source": "hindsight_lc", "prop": 0.0, "body_lr_mult": 0.1}, (1e-3,)),
+    "dfa_body01": ({"delta_source": "dfa", "body_lr_mult": 0.1}, (1e-3,)),
 }
 lj = [job(f"r_lm_{k}_lr{tag(lr)}_s{s}", "experiments/e3_enwik8.json", {**lb, **v, "lr": lr, "seed": s})
       for k, (v, lrs) in LS.items() for lr in lrs for s in (0, 1)]
@@ -75,6 +79,6 @@ for k, ed in {"ed_full": {"rank": 0}, "ed_r64": {"rank": 64}, "ed_r16": {"rank":
         lj.append(job(f"r_lm_{k}_a0_s{s}", "experiments/e3_enwik8.json",
                       {"method": "editor", "vib": False, "delta_source": "hindsight_lc", "prop": 0.0, "steps": 6000,
                        "editor": {**ed, "lr_init": 1e-2, "max_rel": 0.05, "use_id": False}, "seed": s}))
-n = 4
+n = 5
 for i in range(n):
-    wave(f"r_lm{i}", "A100" if i % 2 == 0 else "G4", 8, 3.0, lj[i::n], ["enwik8"])
+    wave(f"r_lm{i}", "A100", 8, 3.0, lj[i::n], ["enwik8"])

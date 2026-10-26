@@ -27,7 +27,7 @@
    }
   },
   {
-   "run_id": "r_lm_frozen_lr1e-3_s0",
+   "run_id": "r_lm_frozen_lr1e-3_s1",
    "config": "experiments/e3_enwik8.json",
    "overrides": {
     "method": "hadam",
@@ -42,12 +42,12 @@
     "delta_source": "dfa",
     "freeze_body": true,
     "lr": 0.001,
-    "seed": 0,
-    "run_id": "r_lm_frozen_lr1e-3_s0"
+    "seed": 1,
+    "run_id": "r_lm_frozen_lr1e-3_s1"
    }
   },
   {
-   "run_id": "r_lm_hlc_a0_lr3e-4_s0",
+   "run_id": "r_lm_hlc_a0_lr1e-3_s0",
    "config": "experiments/e3_enwik8.json",
    "overrides": {
     "method": "hadam",
@@ -61,13 +61,13 @@
     "warmup": 200,
     "delta_source": "hindsight_lc",
     "prop": 0.0,
-    "lr": 0.0003,
+    "lr": 0.001,
     "seed": 0,
-    "run_id": "r_lm_hlc_a0_lr3e-4_s0"
+    "run_id": "r_lm_hlc_a0_lr1e-3_s0"
    }
   },
   {
-   "run_id": "r_lm_hlc_a0_ema_lr3e-4_s0",
+   "run_id": "r_lm_hlc_a0_ema_lr1e-3_s1",
    "config": "experiments/e3_enwik8.json",
    "overrides": {
     "method": "hadam",
@@ -82,13 +82,13 @@
     "delta_source": "hindsight_lc",
     "prop": 0.0,
     "ema": 0.99,
-    "lr": 0.0003,
-    "seed": 0,
-    "run_id": "r_lm_hlc_a0_ema_lr3e-4_s0"
+    "lr": 0.001,
+    "seed": 1,
+    "run_id": "r_lm_hlc_a0_ema_lr1e-3_s1"
    }
   },
   {
-   "run_id": "r_lm_hlc_a1_lr3e-4_s0",
+   "run_id": "r_lm_dfa_body01_lr1e-3_s0",
    "config": "experiments/e3_enwik8.json",
    "overrides": {
     "method": "hadam",
@@ -100,15 +100,15 @@
     "wd": 0.0,
     "steps": 6000,
     "warmup": 200,
-    "delta_source": "hindsight_lc",
-    "prop": 1.0,
-    "lr": 0.0003,
+    "delta_source": "dfa",
+    "body_lr_mult": 0.1,
+    "lr": 0.001,
     "seed": 0,
-    "run_id": "r_lm_hlc_a1_lr3e-4_s0"
+    "run_id": "r_lm_dfa_body01_lr1e-3_s0"
    }
   },
   {
-   "run_id": "r_lm_ed_full_a0_s1",
+   "run_id": "r_lm_ed_r64_a0_s0",
    "config": "experiments/e3_enwik8.json",
    "overrides": {
     "method": "editor",
@@ -117,13 +117,13 @@
     "prop": 0.0,
     "steps": 6000,
     "editor": {
-     "rank": 0,
+     "rank": 64,
      "lr_init": 0.01,
      "max_rel": 0.05,
      "use_id": false
     },
-    "seed": 1,
-    "run_id": "r_lm_ed_full_a0_s1"
+    "seed": 0,
+    "run_id": "r_lm_ed_r64_a0_s0"
    }
   }
  ]

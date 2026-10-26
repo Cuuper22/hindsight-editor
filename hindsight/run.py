@@ -167,12 +167,15 @@ class HAdam:
     exactly AdamW on the true gradient; with a hindsight delta it is the same optimizer on the
     gradient-free signal."""
 
-    def __init__(self, lr, betas=(0.9, 0.999), wd=0.0, eps=1e-8):
+    def __init__(self, lr, betas=(0.9, 0.999), wd=0.0, eps=1e-8, body_mult=1.0):
         self.lr, self.b1, self.b2, self.wd, self.eps, self.st = lr, betas[0], betas[1], wd, eps, {}
+        self.body_mult = body_mult                                  # lr multiplier for every site but the output
 
     @torch.no_grad()
     def step(self, net, P, rec, D, n_params):
+        lr0, last = self.lr, net.sites[-1].name
         for s in net.sites:
+            self.lr = lr0 if s.name == last else lr0 * self.body_mult
             A, Dm = factors(s, rec.a[s.name], D[s.name])
             N = Dm.shape[0] / (Dm.shape[0] // rec.z[s.name].shape[0])
             if s.kind == "embed":
@@ -183,6 +186,7 @@ class HAdam:
             self._upd(s.w, P, g, decay=True)
             if s.b is not None:
                 self._upd(s.b, P, -Dm.float().sum(0) / N, decay=False)
+        self.lr = lr0
         flops.add("opt", 12 * n_params)
 
     def _upd(self, k, P, g, decay):
@@ -261,7 +265,8 @@ def run_train(cfg, log, out):
         if method == "raw":
             rule = RawRule(cfg["lr"], cfg.get("mom", 0.9))
         elif method == "hadam":
-            rule = HAdam(cfg["lr"], tuple(cfg.get("betas", (0.9, 0.999))), cfg.get("wd", 0.0))
+            rule = HAdam(cfg["lr"], tuple(cfg.get("betas", (0.9, 0.999))), cfg.get("wd", 0.0),
+                         body_mult=cfg.get("body_lr_mult", 1.0))
         else:
             editor = make_editor(cfg, net)
             if cfg.get("editor_ckpt"):
